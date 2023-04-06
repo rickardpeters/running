@@ -4,7 +4,7 @@
 
 ### project vision
 
-Our vision is to create an app for runners where Strava users can create "run clubs" - private friend groups where they can reach common goals and compete with each other. The app will utilize the strava API to fetch information from users.
+Our vision is to create an app for runners where Strava users can create "run communities" - private friend groups where they can reach common goals and compete with each other. The app will utilize the strava API to fetch information from users.
 
 ### Core functions
 
