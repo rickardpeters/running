@@ -22,22 +22,47 @@ function App() {
     console.log(code)
     console.log(getAccessToken(code))
 
-    const accessToken = await getAccessToken(code);
-    const refreshToken = response.data.refresh_token;
-
   }
 
 
   async function getAccessToken(code: string): Promise<string> {
     try {
-      const response = await axios.post("https://www.strava.com/oauth/token?client_id=105576&client_secret=d91be7e7d6dc2775e6ee24f494d7079c172e2c8f&code="+code+"&grant_type=authorization_code"
+      const response = await axios.post("https://www.strava.com/oauth/token?", null, {
+      params: {
+        client_id: "105576",
+        client_secret: "d91be7e7d6dc2775e6ee24f494d7079c172e2c8f",
+        code: code,
+        grant_type: "authorization_code",
+        redirect_uri: "http://127.0.0.1:5173"
+      }}
       );
 
       const accessToken = response.data.access_token
+      const refreshToken = response.data.refresh_token
+      console.log("accessToken: " + accessToken)
+      console.log("refreshToken: " + refreshToken)
+      sessionStorage.setItem("access_token", accessToken)
+      sessionStorage.setItem("refresh_token", refreshToken)
+    
       return accessToken
     } catch (error) {
       console.error(error);
       throw new Error("Error getting access token from Strava API");
+    }
+  }
+
+
+  const getAthleteInfo = async () => {
+    try {
+      const response = await axios.get('https://www.strava.com/api/v3/athlete', {
+        headers: {
+          Authorization: "Bearer " + sessionStorage.getItem("access_token")
+        }
+      });
+      console.log(response.data)
+      return response.data;
+    } catch (error) {
+      console.error(error);
     }
   }
 
@@ -50,7 +75,8 @@ function App() {
       </h1>
       <button type='submit' onClick={handleClick}>{loggedInState === false ? "Sign in": "Sign out"}</button>
       <div>
-        <button type='submit' onClick={fetchData}>Fetch</button>
+        <button type='submit' onClick={fetchData}>Load data</button>
+        <button type='submit' onClick={getAthleteInfo}>Fetch athlete info</button>
       </div>
     </div>
   )
