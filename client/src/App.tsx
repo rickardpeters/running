@@ -4,6 +4,7 @@ import axios from "axios";
 
 function App() {
   const [loggedInState, setLoggedInState] = useState(false)
+  const [athlete, setAthlete] = useState({})
 
   const params = new Proxy(new URLSearchParams(window.location.search), {
     get: (searchParams, prop:string) => searchParams.get(prop),
@@ -60,6 +61,8 @@ function App() {
         }
       });
       console.log(response.data)
+      console.log(typeof response.data)
+      setAthlete(response.data)
       return response.data;
     } catch (error) {
       console.error(error);
@@ -69,16 +72,19 @@ function App() {
 
 
   return (
-    <div>
+    <>
       <h1>
         Springa på lite
       </h1>
       <button type='submit' onClick={handleClick}>{loggedInState === false ? "Sign in": "Sign out"}</button>
-      <div>
+      <>
         <button type='submit' onClick={fetchData}>Load data</button>
         <button type='submit' onClick={getAthleteInfo}>Fetch athlete info</button>
-      </div>
-    </div>
+      </>
+      <>
+          <h2>Welcome{athlete ? ", " + athlete.firstname + " " + athlete.lastname + "!": "!"} </h2>
+      </>
+    </>
   )
 }
 
