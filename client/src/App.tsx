@@ -1,18 +1,23 @@
-import React from 'react';
-import './App.css';
+import { useState } from 'react'
+import './App.css'
+import axios from "axios";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import StravaTest from './pages/stravaTest';
+import HomePage from './pages/HomePage';
+import LandingPage from './pages/LandingPage';
 
 function App() {
+ 
+
   return (
-    <div className="App">
-      <header className="App-header">
-       
-        <p>
-          Hello there
-        </p>
-       
-      </header>
-    </div>
-  );
+    <BrowserRouter>
+    <Routes>
+      <Route path="/" element={<LandingPage></LandingPage>}></Route>
+      <Route path="/stravaTest" element={<StravaTest></StravaTest>}></Route>
+      <Route path="/homePage" element={<HomePage></HomePage>}></Route>
+    </Routes>
+    </BrowserRouter>
+  )
 }
 
 export default App;
