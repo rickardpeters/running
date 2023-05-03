@@ -12,7 +12,7 @@ const StravaTest = () => {
   });
 
   const handleClick = async () => {
-    window.location.href='https://www.strava.com/oauth/authorize?client_id=105576&redirect_uri=http://127.0.0.1:5173&response_type=code&scope=read';
+    window.location.href='https://www.strava.com/oauth/authorize?client_id=105576&redirect_uri=http://localhost:3000/StravaTest&response_type=code&scope=read';
     setLoggedInState(!loggedInState);
     console.log(loggedInState);
   };
@@ -32,7 +32,7 @@ const StravaTest = () => {
           client_secret: "d91be7e7d6dc2775e6ee24f494d7079c172e2c8f",
           code: code,
           grant_type: "authorization_code",
-          redirect_uri: "http://127.0.0.1:5173"
+          redirect_uri: "http://localhost:3000/StravaTest"
         }
       });
 
