@@ -15,7 +15,7 @@ const Header = () => {
         <Button color="inherit" component={Link} to="/">
           <FlightLandIcon></FlightLandIcon>
         </Button>
-        <Button color="inherit" component={Link} to="/StravaTest">
+        <Button color="inherit" component={Link} to="/UserPage">
         <DirectionsRunIcon></DirectionsRunIcon>
         </Button>
         <Button color="inherit" component={Link} to="/homePage">
