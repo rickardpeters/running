@@ -1,13 +1,21 @@
 import { useState } from 'react';
 import '../App.css';
 import axios from "axios";
-import { Button, ButtonGroup, Card } from '@mui/material';
+import { Button, ButtonGroup, Card, Paper } from '@mui/material';
+import {
+  Chart,
+  BarSeries,
+  ArgumentAxis,
+  ValueAxis,
+} from '@devexpress/dx-react-chart-material-ui';
+
 
 const UserPage = () => {
 
   const [loggedInState, setLoggedInState] = useState(false);
   const [athlete, setAthlete] = useState({ firstname: '', lastname: '', id: '' });
-  const [runTotals, setRunTotals] = useState<{}>({})
+  const [runTotals, setRunTotals] = useState<RunTotals>({count: 0, distance: 0, moving_time: 0, elapsed_time: 0, elevation_gain: 0});
+
 
   const params = new Proxy(new URLSearchParams(window.location.search), {
     get: (searchParams, prop:string) => searchParams.get(prop),
@@ -16,14 +24,12 @@ const UserPage = () => {
   const signIn = async () => {
     window.location.href='https://www.strava.com/oauth/authorize?client_id=105576&redirect_uri=http://localhost:3000/UserPage&response_type=code&scope=read';
     setLoggedInState(!loggedInState);
-    console.log(loggedInState);
   };
 
   const fetchData = async () => {
     const urlParams = new URLSearchParams(window.location.search);
     const code = urlParams.get('code');
-    console.log(code);
-    console.log(await getAccessToken(code));
+    getAccessToken(code)
   };
 
   async function getAccessToken(code: any): Promise<string> {
@@ -40,8 +46,7 @@ const UserPage = () => {
 
       const accessToken = response.data.access_token;
       const refreshToken = response.data.refresh_token;
-      console.log("accessToken: " + accessToken);
-      console.log("refreshToken: " + refreshToken);
+
       sessionStorage.setItem("access_token", accessToken);
       sessionStorage.setItem("refresh_token", refreshToken);
 
@@ -59,8 +64,6 @@ const UserPage = () => {
           Authorization: "Bearer " + sessionStorage.getItem("access_token")
         }
       });
-      console.log(response.data);
-      console.log(typeof response.data);
       setAthlete(response.data);
       return response.data;
     } catch (error) {
@@ -75,9 +78,8 @@ const UserPage = () => {
           Authorization: "Bearer " + sessionStorage.getItem("access_token")
         }
       });
-      console.log(response.data)
       setRunTotals(response.data.all_run_totals)
-      console.log(runTotals)
+      console.log(response.data.all_run_totals)
       return response.data
     } catch (error) {
       console.error(error)
@@ -88,6 +90,22 @@ const UserPage = () => {
   function capitalizeFirstLetter(string:string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
 }
+
+interface RunTotals {
+  count: number;
+  distance: number;
+  moving_time: number;
+  elapsed_time: number;
+  elevation_gain: number;
+}
+
+const barData = [
+  { argument: 'Count', value: runTotals.count },
+  { argument: 'Distance', value: runTotals.distance / 100 },
+  { argument: 'Moving Time', value: runTotals.moving_time / 100 },
+  { argument: 'Elapsed Time', value: runTotals.elapsed_time / 100 },
+  { argument: 'Elevation Gain', value: runTotals.elevation_gain },
+];
 
   return (
     <>
@@ -112,6 +130,15 @@ const UserPage = () => {
             <Card variant="outlined" key={key}>{capitalizeFirstLetter(key)}: {String(value)}</Card>
             ))}
         </ul>
+        </>
+        <>
+        <Paper>
+        <Chart data = {barData}>
+        <ArgumentAxis />
+          <ValueAxis />
+          <BarSeries valueField="value" argumentField="argument" />
+        </Chart>
+        </Paper>
         </>
     </>
   );
