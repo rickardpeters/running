@@ -9,8 +9,7 @@ const StravaTest = (): JSX.Element => {
   // const params = new URLSearchParams(window.location.search);
 
   const handleClick = async () => {
-    window.location.href =
-      'https://www.strava.com/oauth/authorize?client_id=105576&redirect_uri=http://127.0.0.1:3000&response_type=code&scope=read_all';
+    window.location.href='https://www.strava.com/oauth/authorize?client_id=105576&redirect_uri=http://localhost:3000/StravaTest&response_type=code&scope=read';
     setLoggedInState(!loggedInState);
     console.log(loggedInState);
   };
@@ -25,17 +24,13 @@ const StravaTest = (): JSX.Element => {
 
   async function getAccessToken(code: any): Promise<string> {
     try {
-      const response = await axios.post(
-        'https://www.strava.com/oauth/token?',
-        null,
-        {
-          params: {
-            client_id: '105576',
-            client_secret: 'd91be7e7d6dc2775e6ee24f494d7079c172e2c8f',
-            code: code,
-            grant_type: 'authorization_code',
-            redirect_uri: 'http://127.0.0.1:3000',
-          },
+      const response = await axios.post("https://www.strava.com/oauth/token?", null, {
+        params: {
+          client_id: "105576",
+          client_secret: "d91be7e7d6dc2775e6ee24f494d7079c172e2c8f",
+          code: code,
+          grant_type: "authorization_code",
+          redirect_uri: "http://localhost:3000/StravaTest"
         }
       );
 
