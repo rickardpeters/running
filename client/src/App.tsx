@@ -1,6 +1,6 @@
-import './App.css';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import StravaTest from './pages/stravaTest';
+import './App.css'
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import UserPage from './pages/UserPage';
 import HomePage from './pages/HomePage';
 import LandingPage from './pages/LandingPage';
 import Layout from './components/Layout';
@@ -13,13 +13,13 @@ import '@fontsource/roboto/700.css';
 function App() {
   return (
     <BrowserRouter>
-      <Layout>
-        <Routes>
-          <Route path='/' element={<LandingPage></LandingPage>}></Route>
-          <Route path='/stravaTest' element={<StravaTest></StravaTest>}></Route>
-          <Route path='/homePage' element={<HomePage></HomePage>}></Route>
-        </Routes>
-      </Layout>
+    <Layout>
+    <Routes>
+      <Route path="/" element={<LandingPage></LandingPage>}></Route>
+      <Route path="/userPage" element={<UserPage></UserPage>}></Route>
+      <Route path="/homePage" element={<HomePage></HomePage>}></Route>
+    </Routes>
+    </Layout>
     </BrowserRouter>
   );
 }
