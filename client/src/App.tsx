@@ -2,7 +2,7 @@ import { useState } from "react";
 import "./App.css";
 import axios from "axios";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import StravaTest from "./pages/stravaTest";
+import UserPage from './pages/UserPage';
 import HomePage from "./pages/HomePage";
 import LandingPage from "./pages/LandingPage";
 import Layout from "./components/Layout";
@@ -22,8 +22,8 @@ function App() {
           <Routes>
             <Route path="/" element={<LandingPage></LandingPage>}></Route>
             <Route
-              path="/stravaTest"
-              element={<StravaTest></StravaTest>}
+              path="/userPage"
+              element={<UserPage></UserPage>}
             ></Route>
             <Route path="/homePage" element={<HomePage></HomePage>}></Route>
           </Routes>

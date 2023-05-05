@@ -20,8 +20,11 @@ const LoginModal = () => {
   const [lasttName, setLastName] = useState("")
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [signedUp, setSignedUp] = useState(false);
 
   const signUp = () => {
+
+    //Creata user in firebase
     createUserWithEmailAndPassword(auth, email, password)
     .then((userCredentials) => {
       console.log(userCredentials)
@@ -29,7 +32,10 @@ const LoginModal = () => {
       console.log(error)
     }).then(() => {
       handleClose()
+      setSignedUp(true)
     })
+
+    //Store static user information like name etc on local server
           
       
   };
@@ -138,6 +144,7 @@ const LoginModal = () => {
           <Button onClick={signUp}>Sign Up</Button>
         </DialogActions>
       </Dialog>
+      
     </div>
   );
 };
