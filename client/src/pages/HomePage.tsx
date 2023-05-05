@@ -1,11 +1,24 @@
-import React from 'react'
+import Sidebar from '../components/Sidebar';
+import Mainfeed from '../components/Mainfeed';
+import Container from '@mui/material/Container';
+import useMediaQuery from '@mui/material/useMediaQuery';
 
 const HomePage = () => {
-  return (
-    <div>
-      <h1>Home Page</h1>
-    </div>
-  )
-}
+  const isSmallScreen = useMediaQuery('(max-width: 850px)');
 
-export default HomePage
+  return (
+    <Container
+      sx={{
+        display: 'flex',
+        flexDirection: 'row',
+        marginTop: '10px',
+        minHeight: '100vh',
+        justifyContent: 'center',
+      }}>
+      {isSmallScreen ? null : <Sidebar></Sidebar>}
+      <Mainfeed></Mainfeed>
+    </Container>
+  );
+};
+
+export default HomePage;

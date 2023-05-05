@@ -1,4 +1,3 @@
-import React from 'react';
 import { Link } from 'react-router-dom';
 import { AppBar, Toolbar, Typography, Button } from '@mui/material';
 import DirectionsRunIcon from '@mui/icons-material/DirectionsRun';
@@ -7,19 +6,19 @@ import FlightLandIcon from '@mui/icons-material/FlightLand';
 
 const Header = () => {
   return (
-    <AppBar position="static">
+    <AppBar position='sticky'>
       <Toolbar>
-        <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+        <Typography variant='h6' component='div' sx={{ flexGrow: 1 }}>
           Kubba på litt
         </Typography>
-        <Button color="inherit" component={Link} to="/">
+        <Button color='inherit' component={Link} to='/'>
           <FlightLandIcon></FlightLandIcon>
         </Button>
-        <Button color="inherit" component={Link} to="/StravaTest">
-        <DirectionsRunIcon></DirectionsRunIcon>
+        <Button color='inherit' component={Link} to='/StravaTest'>
+          <DirectionsRunIcon></DirectionsRunIcon>
         </Button>
-        <Button color="inherit" component={Link} to="/homePage">
-        <HomeIcon></HomeIcon>
+        <Button color='inherit' component={Link} to='/homePage'>
+          <HomeIcon></HomeIcon>
         </Button>
       </Toolbar>
     </AppBar>
