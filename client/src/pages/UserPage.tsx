@@ -131,15 +131,15 @@ const barData = [
             ))}
         </ul>
         </>
-        <>
+        {/* <>
         <Paper>
         <Chart data = {barData}>
-        <ArgumentAxis />
+          <ArgumentAxis />
           <ValueAxis />
           <BarSeries valueField="value" argumentField="argument" />
         </Chart>
         </Paper>
-        </>
+        </> */}
     </>
   );
 };
