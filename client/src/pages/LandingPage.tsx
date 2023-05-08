@@ -1,6 +1,8 @@
-import WelcomeMessage from '../components/WelcomeMessage';
-import LoginModal from '../components/LoginModal';
-import SignUpModal from '../components/SignupModal';
+
+
+import WelcomeMessage from "../components/WelcomeMessage";
+import LoginModal from "../components/LoginModal";
+import SignUpModal from "../components/SignupModal";
 
 const LandingPage = () => {
   return (

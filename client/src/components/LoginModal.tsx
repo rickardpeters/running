@@ -19,18 +19,18 @@ const LoginModal = () => {
   const signIn = () => {
     var err = false;
     signInWithEmailAndPassword(auth, email, password)
-      .then((userCredentials) => {
-        console.log(userCredentials);
-      })
-      .catch((error) => {
-        console.log(error);
-        err = true;
-      })
-      .then(() => {
-        if (!err) {
-          handleClose();
-        }
-      });
+    .then((userCredentials) => {
+      console.log(userCredentials)
+    }).catch((error) => {
+      console.log(error);
+      err = true;
+    }).then(() => {
+      if (!err) {
+        handleClose()
+      }
+    })
+          
+      
   };
 
   const handleClickOpen = () => {
