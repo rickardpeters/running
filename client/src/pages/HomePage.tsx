@@ -12,7 +12,6 @@ const HomePage = () => {
         display: 'flex',
         flexDirection: 'row',
         marginTop: '10px',
-        minHeight: '100vh',
         justifyContent: 'center',
       }}>
       {isSmallScreen ? null : <Sidebar></Sidebar>}
