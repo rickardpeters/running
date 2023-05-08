@@ -19,7 +19,6 @@ const LoginModal = () => {
   const signIn = () => {
     var err = false;
     signInWithEmailAndPassword(auth, email, password)
-<<<<<<< HEAD
     .then((userCredentials) => {
       console.log(userCredentials)
     }).catch((error) => {
@@ -32,20 +31,6 @@ const LoginModal = () => {
     })
           
       
-=======
-      .then((userCredentials) => {
-        console.log(userCredentials);
-      })
-      .catch((error) => {
-        console.log(error);
-        err = true;
-      })
-      .then(() => {
-        if (!err) {
-          handleClose();
-        }
-      });
->>>>>>> d411d6140ecfe73c40e7526fda6efd7a30affa75
   };
 
   const handleClickOpen = () => {

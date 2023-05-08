@@ -1,14 +1,8 @@
-<<<<<<< HEAD
 
 
 import WelcomeMessage from "../components/WelcomeMessage";
 import LoginModal from "../components/LoginModal";
 import SignUpModal from "../components/SignupModal";
-=======
-import WelcomeMessage from '../components/WelcomeMessage';
-import LoginModal from '../components/LoginModal';
-import SignUpModal from '../components/SignupModal';
->>>>>>> d411d6140ecfe73c40e7526fda6efd7a30affa75
 
 const LandingPage = () => {
   return (

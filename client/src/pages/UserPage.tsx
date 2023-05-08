@@ -149,18 +149,11 @@ const useStyles = {
       <h1>
         Hello, {user?.email}
       </h1>
-      <ButtonGroup sx={useStyles}>
-        <Button type='submit' onClick={signIn}>Sign in to Strava account</Button>
-        <Button type='submit' onClick={fetchData}>Load data</Button>
-        <Button type='submit' onClick={getAthleteStats}>Load data</Button>
-        
-      </ButtonGroup>
-      
       <>
-          <h2>Connecting account to {athlete.firstname !== ''  ? " " + athlete.firstname + " " + athlete.lastname + "!": "..."} </h2>
+          {athlete.firstname !== ''? <h2>Account connected to {athlete?.firstname + " " + athlete?.lastname + "!"} </h2> : null}
       </>
         <>
-        <ul>
+        
             <Typography fontWeight={'bold'} sx={{ m: 1 }}>          
             <Card variant="outlined">
               <CardContent>
@@ -208,8 +201,13 @@ const useStyles = {
               </CardContent>
             </Card>
             </Typography>
+            <Button sx={useStyles} type='button' onClick={signIn}>Sign in to Strava account</Button>
+            <ButtonGroup sx={useStyles}>
+              <Button type='submit' onClick={fetchData}>Fetch Info</Button>
+              <Button type='submit' onClick={getAthleteStats}>Load data</Button>
+            </ButtonGroup>
             
-        </ul>
+        
         </>
         {/* <>
         <Paper>
