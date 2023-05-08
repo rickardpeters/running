@@ -1,4 +1,4 @@
-import { GoogleMap, LoadScript } from '@react-google-maps/api';
+import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
 import { useEffect, useState } from 'react';
 import mapStyles from '../styles/MapStyles';
 
@@ -7,16 +7,16 @@ const containerStyle = {
   height: '280px',
 };
 
-const center = {
+// Stockholm is set as default
+const center: google.maps.LatLngLiteral = {
   lat: 59.328,
   lng: 18.07,
 };
 
 const MapComponent = () => {
-  const [currentPosition, setCurrentPosition] = useState<{
-    lat?: number;
-    lng?: number;
-  }>({});
+  const [currentPosition, setCurrentPosition] = useState<
+    google.maps.LatLngLiteral | undefined
+  >(undefined);
 
   useEffect(() => {
     navigator.geolocation.getCurrentPosition(
@@ -32,21 +32,23 @@ const MapComponent = () => {
 
   return (
     <LoadScript googleMapsApiKey='AIzaSyAeJky6_w5dAxCg_fg1qWLN1bmWzpdgYGE'>
-      <GoogleMap
-        mapContainerStyle={containerStyle}
-        options={{
-          styles: mapStyles,
-          disableDefaultUI: true,
-        }}
-        center={
-          currentPosition
-            ? (currentPosition as google.maps.LatLngLiteral)
-            : center
-        }
-        zoom={13}>
-        {/* Child components, such as markers, info windows, etc. */}
-        <></>
-      </GoogleMap>
+      <>
+        <GoogleMap
+          mapContainerStyle={containerStyle}
+          options={{
+            styles: mapStyles,
+            disableDefaultUI: true,
+          }}
+          center={
+            (currentPosition as google.maps.LatLngLiteral)
+              ? (currentPosition as google.maps.LatLngLiteral)
+              : center
+          }
+          zoom={13}>
+          {/* Child components, such as markers, info windows, etc. */}
+          {currentPosition && <Marker position={currentPosition} />}
+        </GoogleMap>
+      </>
     </LoadScript>
   );
 };
