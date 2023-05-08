@@ -26,7 +26,7 @@ const LoginModal = () => {
       console.log(userCredentials)
     }).catch((error) => {
       console.log(error);
-      err == true;
+      err = true;
     }).then(() => {
       if (!err) {
         handleClose()

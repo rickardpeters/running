@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import '../App.css';
 import axios from "axios";
-import { Button, ButtonGroup, Card, Paper } from '@mui/material';
+import { Button, ButtonGroup, Card, Paper, Container, Typography, CardContent } from '@mui/material';
 import {
   Chart,
   BarSeries,
@@ -9,6 +9,7 @@ import {
   ValueAxis,
 } from '@devexpress/dx-react-chart-material-ui';
 import { auth } from "../firebase"
+import Sidebar from '../components/Sidebar';
 
 
 const UserPage = () => {
@@ -111,28 +112,103 @@ const barData = [
 
 var user = auth.currentUser;
 
+const useStyles = {
+  button: {
+    backgroundColor: '#2196f3',
+    color: '#ffffff',
+    borderRadius: '8px',
+    padding: '12px 24px',
+    fontSize: '0.8rem',
+    '&:hover': {
+      backgroundColor: '#1976d2',
+    },
+  },
+};
+
 
   return (
-
-    <> 
+    <Container 
+    sx={{
+      width: '300px',
+      margin: '10px',
+      padding: '10px',
+      alignItems: 'center',
+      flexDirection: 'row',
+      display: 'flex',
+    }}>
+      <Sidebar></Sidebar>
+      <Container
+      sx={{
+        width: '300px',
+        margin: '10px',
+        padding: '10px',
+        
+        flexDirection: 'column',
+        display: 'flex',
+      }}>
       <h1>
         Hello, {user?.email}
       </h1>
-      <ButtonGroup variant="contained">
+      <ButtonGroup sx={useStyles}>
         <Button type='submit' onClick={signIn}>Sign in to Strava account</Button>
         <Button type='submit' onClick={fetchData}>Load data</Button>
         <Button type='submit' onClick={getAthleteStats}>Load data</Button>
         
       </ButtonGroup>
+      
       <>
           <h2>Connecting account to {athlete.firstname !== ''  ? " " + athlete.firstname + " " + athlete.lastname + "!": "..."} </h2>
       </>
         <>
-        <h3>Running totals:</h3>
         <ul>
-          {Object.entries(runTotals).map(([key, value]) => (
-            <Card variant="outlined" key={key}>{capitalizeFirstLetter(key)}: {String(value)}</Card>
-            ))}
+            <Typography fontWeight={'bold'} sx={{ m: 1 }}>          
+            <Card variant="outlined">
+              <CardContent>
+                <h3>Running Totals</h3>
+                {Object.entries(runTotals).map(([key, value]) => {
+                  const formattedValue =
+                    key === 'count'
+                    ? `${(Number(value)).toLocaleString('en', {
+                        minimumFractionDigits: 0,
+                        maximumFractionDigits: 0,
+                      })} runs`
+                    : 
+                    key === 'distance'
+                      ? `${(Number(value) / 1000).toLocaleString('en', {
+                          minimumFractionDigits: 1,
+                          maximumFractionDigits: 1,
+                        })} km`
+                      : 
+                      key === 'moving_time' || key === 'elapsed_time'
+                      ? `${(Number(value) / 3600).toLocaleString('en', {
+                          minimumFractionDigits: 1,
+                          maximumFractionDigits: 1,
+                        })} h`
+                      :
+                      key === 'distance'
+                      ? `${(Number(value) / 1000).toLocaleString('en', {
+                          minimumFractionDigits: 1,
+                          maximumFractionDigits: 1,
+                        })} km`
+                      : 
+                      key === 'elevation_gain'
+                      ? `${(Number(value)).toLocaleString('en', {
+                          minimumFractionDigits: 0,
+                          maximumFractionDigits: 0,
+                        })} m`
+                      : 
+                      String(value);
+
+                  return (
+                    <Typography key={key} gutterBottom>
+                      <b>{capitalizeFirstLetter(key)}</b>: {formattedValue}
+                    </Typography>
+                  );
+                })}
+              </CardContent>
+            </Card>
+            </Typography>
+            
         </ul>
         </>
         {/* <>
@@ -144,7 +220,8 @@ var user = auth.currentUser;
         </Chart>
         </Paper>
         </> */}
-    </>
+    </Container>
+    </Container>
       );
 };
 
