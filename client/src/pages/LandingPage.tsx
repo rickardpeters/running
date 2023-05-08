@@ -2,7 +2,7 @@
 
 import WelcomeMessage from "../components/WelcomeMessage";
 import LoginModal from "../components/LoginModal";
-import SignUpModal from "../components/SignUpModal";
+import SignUpModal from "../components/SignupModal";
 
 const LandingPage = () => {
   

@@ -8,6 +8,7 @@ import {
   ArgumentAxis,
   ValueAxis,
 } from '@devexpress/dx-react-chart-material-ui';
+import { auth } from "../firebase"
 
 
 const UserPage = () => {
@@ -30,6 +31,7 @@ const UserPage = () => {
     const urlParams = new URLSearchParams(window.location.search);
     const code = urlParams.get('code');
     getAccessToken(code)
+    getAthleteInfo()
   };
 
   async function getAccessToken(code: any): Promise<string> {
@@ -64,11 +66,11 @@ const UserPage = () => {
           Authorization: "Bearer " + sessionStorage.getItem("access_token")
         }
       });
-      setAthlete(response.data);
-      return response.data;
+      setAthlete(response.data)
     } catch (error) {
       console.error(error);
     }
+    getAthleteStats()
   };
 
   const getAthleteStats = async () => {
@@ -107,21 +109,23 @@ const barData = [
   { argument: 'Elevation Gain', value: runTotals.elevation_gain },
 ];
 
+var user = auth.currentUser;
+
+
   return (
-    <>
+
+    <> 
       <h1>
-        Hello,
+        Hello, {user?.email}
       </h1>
       <ButtonGroup variant="contained">
-        <Button type='submit' onClick={signIn}>{loggedInState === false ? "Sign in": "Sign out"}</Button>
+        <Button type='submit' onClick={signIn}>Sign in to Strava account</Button>
         <Button type='submit' onClick={fetchData}>Load data</Button>
-        <Button type='submit' onClick={getAthleteInfo}>Fetch athlete info</Button>
+        <Button type='submit' onClick={getAthleteStats}>Load data</Button>
+        
       </ButtonGroup>
       <>
           <h2>Connecting account to {athlete.firstname !== ''  ? " " + athlete.firstname + " " + athlete.lastname + "!": "..."} </h2>
-      </>
-      <>
-        <Button variant="contained" type='submit' onClick={getAthleteStats}>Load stats</Button>
       </>
         <>
         <h3>Running totals:</h3>
@@ -141,7 +145,7 @@ const barData = [
         </Paper>
         </> */}
     </>
-  );
+      );
 };
 
 export default UserPage;

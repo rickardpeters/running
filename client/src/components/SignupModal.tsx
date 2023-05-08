@@ -9,15 +9,15 @@ import DialogTitle from "@mui/material/DialogTitle";
 import { Grid, TextField } from "@mui/material";
 import CountrySelect from "./CountrySelect";
 
-import { createUserWithEmailAndPassword } from "firebase/auth";
-import {auth} from '../firebase'
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+import { auth } from '../firebase'
 
 import RocketLaunchIcon from "@mui/icons-material/RocketLaunch";
 
 const LoginModal = () => {
   const [open, setOpen] = useState(false);
   const [firstName, setFirstName] = useState("")
-  const [lasttName, setLastName] = useState("")
+  const [lastName, setLastName] = useState("")
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [signedUp, setSignedUp] = useState(false);
@@ -71,6 +71,7 @@ const LoginModal = () => {
                 variant="outlined"
                 onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                 setFirstName(event.target.value);
+               
               }}
               />
             </Grid>
