@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import '../App.css';
 import axios from "axios";
-import { Button, ButtonGroup, Card, Paper, Container, Typography, CardContent } from '@mui/material';
+import { Button, ButtonGroup, Card, Paper, Container, Typography, CardContent, Modal, TextField} from '@mui/material';
 import {
   Chart,
   BarSeries,
@@ -17,7 +17,7 @@ const UserPage = () => {
   const [loggedInState, setLoggedInState] = useState(false);
   const [athlete, setAthlete] = useState({ firstname: '', lastname: '', id: '' });
   const [runTotals, setRunTotals] = useState<RunTotals>({count: 0, distance: 0, moving_time: 0, elapsed_time: 0, elevation_gain: 0});
-
+  const [openModal, setOpenModal] = useState<boolean>(false);
 
   const params = new Proxy(new URLSearchParams(window.location.search), {
     get: (searchParams, prop:string) => searchParams.get(prop),
@@ -68,13 +68,15 @@ const UserPage = () => {
         }
       });
       setAthlete(response.data)
+      var athlete = response.data
     } catch (error) {
       console.error(error);
     }
-    getAthleteStats()
+    getAthleteStats(athlete)
+    setOpenModal(true)
   };
 
-  const getAthleteStats = async () => {
+  const getAthleteStats = async (athlete:any) => {
     try {
       const response = await axios.get('https://www.strava.com/api/v3/athletes/' + athlete.id + '/stats', {
         headers: {
@@ -82,7 +84,6 @@ const UserPage = () => {
         }
       });
       setRunTotals(response.data.all_run_totals)
-      console.log(response.data.all_run_totals)
       return response.data
     } catch (error) {
       console.error(error)
@@ -92,7 +93,7 @@ const UserPage = () => {
 
   function capitalizeFirstLetter(string:string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
-}
+  }
 
 interface RunTotals {
   count: number;
@@ -110,25 +111,20 @@ const barData = [
   { argument: 'Elevation Gain', value: runTotals.elevation_gain },
 ];
 
+
 var user = auth.currentUser;
 
-const useStyles = {
-  button: {
-    backgroundColor: '#2196f3',
-    color: '#ffffff',
-    borderRadius: '8px',
-    padding: '12px 24px',
-    fontSize: '0.8rem',
-    '&:hover': {
-      backgroundColor: '#1976d2',
-    },
-  },
-};
+
+const handleCloseModal = () => {
+  setOpenModal(false)
+}
 
 
   return (
+
     <Container 
     sx={{
+      height: '500px',
       width: '300px',
       margin: '10px',
       padding: '10px',
@@ -136,41 +132,36 @@ const useStyles = {
       flexDirection: 'row',
       display: 'flex',
     }}>
+
       <Sidebar></Sidebar>
       <Container
       sx={{
+        height: '500px',
         width: '300px',
         margin: '10px',
         padding: '10px',
-        
         flexDirection: 'column',
         display: 'flex',
       }}>
-      <h1>
-        Hello, {user?.email}
-      </h1>
-      <>
-          {athlete.firstname !== ''? <h2>Account connected to {athlete?.firstname + " " + athlete?.lastname + "!"} </h2> : null}
-      </>
+
         <>
-        
             <Typography fontWeight={'bold'} sx={{ m: 1 }}>          
-            <Card variant="outlined">
+            <Card sx={{width: '250px'}}>
               <CardContent>
-                <h3>Running Totals</h3>
+                <h3>{athlete.firstname !== '' ? athlete.firstname : null}</h3>
                 {Object.entries(runTotals).map(([key, value]) => {
                   const formattedValue =
-                    key === 'count'
-                    ? `${(Number(value)).toLocaleString('en', {
-                        minimumFractionDigits: 0,
-                        maximumFractionDigits: 0,
-                      })} runs`
-                    : 
-                    key === 'distance'
-                      ? `${(Number(value) / 1000).toLocaleString('en', {
-                          minimumFractionDigits: 1,
-                          maximumFractionDigits: 1,
-                        })} km`
+                      key === 'count'
+                      ? `${(Number(value)).toLocaleString('en', {
+                          minimumFractionDigits: 0,
+                          maximumFractionDigits: 0,
+                        })} runs`
+                      : 
+                      key === 'distance'
+                        ? `${(Number(value) / 1000).toLocaleString('en', {
+                            minimumFractionDigits: 1,
+                            maximumFractionDigits: 1,
+                          })} km`
                       : 
                       key === 'moving_time' || key === 'elapsed_time'
                       ? `${(Number(value) / 3600).toLocaleString('en', {
@@ -201,23 +192,33 @@ const useStyles = {
               </CardContent>
             </Card>
             </Typography>
-            <Button sx={useStyles} type='button' onClick={signIn}>Sign in to Strava account</Button>
-            <ButtonGroup sx={useStyles}>
-              <Button type='submit' onClick={fetchData}>Fetch Info</Button>
-              <Button type='submit' onClick={getAthleteStats}>Load data</Button>
+
+            <ButtonGroup orientation='vertical'>
+            <Button variant='outlined' type='button' onClick={signIn}>Sign in to Strava account</Button>
+            <Button variant='outlined' type='submit' onClick={fetchData}>Load data</Button>
             </ButtonGroup>
+
+            <Modal open={openModal} onClose={handleCloseModal}>
+              <Container sx={{ p: 2, width: 300, bgcolor: 'background.paper' }}>
+                <Typography variant="h5" gutterBottom>
+                  Sign In Successful!
+                </Typography>
+                <Typography variant="body1" gutterBottom>
+                  Hello, {athlete.firstname}!
+                  Your account is now connected to your Strava account!
+                </Typography>
+                <Button variant="contained" onClick={handleCloseModal}>
+                  Close
+                </Button>
+              </Container>
+            </Modal>
             
-        
+            <br></br>
+            <Container>
+            <TextField id="outlined-basic" label="Search user" variant="outlined" />
+            </Container>
+
         </>
-        {/* <>
-        <Paper>
-        <Chart data = {barData}>
-          <ArgumentAxis />
-          <ValueAxis />
-          <BarSeries valueField="value" argumentField="argument" />
-        </Chart>
-        </Paper>
-        </> */}
     </Container>
     </Container>
       );
