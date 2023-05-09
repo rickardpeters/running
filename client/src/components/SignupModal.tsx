@@ -1,5 +1,6 @@
 import * as React from "react";
-import { useState } from "react";
+import { useState, useContext } from "react";
+import { useNavigate } from "react-router-dom";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
@@ -8,52 +9,58 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import { Grid, TextField } from "@mui/material";
 import CountrySelect from "./CountrySelect";
+import { UserAuth, UserContext } from './auth/AuthContextProvider'
+import LoginModal from "./LoginModal";
 
-import { createUserWithEmailAndPassword } from "firebase/auth";
-import {auth} from '../firebase'
 
-import RocketLaunchIcon from "@mui/icons-material/RocketLaunch";
 
-const LoginModal = () => {
+
+
+
+
+interface SignUpModalProps {
+  show: boolean;
+  setShow: React.Dispatch<React.SetStateAction<boolean>>
+}
+
+const SignUpModal = (props: SignUpModalProps) => {
   const [open, setOpen] = useState(false);
-  const [firstName, setFirstName] = useState("")
-  const [lasttName, setLastName] = useState("")
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [signedUp, setSignedUp] = useState(false);
+  const navigate = useNavigate;
 
-  const signUp = () => {
+  const { createUser } = useContext(UserContext)
+  const { logOut } = UserAuth()
 
-    //Creata user in firebase
-    createUserWithEmailAndPassword(auth, email, password)
-    .then((userCredentials) => {
-      console.log(userCredentials)
-    }).catch((error) => {
-      console.log(error)
-    }).then(() => {
-      handleClose()
+  const signUp = async () => {
+    
+
+    try{
+      await createUser(email, password);
+      props.setShow(false)
       setSignedUp(true)
-    })
-
-    //Store static user information like name etc on local server
+      logOut()
+      
+      
+    }
+    catch (error) {
+      console.log(error)
+    }
           
       
   };
 
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-
   const handleClose = () => {
-    setOpen(false);
+    props.setShow(false)
   };
 
   return (
     <div>
-      <Button variant="contained" sx={{ m: 2 }} onClick={handleClickOpen}>
-        Sign Up <RocketLaunchIcon></RocketLaunchIcon>
-      </Button>
-      <Dialog open={open} onClose={handleClose}>
+      {!signedUp ? 
+      <Dialog open={props.show} onClose={handleClose}>
         <DialogTitle>Sign Up</DialogTitle>
         <DialogContent>
           <DialogContentText sx={{ mb: 2 }}>
@@ -141,12 +148,15 @@ const LoginModal = () => {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
-          <Button onClick={signUp}>Sign Up</Button>
+          <Button variant="contained" onClick={signUp}>Sign Up</Button>
         </DialogActions>
       </Dialog>
+      :
+      <LoginModal show={signedUp} setShow={setSignedUp}></LoginModal>
+}
       
     </div>
   );
 };
 
-export default LoginModal;
+export default SignUpModal;

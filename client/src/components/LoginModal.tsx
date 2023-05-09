@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
@@ -7,53 +7,58 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import { Grid, TextField } from "@mui/material";
+import { UserContext } from './auth/AuthContextProvider'
 import { signInWithEmailAndPassword } from 'firebase/auth'
 import LoginIcon from "@mui/icons-material/Login";
-import { auth } from "../firebase"
+import { useNavigate } from "react-router-dom";
 
 
 
-const LoginModal = () => {
+interface LoginModalProps {
+  show: boolean;
+  setShow: React.Dispatch<React.SetStateAction<boolean>>
+}
+const LoginModal = (props: LoginModalProps) => {
 
   const [open, setOpen] = useState(false);
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
+  const { logInUser } = useContext(UserContext)
 
-  const signIn = () => {
-    var err = false
-    signInWithEmailAndPassword(auth, email, password)
-    .then((userCredentials) => {
-      console.log(userCredentials)
-    }).catch((error) => {
-      console.log(error);
-      err == true;
-    }).then(() => {
-      if (!err) {
-        handleClose()
-      }
-    })
-          
+  const navigate = useNavigate();
+    
+
+    
+            
+
+  const signIn = async () => {
+    try{
+      await logInUser(email, password);
+      props.setShow(false)
+      navigate('/homePage')
       
-  };
+    }
+    catch (error) {
+      console.log(error)
+    }
+    
+  }
 
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
 
   const handleClose = () => {
+    props.setShow(false);
     setOpen(false);
   };
 
+
   return (
     <div>
-      <Button variant="contained" sx={{ m: 2 }} onClick={handleClickOpen}>
-        Sign In <LoginIcon></LoginIcon>
-      </Button>
-      <Dialog open={open} onClose={handleClose}>
+      
+      <Dialog open={props.show} onClose={handleClose}>
         <DialogTitle>Sign In</DialogTitle>
         <DialogContent>
           <DialogContentText sx={{ mb: 2 }}>
-          Add your credentials to sign in to the application
+          Add your credentials to sign in to the application.
           </DialogContentText>
           <Grid container spacing={2}>
             <Grid item xs={6}>
@@ -88,11 +93,11 @@ const LoginModal = () => {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
-          <Button onClick={signIn}>Log In</Button>
+          <Button variant="contained" onClick={signIn}>Log In</Button>
         </DialogActions>
       </Dialog>
     </div>
   );
 }
 
-export default LoginModal
+export default LoginModal;

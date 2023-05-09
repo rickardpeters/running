@@ -3,8 +3,23 @@ import { AppBar, Toolbar, Typography, Button } from '@mui/material';
 import DirectionsRunIcon from '@mui/icons-material/DirectionsRun';
 import HomeIcon from '@mui/icons-material/Home';
 import FlightLandIcon from '@mui/icons-material/FlightLand';
+import SignOutButton from './SignOutButton';
+import { UserContext } from './auth/AuthContextProvider'
+import { auth } from '../firebase'
+import { useContext, useEffect, useState } from 'react';
 
 const Header = () => {
+  
+const { user } = useContext(UserContext);
+const [isLoggedIn, setisLoggedIn] = useState(false);
+
+useEffect(( )=> {
+  setisLoggedIn(user);
+  
+}, [user])
+
+
+
   return (
     <AppBar position='sticky'>
       <Toolbar>
@@ -20,6 +35,7 @@ const Header = () => {
         <Button color='inherit' component={Link} to='/homePage'>
           <HomeIcon></HomeIcon>
         </Button>
+        {user && <SignOutButton></SignOutButton>}
       </Toolbar>
     </AppBar>
   );
