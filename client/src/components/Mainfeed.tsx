@@ -1,5 +1,6 @@
 import Box from '@mui/material/Box';
 import MapComponent from './MapComponent';
+import MessagingComponent from './MessagingComponent';
 
 const Mainfeed = () => {
   return (
@@ -11,8 +12,7 @@ const Mainfeed = () => {
         p: 1,
         justifyContent: 'space-between',
       }}>
-      <Box sx={{ height: 280, mb: 2, bgcolor: 'green' }}>Latest runs</Box>
-      <Box sx={{ height: 280, mb: 2, bgcolor: 'blue' }}>Stats</Box>
+      <MessagingComponent></MessagingComponent>
       <Box>
         <MapComponent></MapComponent>
       </Box>
