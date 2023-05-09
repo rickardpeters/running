@@ -63,7 +63,7 @@ const MessagingComponent = () => {
         {messages?.map((message) => (
           <Message key={message.id} message={message} />
         ))}
-        <div ref={messagesEndRef} />
+        <Box ref={messagesEndRef} />
       </Box>
       <SendMessage scroll={messagesEndRef}></SendMessage>
     </Box>
