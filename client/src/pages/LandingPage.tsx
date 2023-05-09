@@ -23,13 +23,12 @@ const LandingPage = () => {
   return (
     <div
       style={{
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
-        height: "50vh",
-      }}
-    >
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        height: '50vh',
+      }}>
       <WelcomeMessage></WelcomeMessage>
       <div style={{ display: "flex", gap: "16px" }}>
       <Button variant="contained" sx={{ m: 2 }} onClick={handleLogIn}>

@@ -64,30 +64,30 @@ const LoginModal = (props: LoginModalProps) => {
             <Grid item xs={6}>
               <TextField
                 autoFocus
-                margin="dense"
-                id="name"
-                label="Email Adress"
-                type="email"
+                margin='dense'
+                id='name'
+                label='Email Adress'
+                type='email'
                 fullWidth
-                variant="outlined"
+                variant='outlined'
                 onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                   setEmail(event.target.value);
                 }}
               />
             </Grid>
             <Grid item xs={6}>
-            <TextField
-              autoFocus
-              margin="dense"
-              id="Password"
-              label="Password"
-              type="password"
-              fullWidth
-              variant="outlined"
-              onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                setPassword(event.target.value);
-              }}
-            />
+              <TextField
+                autoFocus
+                margin='dense'
+                id='Password'
+                label='Password'
+                type='password'
+                fullWidth
+                variant='outlined'
+                onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                  setPassword(event.target.value);
+                }}
+              />
             </Grid>
           </Grid>
         </DialogContent>
@@ -98,6 +98,6 @@ const LoginModal = (props: LoginModalProps) => {
       </Dialog>
     </div>
   );
-}
+};
 
 export default LoginModal;

@@ -5,20 +5,20 @@ const CommunityCard = () => {
     <Paper
       elevation={0}
       sx={{
-        height: '300px',
-        width: '280px',
+        height: 300,
+        width: 280,
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
         flexDirection: 'column',
         bgcolor: 'white',
-        marginBottom: '20px',
+        mb: 2,
       }}>
       <Avatar
         alt='Avatar'
         sx={{
-          height: '100px',
-          width: '100px',
+          height: 100,
+          width: 100,
         }}></Avatar>
       <Box
         sx={{

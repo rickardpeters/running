@@ -6,9 +6,9 @@ const Sidebar = () => {
   return (
     <Box
       sx={{
-        width: '300px',
-        margin: '10px',
-        padding: '10px',
+        width: 300,
+        m: 1,
+        p: 1,
         alignItems: 'center',
         flexDirection: 'column',
         display: 'flex',

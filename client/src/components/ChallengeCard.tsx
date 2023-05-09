@@ -6,21 +6,21 @@ const ChallengeCard = () => {
     <Paper
       elevation={0}
       sx={{
-        height: '300px',
-        width: '280px',
+        height: 300,
+        width: 280,
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
         flexDirection: 'column',
         bgcolor: 'white',
-        marginBottom: '20px',
+        mb: 2,
       }}>
       <DirectionsRunIcon sx={{ fontSize: '50px' }}></DirectionsRunIcon>
       <Typography variant={'h5'}>Nuvarande utmaning</Typography>
       <Typography>30 av 400km</Typography>
       <Button
         sx={{
-          margin: '20px',
+          m: 2,
         }}
         variant='outlined'>
         Skicka ny utmaning

@@ -78,6 +78,7 @@ const SignUpModal = (props: SignUpModalProps) => {
                 variant="outlined"
                 onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                 setFirstName(event.target.value);
+               
               }}
               />
             </Grid>
