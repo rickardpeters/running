@@ -10,6 +10,7 @@ import {
 } from '@devexpress/dx-react-chart-material-ui';
 import { auth } from "../firebase"
 import Sidebar from '../components/Sidebar';
+import UserModal from '../components/UserList';
 
 
 const UserPage = () => {
@@ -215,7 +216,7 @@ const handleCloseModal = () => {
             
             <br></br>
             <Container>
-            <TextField id="outlined-basic" label="Search user" variant="outlined" />
+            <UserModal/>
             </Container>
 
         </>

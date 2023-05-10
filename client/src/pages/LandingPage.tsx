@@ -2,7 +2,7 @@
 
 import WelcomeMessage from "../components/WelcomeMessage";
 import LoginModal from "../components/LoginModal";
-import SignUpModal from "../components/SignUpModal";
+import SignUpModal from "../components/SignupModal";
 import LoginIcon from "@mui/icons-material/Login";
 import RocketLaunchIcon from "@mui/icons-material/RocketLaunch";
 import Button from "@mui/material/Button";
