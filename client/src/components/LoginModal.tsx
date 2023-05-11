@@ -15,7 +15,7 @@ import { useNavigate } from "react-router-dom";
 
 
 interface LoginModalProps {
-  show: boolean;
+  show ?: boolean;
   setShow: React.Dispatch<React.SetStateAction<boolean>>
 }
 const LoginModal = (props: LoginModalProps) => {
@@ -52,9 +52,9 @@ const LoginModal = (props: LoginModalProps) => {
 
 
   return (
-    <div>
+    <>
       
-      <Dialog open={props.show} onClose={handleClose}>
+      
         <DialogTitle>Sign In</DialogTitle>
         <DialogContent>
           <DialogContentText sx={{ mb: 2 }}>
@@ -95,8 +95,8 @@ const LoginModal = (props: LoginModalProps) => {
           <Button onClick={handleClose}>Cancel</Button>
           <Button variant="contained" onClick={signIn}>Log In</Button>
         </DialogActions>
-      </Dialog>
-    </div>
+      
+    </>
   );
 };
 
