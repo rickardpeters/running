@@ -29,6 +29,7 @@ const PasswordStrength = (props: PasswordStrengthProps) => {
     if (props.passStrength == 0) {
       setColor("error");
       setMessage("The password is too Weak");
+      setStrenthTest(false)
     } else if (props.passStrength == 1) {
       setColor("warning");
       setMessage("The password is Weak");
