@@ -1,19 +1,26 @@
-from typing import Optional
-from uuid import UUID, uuid4
 from pydantic import BaseModel
+from typing import Optional
 
 
 class UserBase(BaseModel):
     email: str
-    name: str
 
 
 class UserCreate(UserBase):
-    id: int
+    first_name: str
+    last_name: str
+    firebase_uid: str
+
+
+class UserStravaTokens(UserBase):
+    strava_access_token: Optional[str]
+    strava_refresh_token: Optional[str]
 
 
 class User(UserBase):
-    id: Optional[UUID] = uuid4()
+    id: int
+    first_name: str
+    last_name: str
 
-    class config:
+    class Config:
         orm_mode = True
