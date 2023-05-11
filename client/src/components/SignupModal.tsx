@@ -1,40 +1,49 @@
-import * as React from 'react';
-import { useState, useContext } from 'react';
-import { useNavigate } from 'react-router-dom';
-import Button from '@mui/material/Button';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
-import { Grid, TextField } from '@mui/material';
-import CountrySelect from './CountrySelect';
-import { UserAuth, UserContext } from './auth/AuthContextProvider';
-import LoginModal from './LoginModal';
+import * as React from "react";
+import { useState, useContext } from "react";
+import { useNavigate } from "react-router-dom";
+import Button from "@mui/material/Button";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
+import { Grid, TextField } from "@mui/material";
+import CountrySelect from "./CountrySelect";
+import { UserAuth, UserContext } from "./auth/AuthContextProvider";
+import LoginModal from "./LoginModal";
+import { passwordStrength } from 'check-password-strength'
 
 interface SignUpModalProps {
   show: boolean;
   setShow: React.Dispatch<React.SetStateAction<boolean>>;
+
+  signedUp: boolean;
+  setSignedUp: React.Dispatch<React.SetStateAction<boolean>>;
+
 }
 
 const SignUpModal = (props: SignUpModalProps) => {
   const [open, setOpen] = useState(false);
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [signedUp, setSignedUp] = useState(false);
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  
   const navigate = useNavigate;
 
   const { createUser } = useContext(UserContext);
   const { logOut } = UserAuth();
 
   const signUp = async () => {
+
     try {
+
       await createUser(email, password);
-      props.setShow(false);
-      setSignedUp(true);
+      //props.setShow(false);
+      props.setSignedUp(true);
       logOut();
+      console.log("signed up: ", props.signedUp)
+
     } catch (error) {
       console.log(error);
     }
@@ -45,9 +54,9 @@ const SignUpModal = (props: SignUpModalProps) => {
   };
 
   return (
-    <div>
-      {!signedUp ? (
-        <Dialog open={props.show} onClose={handleClose}>
+    <>
+      {props.signedUp ? (<LoginModal show={props.signedUp} setShow={props.setSignedUp}></LoginModal>):(
+        <>
           <DialogTitle>Sign Up</DialogTitle>
           <DialogContent>
             <DialogContentText sx={{ mb: 2 }}>
@@ -57,12 +66,12 @@ const SignUpModal = (props: SignUpModalProps) => {
               <Grid item xs={6}>
                 <TextField
                   autoFocus
-                  margin='dense'
-                  id='first name'
-                  label='First Name'
-                  type='name'
+                  margin="dense"
+                  id="first name"
+                  label="First Name"
+                  type="name"
                   fullWidth
-                  variant='outlined'
+                  variant="outlined"
                   onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                     setFirstName(event.target.value);
                   }}
@@ -71,12 +80,12 @@ const SignUpModal = (props: SignUpModalProps) => {
               <Grid item xs={6}>
                 <TextField
                   autoFocus
-                  margin='dense'
-                  id='last name'
-                  label='Last Name'
-                  type='name'
+                  margin="dense"
+                  id="last name"
+                  label="Last Name"
+                  type="name"
                   fullWidth
-                  variant='outlined'
+                  variant="outlined"
                   onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                     setLastName(event.target.value);
                   }}
@@ -87,12 +96,12 @@ const SignUpModal = (props: SignUpModalProps) => {
               <Grid item xs={6}>
                 <TextField
                   autoFocus
-                  margin='dense'
-                  id='name'
-                  label='Email Adress'
-                  type='email'
+                  margin="dense"
+                  id="name"
+                  label="Email Adress"
+                  type="email"
                   fullWidth
-                  variant='outlined'
+                  variant="outlined"
                   onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                     setEmail(event.target.value);
                   }}
@@ -106,12 +115,12 @@ const SignUpModal = (props: SignUpModalProps) => {
               <Grid item xs={6}>
                 <TextField
                   autoFocus
-                  margin='dense'
-                  id='Password'
-                  label='Password'
-                  type='password'
+                  margin="dense"
+                  id="Password"
+                  label="Password"
+                  type="password"
                   fullWidth
-                  variant='outlined'
+                  variant="outlined"
                   onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                     setPassword(event.target.value);
                   }}
@@ -120,12 +129,12 @@ const SignUpModal = (props: SignUpModalProps) => {
               <Grid item xs={6}>
                 <TextField
                   autoFocus
-                  margin='dense'
-                  id='Re type Password'
-                  label='Enter Password Again'
-                  type='password'
+                  margin="dense"
+                  id="Re type Password"
+                  label="Enter Password Again"
+                  type="password"
                   fullWidth
-                  variant='outlined'
+                  variant="outlined"
                   onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                     setPassword(event.target.value);
                   }}
@@ -135,15 +144,13 @@ const SignUpModal = (props: SignUpModalProps) => {
           </DialogContent>
           <DialogActions>
             <Button onClick={handleClose}>Cancel</Button>
-            <Button variant='contained' onClick={signUp}>
+            <Button type='button' variant="contained" onClick={signUp}>
               Sign Up
             </Button>
           </DialogActions>
-        </Dialog>
-      ) : (
-        <LoginModal show={signedUp} setShow={setSignedUp}></LoginModal>
-      )}
-    </div>
+        </>
+      ) }
+    </>
   );
 };
 
