@@ -28,6 +28,10 @@ def create_user(db: Session, user: schemas.User):
     return db_user
 
 
+def update_user(db: Session, user_id: int):
+    pass
+
+
 def delete_user(db: Session, user_id: int):
     user = get_user(db=db, user_id=user_id)
     if user is None:
