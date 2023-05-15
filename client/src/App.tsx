@@ -14,6 +14,7 @@ import "@fontsource/roboto/400.css";
 import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
 import { AuthContextProvider } from "./components/auth/AuthContextProvider";
+import CommunityList from "./pages/CommunityList";
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
               <Route path="/" element={<LandingPage></LandingPage>}></Route>
               <Route path="/userPage" element={<UserPage></UserPage>}></Route>
               <Route path="/homePage" element={<HomePage></HomePage>}></Route>
+              <Route path="/communityList" element={<CommunityList></CommunityList>}></Route>
             </Routes>
           
         </Layout>

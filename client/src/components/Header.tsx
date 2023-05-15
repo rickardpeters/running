@@ -35,6 +35,9 @@ useEffect(( )=> {
         <Button color='inherit' component={Link} to='/homePage'>
           <HomeIcon></HomeIcon>
         </Button>
+        <Button color='inherit' component={Link} to='/communityList'>
+          communityList
+        </Button>
         {user && <SignOutButton></SignOutButton>}
       </Toolbar>
     </AppBar>
