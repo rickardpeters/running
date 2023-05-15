@@ -3,10 +3,18 @@ from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 
 from services.database import Base
+from services import authentication
 
 
-association_table = Table(
+user_community_association_table = Table(
     "user_communities",
+    Base.metadata,
+    Column("user_id", Integer, ForeignKey("users.id")),
+    Column("community_id", Integer, ForeignKey("communities.id")),
+)
+
+admin_community_association_table = Table(
+    "admin_communities",
     Base.metadata,
     Column("user_id", Integer, ForeignKey("users.id")),
     Column("community_id", Integer, ForeignKey("communities.id")),
@@ -16,17 +24,20 @@ association_table = Table(
 class User(Base):
     __tablename__ = "users"
 
-    id = Column(Integer, primary_key=True, index=True)
-    firebase_uid = Column(String, unique=True, index=True, nullable=False)
+    id = Column(String, primary_key=True, index=True)
     email = Column(String, unique=True, index=True, nullable=False)
     first_name = Column(String, unique=False)
     last_name = Column(String, unique=False)
     strava_access_token = Column(String, unique=True)
     strava_refresh_token = Column(String, unique=True)
     communities = relationship(
-        "Community", secondary=association_table, back_populates="users"
+        "Community", secondary=user_community_association_table, back_populates="users"
     )
-    admin_of_communities = relationship("Community", back_populates="community_admin")
+    admin_of_communities = relationship(
+        "Community",
+        secondary=admin_community_association_table,
+        back_populates="community_admins",
+    )
 
 
 class Community(Base):
@@ -34,9 +45,12 @@ class Community(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     community_name = Column(String, unique=True, index=True, nullable=False)
-    community_admin_id = Column(Integer, ForeignKey("users.id"), nullable=False)
-    community_admin = relationship("User", back_populates="admin_of_communities")
+    community_admins = relationship(
+        "User",
+        secondary=admin_community_association_table,
+        back_populates="admin_of_communities",
+    )
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     users = relationship(
-        "User", secondary=association_table, back_populates="communities"
+        "User", secondary=user_community_association_table, back_populates="communities"
     )

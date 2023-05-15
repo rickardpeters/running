@@ -3,7 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.middleware.trustedhost import TrustedHostMiddleware
 
 from services.database import engine
-from routers import user_router
+from routers import user_router, community_router
 from utils import models
 from services import authentication
 
@@ -25,9 +25,11 @@ app.add_middleware(
 )
 
 app.include_router(user_router.router)
+app.include_router(community_router.router)
 
 
 # ROOT (Example of how to protect routes in future)
+# This can be deleted
 @app.get("/", dependencies=[Depends(authentication.authenticate_user)])
 async def root():
     return {"message": "Successfully authenticated!"}

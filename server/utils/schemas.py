@@ -5,7 +5,6 @@ from datetime import datetime
 
 class UserBase(BaseModel):
     email: str
-    firebase_uid: str
 
 
 class UserCreate(UserBase):
@@ -19,7 +18,7 @@ class UserStravaTokens(UserBase):
 
 
 class User(UserBase):
-    id: int
+    id: str
     first_name: str
     last_name: str
     communities: list
@@ -29,9 +28,16 @@ class User(UserBase):
         orm_mode = True
 
 
-class Community(BaseModel):
-    id: int
+class CommunityBase(BaseModel):
     community_name: str
+
+
+class CommunityCreate(CommunityBase):
+    community_name: str
+
+
+class Community(CommunityBase):
+    id: int
+    community_admins: list[User]
     created_at: datetime
-    community_admin: User
     users: list[User]
