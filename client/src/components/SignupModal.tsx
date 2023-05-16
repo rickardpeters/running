@@ -15,7 +15,10 @@ import { passwordStrength, FirstOption, Option } from "check-password-strength";
 import PasswordStrength from "./PasswordStrength";
 import PasswordField from "./PasswordField";
 import { useRecoilValue } from "recoil";
-import { passwordStrengthTestPassed, passwordTestPassed } from "../recoil/atoms";
+import {
+  passwordStrengthTestPassed,
+  passwordTestPassed,
+} from "../recoil/atoms";
 
 interface SignUpModalProps {
   show: boolean;
@@ -33,8 +36,8 @@ const SignUpModal = (props: SignUpModalProps) => {
   const [password, setPassword] = useState("");
   const [passStrength, setStrength] = useState<number | null>(null);
 
-  const testPassed = useRecoilValue(passwordTestPassed)
-  const strengthTestPassed = useRecoilValue(passwordStrengthTestPassed)
+  const testPassed = useRecoilValue(passwordTestPassed);
+  const strengthTestPassed = useRecoilValue(passwordStrengthTestPassed);
 
   const navigate = useNavigate;
 
@@ -42,7 +45,7 @@ const SignUpModal = (props: SignUpModalProps) => {
   const { logOut } = UserAuth();
 
   const signUp = async () => {
-    console.log(testPassed, strengthTestPassed)
+    console.log(testPassed, strengthTestPassed);
     try {
       await createUser(email, password);
       //props.setShow(false);
@@ -157,12 +160,15 @@ const SignUpModal = (props: SignUpModalProps) => {
           </DialogContent>
           <DialogActions>
             <Button onClick={handleClose}>Cancel</Button>
-            {(strengthTestPassed && testPassed) ? <Button type="button" variant="contained" onClick={signUp}>
-              Sign Up
-            </Button> : <Button type="button" variant="contained" disabled>
-              Sign Up
-            </Button>}
-            
+            {strengthTestPassed && testPassed ? (
+              <Button type="button" variant="contained" onClick={signUp}>
+                Sign Up
+              </Button>
+            ) : (
+              <Button type="button" variant="contained" disabled>
+                Sign Up
+              </Button>
+            )}
           </DialogActions>
         </>
       )}
