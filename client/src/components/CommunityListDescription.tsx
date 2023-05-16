@@ -1,11 +1,12 @@
-import React from 'react'
+import { Box, Typography } from "@mui/material";
+import React from "react";
 
 const CommunityListDescription = () => {
   return (
-    <div>
-      <h1>Joined Communities</h1>
-    </div>
-  )
-}
+    <Box style={{ padding: "10px" }}>
+      <Typography variant='h5'>Joined Communities</Typography>
+    </Box>
+  );
+};
 
-export default CommunityListDescription
+export default CommunityListDescription;
