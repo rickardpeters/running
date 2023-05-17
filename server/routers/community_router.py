@@ -32,7 +32,8 @@ def create_community(
     community: schemas.CommunityCreate,
     db: Session = Depends(get_db),
 ):
-    db_community = crud.get_community_by_name(db, name=community.community_name)
+    db_community = crud.get_community_by_name(
+        db, name=community.community_name)
     if db_community:
         raise HTTPException(
             status_code=400, detail="Community with that name already exists!"

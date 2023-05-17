@@ -41,3 +41,29 @@ class Community(CommunityBase):
     community_admins: list[User]
     created_at: datetime
     users: list[User]
+
+
+class ChallengeBase(BaseModel):
+    id: int
+    name: str
+    start_date: datetime
+    end_date: datetime
+
+
+class ChallengeCreate(ChallengeBase):
+    goal: int
+
+
+class ChallengeUpdate(ChallengeBase):
+    goal: int
+
+
+class Challenge(ChallengeBase):
+    id: int
+    name: str
+    goal: int
+    start_date: datetime
+    end_date: datetime
+
+    class Config:
+        orm_mode = True

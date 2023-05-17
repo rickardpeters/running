@@ -54,3 +54,16 @@ class Community(Base):
     users = relationship(
         "User", secondary=user_community_association_table, back_populates="communities"
     )
+    challenges = relationship("Challenge", back_populates="community")
+
+
+class Challenge(Base):
+    __tablename__ = "challenges"
+
+    id = Column(Integer, primary_key=True, index=True, nullable=False)
+    name = Column(String, unique=True, nullable=False)
+    community = Column(Integer, ForeignKey('communities.id'))
+    #community = Column(Integer, index=True, nullable=False)
+    goal = Column(Integer, nullable=False)
+    start_date = Column(DateTime(timezone=True), server_default=func.now())
+    end_date = Column(DateTime(timezone=True))
