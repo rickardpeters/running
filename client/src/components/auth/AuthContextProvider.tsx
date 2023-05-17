@@ -18,6 +18,7 @@ interface UserContextType {
   user: any;
   logOut: () => Promise<void>;
   logInUser: (email: string, password: string) => Promise<any>;
+  
 }
 
 export const UserContext = createContext<UserContextType>({
@@ -25,6 +26,7 @@ export const UserContext = createContext<UserContextType>({
   user: {},
   logOut: () => Promise.resolve(),
   logInUser: () => Promise.resolve(),
+  
 });
 
 type AuthContextProviderProps = {
@@ -36,6 +38,7 @@ export const AuthContextProvider = ({children }: AuthContextProviderProps) => {
     const [user, setUser] = useState<User | null>(null);
   
     const createUser = (email: string, password: string) => {
+      
       return createUserWithEmailAndPassword(auth, email, password)
     }
 
@@ -51,18 +54,21 @@ export const AuthContextProvider = ({children }: AuthContextProviderProps) => {
       const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
         
         if (currentUser) {
+          
           setUser(currentUser);
           console.log("auth state change")
           console.log(currentUser)
+          console.log(user)
         } else {
           setUser(null);
           console.log("set user to null")
         }
-      });
+      }
+      );
       return () => {
         unsubscribe();
       }
-    }, []);
+    }, [user]);
     
     return (
       <UserContext.Provider value ={{createUser, user, logOut, logInUser}}>
