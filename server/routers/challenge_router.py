@@ -55,9 +55,20 @@ def delete_challenge(challenge_id: int, db: Session = Depends(get_db)):
 # UPDATE CHALLENGE
 
 
-@router.put("/{challenge_id}", response_model=schemas.ChallengeUpdate)
-def update_challenge(challenge_id: int, db: Session = Depends(get_db)):
-    updated_challenge = crud.update_challenge(db, challenge_id=challenge_id)
-    if not updated_challenge:
+@router.put("/{challenge_id}", response_model=schemas.Challenge)
+def update_challenge(
+    challenge: schemas.ChallengeUpdate,
+    challenge_id: int,
+    db: Session = Depends(get_db)
+):
+
+    db_challenge = crud.get_challenge(db=db, challenge_id=challenge_id)
+    if db_challenge is None:
         raise HTTPException(status_code=404, detail="Challenge not found")
+
+    updated_challenge = crud.update_challenge(
+        db=db, challenge=db_challenge, challenge_update=challenge.dict(
+            exclude_unset=True)
+    )
+
     return updated_challenge

@@ -122,12 +122,15 @@ def delete_challenge(db: Session, challenge_id: int):
     return challenge
 
 
-def update_challenge(db: Session, challenge_id: int, challenge_update: schemas.ChallengeUpdate):
-    challenge = get_challenge(db=db, challenge_id=challenge_id)
-    if challenge is None:
+def update_challenge(
+        db: Session,
+        challenge: models.Challenge,
+        challenge_update: schemas.ChallengeUpdate):
+    try:
+        for field, value in challenge_update.items():
+            setattr(challenge, field, value)
+        db.commit()
+        db.refresh(challenge)
+        return challenge
+    except:
         return None
-    for field, value in challenge_update.dict(exclude_unset=True).items():
-        setattr(challenge, field, value)
-    db.commit()
-    db.refresh(challenge)
-    return challenge
