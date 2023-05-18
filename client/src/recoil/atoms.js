@@ -14,3 +14,8 @@ export const passwordStrengthTestPassed = atom ({
     key:'passwordStrengthTestPassed',
     default:false
 })
+
+export const showCreateCommunityAtom = atom ({
+    key:'showCreateCommunityAtom',
+    default:false
+})

@@ -64,6 +64,8 @@ const SignUpModal = (props: SignUpModalProps) => {
     try {
       await createUser(email, password);
       props.setSignedUp(true)
+
+      //Function to get user token from anywhere
       const token = await getUserToken(auth);
     
       const unsubscribe = onAuthStateChanged(auth, async (user) => {
