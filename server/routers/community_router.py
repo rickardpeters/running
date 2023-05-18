@@ -83,7 +83,7 @@ def update_community(
             if user not in db_community.members:
                 db_community.members.append(user)
         else:
-            raise HTTPException(status_code=404, detail="Admin could not be added")
+            raise HTTPException(status_code=400, detail="Admin could not be added")
 
     if community.remove_admin:
         user = crud.get_user(db=db, user_id=community.remove_admin)
@@ -95,7 +95,7 @@ def update_community(
         ):
             db_community.community_admins.remove(user)
         else:
-            raise HTTPException(status_code=404, detail="Admin could not be removed")
+            raise HTTPException(status_code=400, detail="Admin could not be removed")
 
     updated_community = crud.update_community(
         db=db, community=db_community, update_data=community.dict(exclude_unset=True)
