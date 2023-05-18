@@ -2,10 +2,14 @@ import { Box, Paper } from "@mui/material";
 import React from "react";
 import CommunityListComponent from "./CommunityListComponent";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
+import axios from "axios";
 
 const SearchResult = () => {
+
+    const API = 'http://127.0.0.1:8000'
   const queryInput = () => {
-    console.log("searching");
+
+    
   };
   return (
     <Box style={{ margin: "10px" }}>
