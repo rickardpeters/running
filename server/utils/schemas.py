@@ -67,10 +67,24 @@ class Community(CommunityBase):
     users: list[User]
     community_admins: List[UserSummery]
     members: List[UserSummery]
+    challenges: list['Challenge']
+
+    class Config:
+        orm_mode = True
 
 
 class ChallengeBase(BaseModel):
     name: str
+    goal: int
+
+
+class Challenge(ChallengeBase):
+    id: int
+    name: str
+    goal: int
+    community: Community
+    start_date: datetime
+    end_date: datetime
 
 
 class ChallengeCreate(ChallengeBase):
@@ -78,18 +92,12 @@ class ChallengeCreate(ChallengeBase):
     name: str
     start_date: datetime
     end_date: datetime
+    community_id: int
 
 
 class ChallengeUpdate(ChallengeBase):
     goal: int
 
 
-class Challenge(ChallengeBase):
-    name: str
-    goal: int
-    #community: int
-    start_date: datetime
-    end_date: datetime
-
-    class Config:
-        orm_mode = True
+Community.update_forward_refs()
+Challenge.update_forward_refs()

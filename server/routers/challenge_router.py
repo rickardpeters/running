@@ -37,7 +37,8 @@ def create_challenge(challenge: schemas.ChallengeCreate, db: Session = Depends(g
         "name": challenge.name,
         "goal": challenge.goal,
         "start_date": challenge.start_date,
-        "end_date": challenge.end_date
+        "end_date": challenge.end_date,
+        "community_id": challenge.community_id
     }
 
     return crud.create_challenge(db=db, challenge=challenge_data)

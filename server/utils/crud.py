@@ -121,9 +121,9 @@ def create_challenge(db: Session, challenge: dict):
     challenge = models.Challenge(
         name=challenge["name"],
         goal=challenge["goal"],
-        # community=challenge.community,
         start_date=challenge["start_date"],
-        end_date=challenge["end_date"]
+        end_date=challenge["end_date"],
+        community_id=challenge["community_id"]
     )
     db.add(challenge)
     db.commit()

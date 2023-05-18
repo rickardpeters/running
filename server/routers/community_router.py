@@ -78,10 +78,12 @@ def update_community(
             raise HTTPException(status_code=404, detail="User not found")
 
     updated_community = crud.update_community(
-        db=db, community=db_community, update_data=community.dict(exclude_unset=True)
+        db=db, community=db_community, update_data=community.dict(
+            exclude_unset=True)
     )
     if updated_community is None:
-        raise HTTPException(status_code=400, detail="Community could not be updated")
+        raise HTTPException(
+            status_code=400, detail="Community could not be updated")
     return updated_community
 
 
