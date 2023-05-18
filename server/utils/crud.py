@@ -80,6 +80,7 @@ def create_community(
     db_community = models.Community(
         community_name=community.community_name,
         community_admins=[current_user],
+        members=[current_user],
         description=community.description,
     )
     db.add(db_community)
