@@ -3,7 +3,6 @@ from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 
 from services.database import Base
-from services import authentication
 
 from datetime import date
 
@@ -11,14 +10,14 @@ from datetime import date
 user_community_association_table = Table(
     "user_communities",
     Base.metadata,
-    Column("user_id", Integer, ForeignKey("users.id")),
+    Column("user_id", String, ForeignKey("users.id")),
     Column("community_id", Integer, ForeignKey("communities.id")),
 )
 
 admin_community_association_table = Table(
     "admin_communities",
     Base.metadata,
-    Column("user_id", Integer, ForeignKey("users.id")),
+    Column("user_id", String, ForeignKey("users.id")),
     Column("community_id", Integer, ForeignKey("communities.id")),
 )
 
@@ -33,7 +32,9 @@ class User(Base):
     strava_access_token = Column(String, unique=True)
     strava_refresh_token = Column(String, unique=True)
     communities = relationship(
-        "Community", secondary=user_community_association_table, back_populates="users"
+        "Community",
+        secondary=user_community_association_table,
+        back_populates="members",
     )
     admin_of_communities = relationship(
         "Community",
@@ -47,13 +48,14 @@ class Community(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     community_name = Column(String, unique=True, index=True, nullable=False)
+    description = Column(String, unique=False, nullable=False, default="")
     community_admins = relationship(
         "User",
         secondary=admin_community_association_table,
         back_populates="admin_of_communities",
     )
     created_at = Column(DateTime(timezone=True), server_default=func.now())
-    users = relationship(
+    members = relationship(
         "User", secondary=user_community_association_table, back_populates="communities"
     )
     challenges = Column()
