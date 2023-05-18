@@ -58,6 +58,8 @@ class CommunityUpdate(CommunityBase):
     description: Optional[str]
     add_member: Optional[str]
     remove_member: Optional[str]
+    add_admin: Optional[str]
+    remove_admin: Optional[str]
 
 
 class Community(CommunityBase):
