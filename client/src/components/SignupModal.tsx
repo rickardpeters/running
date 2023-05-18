@@ -15,7 +15,17 @@ import { passwordStrength, FirstOption, Option } from "check-password-strength";
 import PasswordStrength from "./PasswordStrength";
 import PasswordField from "./PasswordField";
 import { useRecoilValue } from "recoil";
-import { passwordStrengthTestPassed, passwordTestPassed } from "../recoil/atoms";
+import {
+  passwordStrengthTestPassed,
+  passwordTestPassed,
+} from "../recoil/atoms";
+import axios from "axios";
+
+import { Auth, onAuthStateChanged } from "firebase/auth";
+import { auth } from "../firebase";
+import firebase from 'firebase/app';
+import 'firebase/auth';
+import { getUserToken } from "../utils";
 
 interface SignUpModalProps {
   show: boolean;
@@ -33,26 +43,53 @@ const SignUpModal = (props: SignUpModalProps) => {
   const [password, setPassword] = useState("");
   const [passStrength, setStrength] = useState<number | null>(null);
 
-  const testPassed = useRecoilValue(passwordTestPassed)
-  const strengthTestPassed = useRecoilValue(passwordStrengthTestPassed)
+  const testPassed = useRecoilValue(passwordTestPassed);
+  const strengthTestPassed = useRecoilValue(passwordStrengthTestPassed);
 
   const navigate = useNavigate;
 
-  const { createUser } = useContext(UserContext);
+  const { createUser, user } = useContext(UserContext);
+  
   const { logOut } = UserAuth();
 
+  
   const signUp = async () => {
-    console.log(testPassed, strengthTestPassed)
+    const newUser = {
+      email: email,
+      first_name: firstName,
+      last_name: lastName,
+      
+    }
+   
     try {
       await createUser(email, password);
-      //props.setShow(false);
-      props.setSignedUp(true);
-      logOut();
-      console.log("signed up: ", props.signedUp);
+      props.setSignedUp(true)
+      const token = await getUserToken(auth);
+    
+      const unsubscribe = onAuthStateChanged(auth, async (user) => {
+        
+      
+      const config = {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      }
+      const response = await axios.post('http://localhost:8000/users/', newUser, config);
+      console.log(response)
+    });
+    return unsubscribe();
+      
     } catch (error) {
-      console.log(error);
+      console.error(error)
     }
-  };
+    
+    
+    
+  }
+
+
+ 
 
   const handleClose = () => {
     props.setShow(false);
@@ -157,12 +194,15 @@ const SignUpModal = (props: SignUpModalProps) => {
           </DialogContent>
           <DialogActions>
             <Button onClick={handleClose}>Cancel</Button>
-            {(strengthTestPassed && testPassed) ? <Button type="button" variant="contained" onClick={signUp}>
-              Sign Up
-            </Button> : <Button type="button" variant="contained" disabled>
-              Sign Up
-            </Button>}
-            
+            {strengthTestPassed && testPassed ? (
+              <Button type="button" variant="contained" onClick={signUp}>
+                Sign Up
+              </Button>
+            ) : (
+              <Button type="button" variant="contained" disabled>
+                Sign Up
+              </Button>
+            )}
           </DialogActions>
         </>
       )}
