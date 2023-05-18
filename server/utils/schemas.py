@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from typing import Optional
+from typing import Optional, List
 from datetime import datetime
 
 
@@ -15,6 +15,20 @@ class UserCreate(UserBase):
 class UserStravaTokens(UserBase):
     strava_access_token: Optional[str]
     strava_refresh_token: Optional[str]
+
+
+class UserSummery(UserBase):
+    first_name: str
+    last_name: str
+
+    class Config:
+        orm_mode = True
+
+
+class UserUpdate(UserBase):
+    email: Optional[str]
+    first_name: Optional[str]
+    last_name: Optional[str]
 
 
 class User(UserBase):
@@ -34,10 +48,22 @@ class CommunityBase(BaseModel):
 
 class CommunityCreate(CommunityBase):
     community_name: str
+    description: Optional[str]
+
+
+class CommunityUpdate(CommunityBase):
+    community_name: Optional[str]
+    description: Optional[str]
+    add_member: Optional[str]
+    remove_member: Optional[str]
 
 
 class Community(CommunityBase):
     id: int
-    community_admins: list[User]
+    description: str
     created_at: datetime
-    users: list[User]
+    community_admins: List[UserSummery]
+    members: List[UserSummery]
+
+    class Config:
+        orm_mode = True
