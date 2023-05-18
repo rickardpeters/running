@@ -5,6 +5,8 @@ from sqlalchemy.sql import func
 from services.database import Base
 from services import authentication
 
+from datetime import date
+
 
 user_community_association_table = Table(
     "user_communities",
@@ -54,16 +56,15 @@ class Community(Base):
     users = relationship(
         "User", secondary=user_community_association_table, back_populates="communities"
     )
-    challenges = relationship("Challenge", back_populates="community")
+    challenges = Column()
 
 
 class Challenge(Base):
     __tablename__ = "challenges"
 
-    id = Column(Integer, primary_key=True, index=True, nullable=False)
+    id = Column(Integer, primary_key=True)
     name = Column(String, unique=True, nullable=False)
-    community = Column(Integer, ForeignKey('communities.id'))
-    #community = Column(Integer, index=True, nullable=False)
+    #community = Column(Integer, ForeignKey('communities.id'))
     goal = Column(Integer, nullable=False)
-    start_date = Column(DateTime(timezone=True), server_default=func.now())
-    end_date = Column(DateTime(timezone=True))
+    start_date = Column(DateTime)
+    end_date = Column(DateTime)

@@ -1,6 +1,6 @@
 from pydantic import BaseModel
 from typing import Optional
-from datetime import datetime
+from datetime import datetime, date
 
 
 class UserBase(BaseModel):
@@ -44,14 +44,14 @@ class Community(CommunityBase):
 
 
 class ChallengeBase(BaseModel):
-    id: int
     name: str
-    start_date: datetime
-    end_date: datetime
 
 
 class ChallengeCreate(ChallengeBase):
     goal: int
+    name: str
+    start_date: datetime
+    end_date: datetime
 
 
 class ChallengeUpdate(ChallengeBase):
@@ -59,9 +59,9 @@ class ChallengeUpdate(ChallengeBase):
 
 
 class Challenge(ChallengeBase):
-    id: int
     name: str
     goal: int
+    #community: int
     start_date: datetime
     end_date: datetime
 

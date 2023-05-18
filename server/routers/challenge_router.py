@@ -32,7 +32,15 @@ def read_challenges(skip: int = 0, limit: int = 100, db: Session = Depends(get_d
 
 @router.post("/", response_model=schemas.Challenge)
 def create_challenge(challenge: schemas.ChallengeCreate, db: Session = Depends(get_db)):
-    return crud.create_challenge
+
+    challenge_data = {
+        "name": challenge.name,
+        "goal": challenge.goal,
+        "start_date": challenge.start_date,
+        "end_date": challenge.end_date
+    }
+
+    return crud.create_challenge(db=db, challenge=challenge_data)
 
 # DELETE CHALLENGE
 

@@ -32,11 +32,6 @@ app.include_router(challenge_router.router)
 
 # ROOT (Example of how to protect routes in future)
 # This can be deleted
-@app.get("/users", dependencies=[Depends(authentication.authenticate_user)])
-async def root():
-    return {"message": "Successfully authenticated!"}
-
-
-@app.get("/community", dependencies=[Depends(authentication.authenticate_user)])
+@app.get("/", dependencies=[Depends(authentication.authenticate_user)])
 async def root():
     return {"message": "Successfully authenticated!"}

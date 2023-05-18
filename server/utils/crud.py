@@ -99,12 +99,13 @@ def get_challenges(db: Session, skip: int = 0, limit: int = 100):
     return db.query(models.Challenge).offset(skip).limit(limit).all()
 
 
-def create_challenge(db: Session, challenge: schemas.Challenge):
+def create_challenge(db: Session, challenge: dict):
     challenge = models.Challenge(
-        name=challenge.name,
-        goal=challenge.goal,
-        start_date=challenge.start_date,
-        end_date=challenge.end_date
+        name=challenge["name"],
+        goal=challenge["goal"],
+        # community=challenge.community,
+        start_date=challenge["start_date"],
+        end_date=challenge["end_date"]
     )
     db.add(challenge)
     db.commit()
