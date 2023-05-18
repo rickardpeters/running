@@ -5,6 +5,7 @@ from . import models, schemas
 
 ##### USER CRUD #####
 def get_user(db: Session, user_id: str):
+    """Takes an user_id and returns corresponding user or None"""
     return db.query(models.User).filter(models.User.id == user_id).first()
 
 
@@ -32,8 +33,15 @@ def create_user(
     return db_user
 
 
-def update_user(db: Session, user_id: int):
-    pass
+def update_user(db: Session, user: models.User, update_data: schemas.UserUpdate):
+    try:
+        for field, value in update_data.items():
+            setattr(user, field, value)
+        db.commit()
+        db.refresh(user)
+        return user
+    except:
+        return None
 
 
 def delete_user(db: Session, user_id: str):
@@ -65,10 +73,14 @@ def get_communities(db: Session, skip: int = 0, limit: int = 100):
 
 
 def create_community(
-    db: Session, community: schemas.Community, current_user: schemas.User
+    db: Session,
+    community: schemas.Community,
+    current_user: schemas.User,
 ):
     db_community = models.Community(
-        name=community.community_name, community_admin=current_user.id
+        community_name=community.community_name,
+        community_admins=[current_user],
+        description=community.description,
     )
     db.add(db_community)
     db.commit()
@@ -76,14 +88,20 @@ def create_community(
     return db_community
 
 
-def update_community(db: Session, community_id: int):
-    pass
-
-
-def delete_community(db: Session, community_id: int):
-    community = get_community(db=db, community_id=community_id)
-    if community is None:
+def update_community(
+    db: Session, community: models.Community, update_data: schemas.CommunityUpdate
+):
+    try:
+        for field, value in update_data.items():
+            setattr(community, field, value)
+        db.commit()
+        db.refresh(community)
+        return community
+    except:
         return None
+
+
+def delete_community(db: Session, community: models.Community):
     db.delete(community)
     db.commit()
     return community
