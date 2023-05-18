@@ -33,7 +33,8 @@ def create_community(
     db: Session = Depends(get_db),
     auth_user: dict = Depends(authentication.authenticate_user),
 ):
-    db_community = crud.get_community_by_name(db, name=community.community_name)
+    db_community = crud.get_community_by_name(
+        db, name=community.community_name)
     if db_community:
         raise HTTPException(
             status_code=400, detail="Community with that name already exists!"
