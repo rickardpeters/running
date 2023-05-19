@@ -42,6 +42,8 @@ const CreateCommunityModal = () => {
 
     try {
         const response = await axios.post('http://localhost:8000/communities/', newCommunity,config)
+       console.log("community created:",response)
+        handleCloseModal
     } catch (error) {
         console.log(error)
     }
