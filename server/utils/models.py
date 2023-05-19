@@ -58,7 +58,7 @@ class Community(Base):
     members = relationship(
         "User", secondary=user_community_association_table, back_populates="communities"
     )
-    challenges = Column()
+    #challenges = Column()
 
 
 class Challenge(Base):
