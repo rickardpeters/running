@@ -33,7 +33,8 @@ def create_community(
     db: Session = Depends(get_db),
     auth_user: dict = Depends(authentication.authenticate_user),
 ):
-    db_community = crud.get_community_by_name(db, name=community.community_name)
+    db_community = crud.get_community_by_name(
+        db, name=community.community_name)
     if db_community:
         raise HTTPException(
             status_code=400, detail="Community with that name already exists!"
@@ -64,7 +65,7 @@ def update_community(
 
     if community.add_member:
         user = crud.get_user(db=db, user_id=community.add_member)
-        if user and user not in db_community.members:
+        if user:
             db_community.members.append(user)
         else:
             raise HTTPException(status_code=404, detail="User not found")
@@ -75,6 +76,27 @@ def update_community(
             db_community.members.remove(user)
         else:
             raise HTTPException(status_code=404, detail="User not found")
+
+    if community.add_admin:
+        user = crud.get_user(db=db, user_id=community.add_admin)
+        if user:
+            db_community.community_admins.append(user)
+            if user not in db_community.members:
+                db_community.members.append(user)
+        else:
+            raise HTTPException(status_code=400, detail="Admin could not be added")
+
+    if community.remove_admin:
+        user = crud.get_user(db=db, user_id=community.remove_admin)
+        if (
+            user
+            and user in db_community.community_admins
+            # Makes sure last admin is not deleted
+            and len(db_community.community_admins) > 1
+        ):
+            db_community.community_admins.remove(user)
+        else:
+            raise HTTPException(status_code=400, detail="Admin could not be removed")
 
     updated_community = crud.update_community(
         db=db, community=db_community, update_data=community.dict(exclude_unset=True)

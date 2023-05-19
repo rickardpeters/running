@@ -1,6 +1,8 @@
-from pydantic import BaseModel
-from typing import Optional, List
 from datetime import datetime
+from typing import Optional, List
+from datetime import datetime, date
+from typing import Optional
+from pydantic import BaseModel
 
 
 class UserBase(BaseModel):
@@ -56,14 +58,40 @@ class CommunityUpdate(CommunityBase):
     description: Optional[str]
     add_member: Optional[str]
     remove_member: Optional[str]
+    add_admin: Optional[str]
+    remove_admin: Optional[str]
 
 
 class Community(CommunityBase):
     id: int
     description: str
     created_at: datetime
+    users: list[User]
     community_admins: List[UserSummery]
     members: List[UserSummery]
+
+
+class ChallengeBase(BaseModel):
+    name: str
+
+
+class ChallengeCreate(ChallengeBase):
+    goal: int
+    name: str
+    start_date: datetime
+    end_date: datetime
+
+
+class ChallengeUpdate(ChallengeBase):
+    goal: int
+
+
+class Challenge(ChallengeBase):
+    name: str
+    goal: int
+    #community: int
+    start_date: datetime
+    end_date: datetime
 
     class Config:
         orm_mode = True

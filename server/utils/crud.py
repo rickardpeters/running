@@ -56,7 +56,8 @@ def delete_user(db: Session, user_id: str):
 ##### COMMUNITY CRUD #####
 def get_community(db: Session, community_id: schemas.Community):
     return (
-        db.query(models.Community).filter(models.Community.id == community_id).first()
+        db.query(models.Community).filter(
+            models.Community.id == community_id).first()
     )
 
 
@@ -80,6 +81,7 @@ def create_community(
     db_community = models.Community(
         community_name=community.community_name,
         community_admins=[current_user],
+        members=[current_user],
         description=community.description,
     )
     db.add(db_community)
@@ -105,3 +107,49 @@ def delete_community(db: Session, community: models.Community):
     db.delete(community)
     db.commit()
     return community
+
+
+##### CHALLENGE CRUD #####
+def get_challenge(db: Session, challenge_id: int):
+    return db.query(models.Challenge).filter(models.Challenge.id == challenge_id).first()
+
+
+def get_challenges(db: Session, skip: int = 0, limit: int = 100):
+    return db.query(models.Challenge).offset(skip).limit(limit).all()
+
+
+def create_challenge(db: Session, challenge: dict):
+    challenge = models.Challenge(
+        name=challenge["name"],
+        goal=challenge["goal"],
+        # community=challenge.community,
+        start_date=challenge["start_date"],
+        end_date=challenge["end_date"]
+    )
+    db.add(challenge)
+    db.commit()
+    db.refresh(challenge)
+    return challenge
+
+
+def delete_challenge(db: Session, challenge_id: int):
+    challenge = get_challenge(db=db, challenge_id=challenge_id)
+    if challenge is None:
+        return None
+    db.delete(challenge)
+    db.commit()
+    return challenge
+
+
+def update_challenge(
+        db: Session,
+        challenge: models.Challenge,
+        challenge_update: schemas.ChallengeUpdate):
+    try:
+        for field, value in challenge_update.items():
+            setattr(challenge, field, value)
+        db.commit()
+        db.refresh(challenge)
+        return challenge
+    except:
+        return None

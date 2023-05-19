@@ -4,6 +4,8 @@ from sqlalchemy.sql import func
 
 from services.database import Base
 
+from datetime import date
+
 
 user_community_association_table = Table(
     "user_communities",
@@ -56,3 +58,15 @@ class Community(Base):
     members = relationship(
         "User", secondary=user_community_association_table, back_populates="communities"
     )
+    challenges = Column()
+
+
+class Challenge(Base):
+    __tablename__ = "challenges"
+
+    id = Column(Integer, primary_key=True)
+    name = Column(String, unique=True, nullable=False)
+    #community = Column(Integer, ForeignKey('communities.id'))
+    goal = Column(Integer, nullable=False)
+    start_date = Column(DateTime)
+    end_date = Column(DateTime)
