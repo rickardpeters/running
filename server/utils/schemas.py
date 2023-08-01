@@ -77,6 +77,8 @@ class CommunityUpdate(CommunityBase):
     add_member: Optional[str]
     remove_member: Optional[str]
     add_challenge: Optional[str]
+    add_admin: Optional[str]
+    remove_admin: Optional[str]
 
     class Config:
         orm_mode = True

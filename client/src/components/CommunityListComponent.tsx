@@ -24,8 +24,10 @@ interface CommunityListProps {
 const CommunityListComponent = (props: CommunityListProps) => {
   const matches = useMediaQuery("(max-width:960px)"); // Change the breakpoint as per your requirement
   const typographyVariant = matches ? "body1" : "h6"; // change the typography variant as per your requirement
-
+//Länken ska gå till community, inte user page
   return (
+
+
     <Link to={"/UserPage"} style={{ textDecoration: "none" }}>
       <Box style={{ margin: "10px" }}>
         <Paper elevation={2} style={{ margin: "25px" }}>
