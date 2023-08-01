@@ -58,7 +58,7 @@ class Community(Base):
     members = relationship(
         "User", secondary=user_community_association_table, back_populates="communities"
     )
-    challenges = relationship("Challenge", back_populates="community")
+    challenges = relationship("Challenge", backref="challenges")
 
 
 class Challenge(Base):
@@ -69,6 +69,6 @@ class Challenge(Base):
     goal = Column(Integer, nullable=False)
     start_date = Column(DateTime)
     end_date = Column(DateTime)
-    community_id = Column(Integer, ForeignKey(
-        "communities.id"), nullable=False)
-    community = relationship("Community", back_populates="challenges")
+    community_id = relationship("Community", back_populates="challenges")
+    # community_id = Column(Integer, ForeignKey(
+    #   "communities.id"), nullable=False)

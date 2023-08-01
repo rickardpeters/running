@@ -1,4 +1,4 @@
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, joinedload
 
 from . import models, schemas
 
@@ -114,6 +114,7 @@ def get_challenge(db: Session, challenge_id: int):
 
 
 def get_challenges(db: Session, skip: int = 0, limit: int = 100):
+    print("POPO")
     return db.query(models.Challenge).offset(skip).limit(limit).all()
 
 
