@@ -1,4 +1,4 @@
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, joinedload
 
 from . import models, schemas
 
@@ -115,6 +115,7 @@ def get_challenge(db: Session, challenge_id: int):
 
 
 def get_challenges(db: Session, skip: int = 0, limit: int = 100):
+    print("POPO")
     return db.query(models.Challenge).offset(skip).limit(limit).all()
 
 
@@ -122,9 +123,9 @@ def create_challenge(db: Session, challenge: dict):
     challenge = models.Challenge(
         name=challenge["name"],
         goal=challenge["goal"],
-        # community=challenge.community,
         start_date=challenge["start_date"],
-        end_date=challenge["end_date"]
+        end_date=challenge["end_date"],
+        community_id=challenge["community_id"]
     )
     db.add(challenge)
     db.commit()
