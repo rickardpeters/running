@@ -69,6 +69,5 @@ class Challenge(Base):
     goal = Column(Integer, nullable=False)
     start_date = Column(DateTime)
     end_date = Column(DateTime)
-    community_id = relationship("Community", back_populates="challenges")
-    # community_id = Column(Integer, ForeignKey(
-    #   "communities.id"), nullable=False)
+    community = relationship("Community", backref="communities")
+    community_id = Column(Integer, ForeignKey("communities.id"), nullable=False)

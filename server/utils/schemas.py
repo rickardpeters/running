@@ -89,7 +89,7 @@ class Community(CommunityBase):
     users: Optional[list[User]]
     community_admins: List[UserSummery]
     members: List[UserSummery]
-    challenges: Optional[List['ChallengeBase']]
+    challenges: Optional[List["ChallengeBase"]]
 
     class Config:
         orm_mode = True
@@ -109,7 +109,7 @@ class Challenge(ChallengeBase):
     goal: int
     start_date: datetime
     end_date: datetime
-    community: Optional[int]
+    community: Optional[CommunityCreate]
 
     class Config:
         orm_mode = True
