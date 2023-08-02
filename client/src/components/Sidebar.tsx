@@ -2,7 +2,9 @@ import Box from '@mui/material/Box';
 import CommunityCard from './CommunityCard';
 import ChallengeCard from './ChallengeCard';
 
+
 const Sidebar = () => {
+
   return (
     <Box
       sx={{

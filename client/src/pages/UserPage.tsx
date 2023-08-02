@@ -1,16 +1,34 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import '../App.css';
 import axios from "axios";
-import { Button, ButtonGroup, Card, Paper, Container, Typography, CardContent, Modal, TextField} from '@mui/material';
 import {
-  Chart,
-  BarSeries,
-  ArgumentAxis,
-  ValueAxis,
-} from '@devexpress/dx-react-chart-material-ui';
-import { auth } from "../firebase"
+  useMediaQuery,
+  Button,
+  ButtonGroup,
+  Card,
+  Container,
+  Typography,
+  CardContent,
+  Modal} from '@mui/material';
 import Sidebar from '../components/Sidebar';
 import UserModal from '../components/UserList';
+
+
+interface RunTotals {
+  count: number;
+  distance: number;
+  moving_time: number;
+  elapsed_time: number;
+  elevation_gain: number;
+}
+
+interface Challenge {
+  name: string;
+  start_date: string;
+  end_date: string;
+  goal: number;
+  community_id: number;
+}
 
 
 const UserPage = () => {
@@ -19,10 +37,15 @@ const UserPage = () => {
   const [athlete, setAthlete] = useState({ firstname: '', lastname: '', id: '' });
   const [runTotals, setRunTotals] = useState<RunTotals>({count: 0, distance: 0, moving_time: 0, elapsed_time: 0, elevation_gain: 0});
   const [openModal, setOpenModal] = useState<boolean>(false);
+  const [challenges, setChallenges] = useState<Challenge[]>([])
 
-  const params = new Proxy(new URLSearchParams(window.location.search), {
-    get: (searchParams, prop:string) => searchParams.get(prop),
-  });
+  function capitalizeFirstLetter(string:string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  }
+
+  const handleCloseModal = () => {
+    setOpenModal(false)
+  }  
 
   const signIn = async () => {
     window.location.href='https://www.strava.com/oauth/authorize?client_id=105576&redirect_uri=http://localhost:3000/UserPage&response_type=code&scope=read';
@@ -92,62 +115,52 @@ const UserPage = () => {
     
   }
 
-  function capitalizeFirstLetter(string:string) {
-    return string.charAt(0).toUpperCase() + string.slice(1);
-  }
 
-interface RunTotals {
-  count: number;
-  distance: number;
-  moving_time: number;
-  elapsed_time: number;
-  elevation_gain: number;
-}
+const isSmallScreen = useMediaQuery('(max-width: 850px)');
 
-const barData = [
-  { argument: 'Count', value: runTotals.count },
-  { argument: 'Distance', value: runTotals.distance / 100 },
-  { argument: 'Moving Time', value: runTotals.moving_time / 100 },
-  { argument: 'Elapsed Time', value: runTotals.elapsed_time / 100 },
-  { argument: 'Elevation Gain', value: runTotals.elevation_gain },
-];
+const token = "eyJhbGciOiJSUzI1NiIsImtpZCI6IjYyM2YzNmM4MTZlZTNkZWQ2YzU0NTkyZTM4ZGFlZjcyZjE1YTBmMTMiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL3NlY3VyZXRva2VuLmdvb2dsZS5jb20vdGRkZDI3LTczNWYwIiwiYXVkIjoidGRkZDI3LTczNWYwIiwiYXV0aF90aW1lIjoxNjkwOTgyMTE3LCJ1c2VyX2lkIjoiNVlmdE9BTFdxZ2FIWHFUcE9JU2RLdjZWQ040MyIsInN1YiI6IjVZZnRPQUxXcWdhSFhxVHBPSVNkS3Y2VkNONDMiLCJpYXQiOjE2OTA5ODIxMTcsImV4cCI6MTY5MDk4NTcxNywiZW1haWwiOiJyaWNrYXJkQHBldGVycy5jb20iLCJlbWFpbF92ZXJpZmllZCI6ZmFsc2UsImZpcmViYXNlIjp7ImlkZW50aXRpZXMiOnsiZW1haWwiOlsicmlja2FyZEBwZXRlcnMuY29tIl19LCJzaWduX2luX3Byb3ZpZGVyIjoicGFzc3dvcmQifX0.FyzfrSBtWARXBQpaHZvlY7btJzqWdqtHub5OqYOM8ipmZiicGYiNQvSNTeek0N6WhLiz36UZabekzhJyoGQiq7OWVh_lNjELnrS_aqegqBLdaZ9pJPnQSQtDAPHnkk9oqPh9t_m4-kCsJGKdfoGgxwnMe7ucvoWTSFbo5E0TOhjzTWCxESOtvgY0zbl2IF5bir5ety7TkK6d7vG88tJW7JATMIb5visA9rFngn5RY0PrLEplGD0beyFjlMafm9PRw4P7ypDHi5OBQAN6vKwbBCdeIlYqMoeJ_SohuqgEHzJ1qkN5OwkDUjLLlOVTKoi5F8WN0qlhUTCdAJXcWWIIPw"
+
+  useEffect(() => {
+    async function fetchChallenges() {
+      try {
+        const response = await axios.get('http://127.0.0.1:8500/challenges/', {
+          headers: {
+            Authorization: "Bearer " + token
+          }
+        });
+        setChallenges(response.data);
+      } catch (error) {
+        console.error(error)
+      }
+    }
+
+    fetchChallenges();
+  }, []);
 
 
-var user = auth.currentUser;
-
-
-const handleCloseModal = () => {
-  setOpenModal(false)
-}
 
 
   return (
 
     <Container 
     sx={{
-      height: '500px',
-      width: '300px',
-      margin: '10px',
-      padding: '10px',
-      alignItems: 'center',
-      flexDirection: 'row',
       display: 'flex',
+      flexDirection: 'row',
+      marginTop: '10px',
+      justifyContent: 'center',
     }}>
-
-      <Sidebar></Sidebar>
+    {isSmallScreen ? null : <Sidebar></Sidebar>}
       <Container
       sx={{
-        height: '500px',
-        width: '300px',
-        margin: '10px',
-        padding: '10px',
-        flexDirection: 'column',
         display: 'flex',
+        flexDirection: 'row',
+        marginTop: '10px',
+        justifyContent: 'center',
       }}>
 
         <>
             <Typography fontWeight={'bold'} sx={{ m: 1 }}>          
-            <Card sx={{width: '250px'}}>
+            <Card sx={{width: '250px', marginTop: '100px'}}>
               <CardContent>
                 <h3>{athlete.firstname !== '' ? athlete.firstname : null}</h3>
                 {Object.entries(runTotals).map(([key, value]) => {
@@ -190,14 +203,22 @@ const handleCloseModal = () => {
                     </Typography>
                   );
                 })}
-              </CardContent>
-            </Card>
-            </Typography>
 
-            <ButtonGroup orientation='vertical'>
+              </CardContent>
+            <ButtonGroup 
+            sx={{
+              display: 'flex',
+              flexDirection: 'row',
+              margin: '20px',
+              justifyContent: 'center',
+            }}>
             <Button variant='outlined' type='button' onClick={signIn}>Sign in to Strava account</Button>
             <Button variant='outlined' type='submit' onClick={fetchData}>Load data</Button>
             </ButtonGroup>
+            </Card>
+            </Typography>
+
+            
 
             <Modal open={openModal} onClose={handleCloseModal}>
               <Container sx={{ p: 2, width: 300, bgcolor: 'background.paper' }}>
@@ -216,6 +237,14 @@ const handleCloseModal = () => {
             
             <br></br>
             <Container>
+              <Card>
+                <CardContent>
+                  <Typography>
+                    {challenges.map((challenge) => (
+                      <li key={challenge.name}>{challenge.name}</li> ))}
+                  </Typography>
+                </CardContent>
+              </Card>
             <UserModal/>
             </Container>
 

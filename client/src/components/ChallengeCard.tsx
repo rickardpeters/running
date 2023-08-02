@@ -23,7 +23,7 @@ const ChallengeCard = () => {
           m: 2,
         }}
         variant='outlined'>
-        Skicka ny utmaning
+        Skapa ny utmaning
       </Button>
     </Paper>
   );
