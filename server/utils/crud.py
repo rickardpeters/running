@@ -56,8 +56,7 @@ def delete_user(db: Session, user_id: str):
 ##### COMMUNITY CRUD #####
 def get_community(db: Session, community_id: schemas.Community):
     return (
-        db.query(models.Community).filter(
-            models.Community.id == community_id).first()
+        db.query(models.Community).filter(models.Community.id == community_id).first()
     )
 
 
@@ -111,11 +110,12 @@ def delete_community(db: Session, community: models.Community):
 
 ##### CHALLENGE CRUD #####
 def get_challenge(db: Session, challenge_id: int):
-    return db.query(models.Challenge).filter(models.Challenge.id == challenge_id).first()
+    return (
+        db.query(models.Challenge).filter(models.Challenge.id == challenge_id).first()
+    )
 
 
 def get_challenges(db: Session, skip: int = 0, limit: int = 100):
-    print("POPO")
     return db.query(models.Challenge).offset(skip).limit(limit).all()
 
 
@@ -125,7 +125,7 @@ def create_challenge(db: Session, challenge: dict):
         goal=challenge["goal"],
         start_date=challenge["start_date"],
         end_date=challenge["end_date"],
-        community_id=challenge["community_id"]
+        community_id=challenge["community_id"],
     )
     db.add(challenge)
     db.commit()
@@ -143,9 +143,8 @@ def delete_challenge(db: Session, challenge_id: int):
 
 
 def update_challenge(
-        db: Session,
-        challenge: models.Challenge,
-        challenge_update: schemas.ChallengeUpdate):
+    db: Session, challenge: models.Challenge, challenge_update: schemas.ChallengeUpdate
+):
     try:
         for field, value in challenge_update.items():
             setattr(challenge, field, value)

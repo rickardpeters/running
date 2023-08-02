@@ -135,5 +135,13 @@ class ChallengeUpdate(ChallengeBase):
         orm_mode = True
 
 
+class ChallengeDelete(ChallengeBase):
+    id: int
+    name: str
+
+    class Config:
+        orm_mode = True
+
+
 Community.update_forward_refs()
 Challenge.update_forward_refs()
