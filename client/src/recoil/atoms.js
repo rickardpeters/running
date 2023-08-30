@@ -19,3 +19,8 @@ export const showCreateCommunityAtom = atom ({
     key:'showCreateCommunityAtom',
     default:false
 })
+
+export const showCreateChallengeAtom = atom ({
+    key:'showCreateChallengeAtom',
+    default:false
+})
