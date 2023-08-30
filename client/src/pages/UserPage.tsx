@@ -13,6 +13,9 @@ import {
 } from "@mui/material";
 import Sidebar from "../components/Sidebar";
 import UserModal from "../components/UserList";
+import CreateChallengeForm from "../components/CreateChallengeForm";
+import { showCreateChallengeAtom } from "../recoil/atoms";
+import { useRecoilState } from "recoil";
 
 interface RunTotals {
   count: number;
@@ -46,10 +49,24 @@ const UserPage = () => {
   });
   const [openModal, setOpenModal] = useState<boolean>(false);
   const [challenges, setChallenges] = useState<Challenge[]>([]);
+  const [token, setToken] = useState(null);
+  const [showCreateChallenge, setShowCreateChallenge] = useRecoilState(
+    showCreateChallengeAtom
+  );
 
   function capitalizeFirstLetter(string: string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
   }
+
+  const exitChallenge = () => {
+    console.log("exitChallenge");
+  };
+
+  const handleCreateChallenge = () => {
+    console.log("create challenge");
+    setShowCreateChallenge(true);
+    console.log(showCreateChallenge);
+  };
 
   const handleCloseModal = () => {
     setOpenModal(false);
@@ -135,26 +152,49 @@ const UserPage = () => {
 
   const isSmallScreen = useMediaQuery("(max-width: 850px)");
 
-  const token =
-    "eyJhbGciOiJSUzI1NiIsImtpZCI6ImM2MGI5ZGUwODBmZmFmYmZjMTgzMzllY2Q0NGFjNzdmN2ZhNGU4ZDMiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL3NlY3VyZXRva2VuLmdvb2dsZS5jb20vdGRkZDI3LTczNWYwIiwiYXVkIjoidGRkZDI3LTczNWYwIiwiYXV0aF90aW1lIjoxNjkzNDAzNzc1LCJ1c2VyX2lkIjoiNVlmdE9BTFdxZ2FIWHFUcE9JU2RLdjZWQ040MyIsInN1YiI6IjVZZnRPQUxXcWdhSFhxVHBPSVNkS3Y2VkNONDMiLCJpYXQiOjE2OTM0MDM3NzUsImV4cCI6MTY5MzQwNzM3NSwiZW1haWwiOiJyaWNrYXJkQHBldGVycy5jb20iLCJlbWFpbF92ZXJpZmllZCI6ZmFsc2UsImZpcmViYXNlIjp7ImlkZW50aXRpZXMiOnsiZW1haWwiOlsicmlja2FyZEBwZXRlcnMuY29tIl19LCJzaWduX2luX3Byb3ZpZGVyIjoicGFzc3dvcmQifX0.jl8zRUlilhI15j9Vivj-I_kDQ3m1y2r46lvjHaeBqDLKJiJCzMIlJ5pUezcbjOYSQszbIfWeAXtTykjqbTi1k4kS5RBPzgfF-AklNtnG4MXTSyui57EiuaHB4Bs3LN6AQbCJXxWjVh_L7RX2hBayPBudSnXKvoyUIXeN4oYzKE9Ggv4uaaVQsDpvxtMrLM-NRlw0JCnhVonNVGT8eYZAY1WyGZLiYMr7w3Tj6BrqvvnBTbgV7AblP6-_F4hVEQd0Ao70AZdr8KZraWAufaunUMyMqbm0eVPgLEJkMQtx2bi19Fznz7nyXoi4YXHVL8_svVJ1ZiJcvxuiZrRxoBIOKA";
+  async function getfireBaseToken() {
+    const tokenUrl =
+      "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyCqoeW4zK9f5YNgAKAsMg36CRwqxbh4-Ao";
+
+    const requestData = {
+      email: "rickard@peters.com",
+      password: "hej12hej",
+      returnSecureToken: true,
+    };
+
+    axios
+      .post(tokenUrl, requestData)
+      .then((response) => {
+        const idToken = response.data.idToken;
+        setToken(idToken);
+      })
+      .catch((error) => {
+        console.error("Error fetching token:", error);
+      });
+  }
+
+  async function fetchChallenges() {
+    try {
+      const response = await axios.get("http://127.0.0.1:8500/challenges/", {
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      });
+      setChallenges(response.data);
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
   useEffect(() => {
-    async function fetchChallenges() {
-      try {
-        const response = await axios.get("http://127.0.0.1:8500/challenges/", {
-          headers: {
-            Authorization: "Bearer " + token,
-          },
-        });
-        setChallenges(response.data);
-        console.log(response.data);
-      } catch (error) {
-        console.error(error);
-      }
-    }
-
-    fetchChallenges();
+    getfireBaseToken();
   }, []);
+
+  useEffect(() => {
+    if (token) {
+      fetchChallenges();
+    }
+  }, [token]);
 
   return (
     <Container
@@ -249,20 +289,32 @@ const UserPage = () => {
           </Modal>
 
           <br></br>
-          <Container>
+          <Container
+            sx={{
+              display: "flex",
+              flexDirection: "row",
+              margin: "20px",
+              justifyContent: "center",
+            }}
+          >
             <Card sx={{ width: "250px", marginTop: "100px" }}>
               <CardContent>
                 <h2>Challenges</h2>
                 <Typography>
                   {challenges.map((challenge) => (
                     <li key={challenge.name}>
-                      Name: {challenge.name}
+                      {challenge.name}
                       <br />
-                      Goal: {challenge.goal}
+                      {runTotals.distance >= challenge.goal
+                        ? "Challenge complete!"
+                        : `Progress: ${runTotals.distance / 1000} of ${
+                            challenge.goal
+                          } km`}
                     </li>
                   ))}
                 </Typography>
               </CardContent>
+              <Button onClick={handleCreateChallenge}>Create challenge</Button>
             </Card>
           </Container>
         </>

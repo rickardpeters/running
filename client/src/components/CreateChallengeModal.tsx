@@ -6,31 +6,31 @@ import {
   DialogActions,
   Button,
 } from "@mui/material";
-import { showCreateCommunityAtom } from "../recoil/atoms";
+import { showCreateChallengeAtom } from "../recoil/atoms";
 import { useRecoilState } from "recoil";
-import CreateCommunityForm from "./CreateCommunityForm";
+import CreateChallengeForm from "./CreateChallengeForm";
 import { getUserToken } from "../utils";
 import { auth } from "../firebase";
 import axios from "axios";
 
-const CreateCommunityModal = () => {
-  const [showCreateCommunity, setShowCreateCommunity] = useRecoilState(
-    showCreateCommunityAtom
+const CreateChallengeModal = () => {
+  const [showCreateChallenge, setShowCreateChallenge] = useRecoilState(
+    showCreateChallengeAtom
   );
-  const [communityName, setCommunityName] = useState("");
-  const [description, setDescription] = useState("");
+  const [challengeName, setChallengeName] = useState("");
+  const [goal, setGoal] = useState("");
 
   const handleCloseModal = () => {
-    setShowCreateCommunity(false);
+    setShowCreateChallenge(false);
   };
 
   const handleSubmit = async () => {
     const token = await getUserToken(auth);
 
-    console.log(description, communityName);
-    const newCommunity = {
-      community_name: communityName,
-      description: description,
+    console.log(goal, challengeName);
+    const newChallenge = {
+      name: challengeName,
+      goal: goal,
     };
 
     const config = {
@@ -42,11 +42,11 @@ const CreateCommunityModal = () => {
 
     try {
       const response = await axios.post(
-        "http://127.0.0.1:8500/communities/",
-        newCommunity,
+        "http://127.0.0.1:8500/challenges/",
+        newChallenge,
         config
       );
-      console.log("community created:", response);
+      console.log("challenge created:", response);
       handleCloseModal();
     } catch (error) {
       console.log(error);
@@ -54,21 +54,21 @@ const CreateCommunityModal = () => {
   };
 
   return (
-    <Dialog open={showCreateCommunity} onClose={handleCloseModal}>
+    <Dialog open={showCreateChallenge} onClose={handleCloseModal}>
       <DialogTitle>Create Community</DialogTitle>
       <form onSubmit={handleSubmit}>
         <DialogContent>
-          <CreateCommunityForm
-            name={communityName}
-            description={description}
-            setName={setCommunityName}
-            setDescription={setDescription}
-          ></CreateCommunityForm>
+          <CreateChallengeForm
+            name={challengeName}
+            goal={goal}
+            setName={setChallengeName}
+            setGoal={setGoal}
+          ></CreateChallengeForm>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleCloseModal}>Cancel</Button>
           <Button onClick={handleSubmit} variant="contained" color="primary">
-            Create Community
+            Create Challenge
           </Button>
         </DialogActions>
       </form>
@@ -76,4 +76,4 @@ const CreateCommunityModal = () => {
   );
 };
 
-export default CreateCommunityModal;
+export default CreateChallengeModal;
