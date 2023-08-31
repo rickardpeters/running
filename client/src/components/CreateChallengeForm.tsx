@@ -1,11 +1,13 @@
-import { Button, TextField } from "@mui/material";
-import React, { Dispatch, SetStateAction, useState } from "react";
+import { TextField } from "@mui/material";
+import React, { Dispatch, SetStateAction } from "react";
 
 interface createChallengeFormProps {
   name: string;
   goal: string;
+  communityId: string;
   setName: Dispatch<SetStateAction<string>>;
   setGoal: Dispatch<SetStateAction<string>>;
+  setCommunityId: Dispatch<SetStateAction<string>>;
 }
 
 const CreateChallengeForm = (props: createChallengeFormProps) => {
@@ -15,10 +17,16 @@ const CreateChallengeForm = (props: createChallengeFormProps) => {
     props.setName(event.target.value);
   };
 
-  const handleDescriptionChange = (event: {
+  const handleGoalChange = (event: {
     target: { value: React.SetStateAction<string> };
   }) => {
     props.setGoal(event.target.value);
+  };
+
+  const handleCommunityIdChange = (event: {
+    target: { value: React.SetStateAction<string> };
+  }) => {
+    props.setCommunityId(event.target.value);
   };
 
   return (
@@ -33,11 +41,16 @@ const CreateChallengeForm = (props: createChallengeFormProps) => {
       <TextField
         label="Goal (km)"
         value={props.goal}
-        onChange={handleDescriptionChange}
+        onChange={handleGoalChange}
         fullWidth
         margin="normal"
-        multiline
-        rows={4}
+      />
+      <TextField
+        label="Community ID"
+        value={props.communityId}
+        onChange={handleCommunityIdChange}
+        fullWidth
+        margin="normal"
       />
     </>
   );
