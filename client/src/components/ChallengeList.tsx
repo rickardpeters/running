@@ -4,6 +4,7 @@ import {
   firebaseTokenAtom,
   runTotalsAtom,
   showCreateChallengeAtom,
+  updateChallengeListAtom,
 } from "../recoil/atoms";
 import axios from "axios";
 import { useEffect } from "react";
@@ -14,6 +15,7 @@ import {
   Typography,
   Button,
 } from "@mui/material";
+import CreateChallengeModal from "./CreateChallengeModal";
 
 const ChallengeList = () => {
   const [token, setToken] = useRecoilState(firebaseTokenAtom);
@@ -22,6 +24,10 @@ const ChallengeList = () => {
   const [showCreateChallenge, setShowCreateChallenge] = useRecoilState(
     showCreateChallengeAtom
   );
+  const [updateChallengeList, setUpdateChallengeList] = useRecoilState(
+    updateChallengeListAtom
+  );
+
   async function fetchChallenges() {
     try {
       const response = await axios.get("http://127.0.0.1:8500/challenges/", {
@@ -36,16 +42,15 @@ const ChallengeList = () => {
   }
 
   const handleCreateChallenge = () => {
-    console.log("create challenge");
     setShowCreateChallenge(true);
+    console.log("create challenge");
     console.log(showCreateChallenge);
   };
 
   useEffect(() => {
-    console.log("Yalla nu kör vi: " + token);
-    if (token) {
-      fetchChallenges();
-    }
+    token || updateChallengeList
+      ? fetchChallenges()
+      : console.log("No token, cannot fetch challenges.");
   }, [token]);
 
   return (
@@ -65,7 +70,7 @@ const ChallengeList = () => {
               <li key={challenge.name}>
                 {challenge.name}
                 <br />
-                {runTotals.distance >= challenge.goal
+                {runTotals.distance / 1000 >= challenge.goal
                   ? "Challenge complete!"
                   : `Progress: ${runTotals.distance / 1000} of ${
                       challenge.goal
@@ -74,7 +79,10 @@ const ChallengeList = () => {
             ))}
           </Typography>
         </CardContent>
-        <Button onClick={handleCreateChallenge}>Create challenge</Button>
+        <Button variant="outlined" onClick={handleCreateChallenge}>
+          Create challenge
+        </Button>
+        <CreateChallengeModal />
       </Card>
     </Container>
   );

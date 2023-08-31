@@ -69,4 +69,9 @@ export const challengesAtom = atom({
         
     })
 
+export const updateChallengeListAtom = atom({
+    key:'updateChallengeListAtom',
+    default: false
+})
+
     

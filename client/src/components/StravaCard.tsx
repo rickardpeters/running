@@ -22,13 +22,13 @@ const StravaCard = () => {
   const [runTotals, setRunTotals] = useRecoilState(runTotalsAtom);
   const [openModal, setOpenModal] = useState<boolean>(false);
 
-  function capitalizeFirstLetter(string: string) {
-    return string.charAt(0).toUpperCase() + string.slice(1);
+  function capitalizeAndRemoveUnderscore(string: string) {
+    const stringWithoutUnderscore = string.replace(/_/g, " ");
+    return (
+      stringWithoutUnderscore.charAt(0).toUpperCase() +
+      stringWithoutUnderscore.slice(1)
+    );
   }
-
-  const exitChallenge = () => {
-    console.log("exitChallenge");
-  };
 
   const handleCloseModal = () => {
     setOpenModal(false);
@@ -157,7 +157,8 @@ const StravaCard = () => {
 
                 return (
                   <Typography key={key} gutterBottom>
-                    <b>{capitalizeFirstLetter(key)}</b>: {formattedValue}
+                    <b>{capitalizeAndRemoveUnderscore(key)}</b>:{" "}
+                    {formattedValue}
                   </Typography>
                 );
               })}

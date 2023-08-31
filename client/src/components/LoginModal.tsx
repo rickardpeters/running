@@ -41,7 +41,7 @@ const LoginModal = (props: LoginModalProps) => {
 
   //Fetches token from firebase and stores to tokenAtom for querys.
 
-  async function getfireBaseToken() {
+  function getfireBaseToken() {
     const tokenUrl =
       "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyCqoeW4zK9f5YNgAKAsMg36CRwqxbh4-Ao";
 
