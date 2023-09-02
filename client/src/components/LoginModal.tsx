@@ -14,6 +14,8 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useRecoilState } from "recoil";
 import { firebaseTokenAtom } from "../recoil/atoms";
+import { auth } from "../firebase";
+import { getUserToken } from "../utils";
 
 interface LoginModalProps {
   show?: boolean;
@@ -33,6 +35,7 @@ const LoginModal = (props: LoginModalProps) => {
       await logInUser(email, password);
       props.setShow(false);
       getfireBaseToken();
+      localStorage.setItem("token", token);
       navigate("/homePage");
     } catch (error) {
       console.log(error);

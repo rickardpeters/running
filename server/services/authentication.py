@@ -12,8 +12,14 @@ from firebase_admin import credentials, auth
 load_dotenv()
 app = FastAPI()
 
+credentials_file = "firebase_credentials.json"
 
-cred = credentials.Certificate(os.environ.get("FIREBASE_ADMIN_CREDENTIALS_URL"))
+# Construct the full path to the credentials file
+credentials_path = os.path.join(os.path.dirname(__file__), credentials_file)
+
+# Initialize the Firebase app using the credentials file path
+cred = credentials.Certificate(credentials_path)
+
 firebase_admin.initialize_app(cred)
 
 

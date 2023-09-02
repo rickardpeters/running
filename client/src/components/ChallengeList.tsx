@@ -16,9 +16,10 @@ import {
   Button,
 } from "@mui/material";
 import CreateChallengeModal from "./CreateChallengeModal";
+import { auth } from "../firebase";
+import { getUserToken } from "../utils";
 
 const ChallengeList = () => {
-  const [token, setToken] = useRecoilState(firebaseTokenAtom);
   const [challenges, setChallenges] = useRecoilState(challengesAtom);
   const [runTotals, setRunTotals] = useRecoilState(runTotalsAtom);
   const [showCreateChallenge, setShowCreateChallenge] = useRecoilState(
@@ -32,7 +33,7 @@ const ChallengeList = () => {
     try {
       const response = await axios.get("http://127.0.0.1:8500/challenges/", {
         headers: {
-          Authorization: "Bearer " + token,
+          Authorization: "Bearer " + localStorage.getItem("token"),
         },
       });
       setChallenges(response.data);
@@ -48,10 +49,12 @@ const ChallengeList = () => {
   };
 
   useEffect(() => {
-    token || updateChallengeList
+    localStorage.getItem("token")
       ? fetchChallenges()
-      : console.log("No token, cannot fetch challenges.");
-  }, [token]);
+      : console.log(
+          "No token, cannot fetch challenges." + localStorage.getItem("token")
+        );
+  }, [updateChallengeList]);
 
   return (
     <Container

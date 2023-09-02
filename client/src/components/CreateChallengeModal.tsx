@@ -56,8 +56,8 @@ const CreateChallengeModal = () => {
     console.log(challengeName, goal);
     const newChallenge = {
       name: challengeName,
-      start_date: formatCurrentDate(),
-      end_date: formatCurrentDate(),
+      start_date: formattedDateString,
+      end_date: formattedDateString,
       goal: goal,
       community_id: communityId,
     };
