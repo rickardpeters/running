@@ -117,13 +117,12 @@ const StravaCard = () => {
       sx={{
         display: "flex",
         flexDirection: "row",
-        marginTop: "10px",
         justifyContent: "center",
       }}
     >
       <>
         <Typography fontWeight={"bold"} sx={{ m: 1 }}>
-          <Card sx={{ width: "250px", marginTop: "100px" }}>
+          <Card sx={{ width: "250px", margin: "10px" }}>
             <CardContent>
               <h3>{athlete.firstname !== "" ? athlete.firstname : null}</h3>
               {Object.entries(runTotals).map(([key, value]) => {

@@ -59,11 +59,10 @@ const ChallengeList = () => {
       sx={{
         display: "flex",
         flexDirection: "row",
-        margin: "20px",
         justifyContent: "center",
       }}
     >
-      <Card sx={{ width: "250px", marginTop: "100px" }}>
+      <Card sx={{ width: "250px", margin: "10px" }}>
         <CardContent>
           <h2>Challenges</h2>
           <Typography>

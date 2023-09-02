@@ -5,7 +5,7 @@ import LoginIcon from "@mui/icons-material/Login";
 import RocketLaunchIcon from "@mui/icons-material/RocketLaunch";
 import Button from "@mui/material/Button";
 import { useState } from "react";
-import { Dialog } from "@mui/material";
+import { Box, Container, Dialog, styled } from "@mui/material";
 
 const LandingPage = () => {
   const [openLogIn, setOpenLogIn] = useState(false);
@@ -27,6 +27,7 @@ const LandingPage = () => {
   const handleCloseLogIn = () => {
     setOpenLogIn(false);
   };
+
   return (
     <div
       style={{
@@ -37,9 +38,9 @@ const LandingPage = () => {
         height: "50vh",
       }}
     >
+      <img src="../img/headerimg.png"></img>
       <WelcomeMessage></WelcomeMessage>
       <div style={{ display: "flex", gap: "16px" }}>
-        
         <Button variant="contained" sx={{ m: 2 }} onClick={handleLogIn}>
           Log In <LoginIcon></LoginIcon>
         </Button>
@@ -55,9 +56,17 @@ const LandingPage = () => {
         </Button>
 
         <Dialog open={openSignUp} onClose={handleCloseSignUp}>
-         {signedUp? <LoginModal setShow={setOpenLogIn}></LoginModal> : <SignUpModal show={openSignUp} setShow={setOpenSignUp} signedUp={signedUp} setSignedUp={setSignedUp}></SignUpModal> } 
+          {signedUp ? (
+            <LoginModal setShow={setOpenLogIn}></LoginModal>
+          ) : (
+            <SignUpModal
+              show={openSignUp}
+              setShow={setOpenSignUp}
+              signedUp={signedUp}
+              setSignedUp={setSignedUp}
+            ></SignUpModal>
+          )}
         </Dialog>
-
       </div>
     </div>
   );
