@@ -14,7 +14,7 @@ import {
   athleteAtom,
   runTotalsAtom,
 } from "../recoil/atoms";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const StravaCard = () => {
   const [loggedInState, setLoggedInState] = useRecoilState(stravaLoggedinAtom);
@@ -92,7 +92,6 @@ const StravaCard = () => {
       console.error(error);
     }
     getAthleteStats(athlete);
-    setOpenModal(true);
   };
 
   const getAthleteStats = async (athlete: any) => {
@@ -111,6 +110,10 @@ const StravaCard = () => {
       console.error(error);
     }
   };
+
+  useEffect(() => {
+    fetchData();
+  }, [loggedInState]);
 
   return (
     <Container
@@ -172,9 +175,6 @@ const StravaCard = () => {
             >
               <Button variant="outlined" type="button" onClick={signIn}>
                 Sign in to Strava account
-              </Button>
-              <Button variant="outlined" type="submit" onClick={fetchData}>
-                Load data
               </Button>
             </ButtonGroup>
           </Card>
