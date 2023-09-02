@@ -47,7 +47,7 @@ export const athleteAtom = atom({
 
 export const firebaseTokenAtom = atom({
     key:'firebaseTokenAtom',
-    default: null
+    default: ""
 })
 
 export const stravaLoggedinAtom = atom({

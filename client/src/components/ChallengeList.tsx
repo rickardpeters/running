@@ -16,8 +16,6 @@ import {
   Button,
 } from "@mui/material";
 import CreateChallengeModal from "./CreateChallengeModal";
-import { auth } from "../firebase";
-import { getUserToken } from "../utils";
 
 const ChallengeList = () => {
   const [challenges, setChallenges] = useRecoilState(challengesAtom);
@@ -69,20 +67,36 @@ const ChallengeList = () => {
         <CardContent>
           <h2>Challenges</h2>
           <Typography>
-            {challenges.map((challenge) => (
-              <li key={challenge.name}>
-                {challenge.name}
-                <br />
-                {runTotals.distance / 1000 >= challenge.goal
-                  ? "Challenge complete!"
-                  : `Progress: ${runTotals.distance / 1000} of ${
-                      challenge.goal
-                    } km`}
-              </li>
-            ))}
+            {challenges
+              .slice()
+              .sort((a, b) => {
+                const differenceA = a.goal - runTotals.distance / 1000;
+                const differenceB = b.goal - runTotals.distance / 1000;
+                return differenceB - differenceA;
+              })
+              .map((challenge) => (
+                <li>
+                  <strong>{challenge.name}</strong>
+                  <br />
+                  {runTotals.distance / 1000 >= challenge.goal
+                    ? "Challenge complete!"
+                    : `${runTotals.distance / 1000} of ${challenge.goal} km`}
+                  <hr />
+                </li>
+              ))}
           </Typography>
         </CardContent>
-        <Button variant="outlined" onClick={handleCreateChallenge}>
+        <Button
+          sx={{
+            display: "flex",
+            flexDirection: "row",
+            margin: "20px",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+          variant="outlined"
+          onClick={handleCreateChallenge}
+        >
           Create challenge
         </Button>
         <CreateChallengeModal />
