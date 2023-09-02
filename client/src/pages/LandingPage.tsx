@@ -6,6 +6,7 @@ import RocketLaunchIcon from "@mui/icons-material/RocketLaunch";
 import Button from "@mui/material/Button";
 import { useState } from "react";
 import { Box, Container, Dialog, styled } from "@mui/material";
+import headerimg from "../img/headerimg.png";
 
 const LandingPage = () => {
   const [openLogIn, setOpenLogIn] = useState(false);
@@ -29,17 +30,23 @@ const LandingPage = () => {
   };
 
   return (
-    <div
+    <Container
       style={{
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
-        height: "50vh",
+        height: "100%",
+        width: "100%",
+        backgroundRepeat: "no-repeat",
+        backgroundPosition: "center",
+        backgroundSize: "cover",
+        placeItems: "center",
+        backgroundImage: `url(${headerimg})`,
       }}
     >
-      <img src="../img/headerimg.png"></img>
       <WelcomeMessage></WelcomeMessage>
+
       <div style={{ display: "flex", gap: "16px" }}>
         <Button variant="contained" sx={{ m: 2 }} onClick={handleLogIn}>
           Log In <LoginIcon></LoginIcon>
@@ -68,7 +75,7 @@ const LandingPage = () => {
           )}
         </Dialog>
       </div>
-    </div>
+    </Container>
   );
 };
 
