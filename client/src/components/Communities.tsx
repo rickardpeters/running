@@ -56,6 +56,7 @@ const Communities = () => {
               {"      "}
               <PeopleIcon />
               {community.members.length}
+              <hr />
             </Typography>
             <Typography sx={{ mb: 1.5 }} color="text.secondary"></Typography>
             <Typography variant="body2">
