@@ -35,7 +35,6 @@ const LoginModal = (props: LoginModalProps) => {
       await logInUser(email, password);
       props.setShow(false);
       getfireBaseToken();
-      sessionStorage.setItem("token", token);
       navigate("/homePage");
     } catch (error) {
       console.log(error);
@@ -58,7 +57,9 @@ const LoginModal = (props: LoginModalProps) => {
       .post(tokenUrl, requestData)
       .then((response) => {
         const idToken = response.data.idToken;
+        console.log(idToken);
         setToken(idToken);
+        sessionStorage.setItem("token", idToken);
       })
       .catch((error) => {
         console.error("Error fetching token:", error);
