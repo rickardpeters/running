@@ -1,5 +1,10 @@
 import { atom } from "recoil";
 
+export const emailAtom = atom({
+  key: "emailAtom",
+  default: "",
+});
+
 export const loginModalState = atom({
   key: "loginModalState",
   default: false,

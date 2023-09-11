@@ -1,23 +1,22 @@
 import {
-  Box,
   Button,
   Card,
   CardActions,
   CardContent,
   Container,
-  Grid,
-  Icon,
-  Paper,
   Typography,
 } from "@mui/material";
 import PeopleIcon from "@mui/icons-material/People";
 import axios from "axios";
 import { useRecoilState } from "recoil";
-import { communitiesAtom } from "../recoil/atoms";
+import { communitiesAtom, emailAtom } from "../recoil/atoms";
 import { useEffect } from "react";
+import { auth } from "../firebase";
+import { getUserToken } from "../utils";
 
 const Communities = () => {
   const [communities, setCommunities] = useRecoilState(communitiesAtom);
+  const [email, setEmail] = useRecoilState(emailAtom);
 
   async function fetchCommunities() {
     try {
@@ -31,6 +30,8 @@ const Communities = () => {
       console.error(error);
     }
   }
+
+  const handleJoinCommunity = async () => {};
 
   useEffect(() => {
     sessionStorage.getItem("token")
@@ -56,7 +57,6 @@ const Communities = () => {
               {"      "}
               <PeopleIcon />
               {community.members.length}
-              <hr />
             </Typography>
             <Typography sx={{ mb: 1.5 }} color="text.secondary"></Typography>
             <Typography variant="body2">
@@ -72,9 +72,29 @@ const Communities = () => {
               {community.created_at.split("T")[0]}
             </Typography>
           </CardContent>
-          <CardActions></CardActions>
+          <CardActions>
+            {community.members.some((member) => member.email === email) ? (
+              <Button>Leave Community</Button>
+            ) : (
+              <Button
+                style={{ display: "flex", flexDirection: "column" }}
+                onClick={handleJoinCommunity}
+              >
+                Join community
+              </Button>
+            )}
+          </CardActions>
         </Card>
       ))}
+      <Container
+        style={{
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "center",
+        }}
+      >
+        <Button variant="contained">Create new communtiy</Button>
+      </Container>
     </Container>
   );
 };
