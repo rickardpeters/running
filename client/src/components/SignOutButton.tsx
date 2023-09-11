@@ -13,7 +13,7 @@ const SignOutButton = () => {
   const handleSignOut = async () => {
     try {
       await logOut();
-      localStorage.removeItem("token");
+      sessionStorage.removeItem("token");
       navigate("/");
       console.log("logged out");
     } catch (error) {

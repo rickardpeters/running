@@ -31,7 +31,7 @@ const ChallengeList = () => {
     try {
       const response = await axios.get("http://127.0.0.1:8500/challenges/", {
         headers: {
-          Authorization: "Bearer " + localStorage.getItem("token"),
+          Authorization: "Bearer " + sessionStorage.getItem("token"),
         },
       });
       setChallenges(response.data);
@@ -47,10 +47,10 @@ const ChallengeList = () => {
   };
 
   useEffect(() => {
-    localStorage.getItem("token")
+    sessionStorage.getItem("token")
       ? fetchChallenges()
       : console.log(
-          "No token, cannot fetch challenges." + localStorage.getItem("token")
+          "No token, cannot fetch challenges." + sessionStorage.getItem("token")
         );
   }, [updateChallengeList]);
 

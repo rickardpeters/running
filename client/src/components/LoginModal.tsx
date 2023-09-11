@@ -35,7 +35,7 @@ const LoginModal = (props: LoginModalProps) => {
       await logInUser(email, password);
       props.setShow(false);
       getfireBaseToken();
-      localStorage.setItem("token", token);
+      sessionStorage.setItem("token", token);
       navigate("/homePage");
     } catch (error) {
       console.log(error);
