@@ -14,6 +14,10 @@ import {
   CardContent,
   Typography,
   Button,
+  CardActionArea,
+  useMediaQuery,
+  Grid,
+  LinearProgress,
 } from "@mui/material";
 import CreateChallengeModal from "./CreateChallengeModal";
 
@@ -26,6 +30,8 @@ const ChallengeList = () => {
   const [updateChallengeList, setUpdateChallengeList] = useRecoilState(
     updateChallengeListAtom
   );
+
+  const isSmallScreen = useMediaQuery("(max-width: 850px)");
 
   async function fetchChallenges() {
     try {
@@ -58,48 +64,83 @@ const ChallengeList = () => {
     <Container
       sx={{
         display: "flex",
-        flexDirection: "row",
+        flexDirection: "column",
         justifyContent: "center",
       }}
     >
-      <Card sx={{ width: "250px", margin: "10px" }}>
-        <CardContent>
-          <h2>Challenges</h2>
-          <Typography>
-            {challenges
-              .slice()
-              .sort((a, b) => {
-                const differenceA = a.goal - runTotals.distance / 1000;
-                const differenceB = b.goal - runTotals.distance / 1000;
-                return differenceB - differenceA;
-              })
-              .map((challenge) => (
-                <li>
-                  <strong>{challenge.name}</strong>
-                  <br />
-                  {runTotals.distance / 1000 >= challenge.goal
-                    ? "Challenge complete!"
-                    : `${runTotals.distance / 1000} of ${challenge.goal} km`}
-                  <hr />
-                </li>
-              ))}
-          </Typography>
-        </CardContent>
-        <Button
-          sx={{
-            display: "flex",
-            flexDirection: "row",
-            margin: "20px",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-          variant="outlined"
-          onClick={handleCreateChallenge}
-        >
-          Create challenge
-        </Button>
+      <Card
+        sx={{
+          width: "500px",
+          margin: "10px",
+          justifyContent: "center",
+          placeItems: "center",
+        }}
+      >
+        <Grid>
+          <CardContent
+            sx={{
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <h2 style={{ textAlign: "center" }}>Challenges</h2>
+            <Typography>
+              {challenges
+                .slice()
+                .sort((a, b) => {
+                  const differenceA = a.goal - runTotals.distance / 1000;
+                  const differenceB = b.goal - runTotals.distance / 1000;
+                  return differenceB - differenceA;
+                })
+                .map((challenge) => (
+                  <Card
+                    sx={{
+                      padding: "10px",
+                      margin: "10px",
+                      justifyContent: "center",
+                      placeItems: "center",
+                      textAlign: "center",
+                    }}
+                  >
+                    <CardActionArea sx={{}}>
+                      <strong>{challenge.name}</strong>
+                      <br />
+                      <br />
+                      {runTotals.distance / 1000 >= challenge.goal
+                        ? "Challenge complete!"
+                        : `${(runTotals.distance / 1000).toFixed(0)} of ${
+                            challenge.goal
+                          } km`}
+                      <br />
+
+                      <LinearProgress
+                        variant="determinate"
+                        color="success"
+                        value={
+                          (runTotals.distance / 1000 / challenge.goal) * 100
+                        }
+                      />
+                    </CardActionArea>
+                  </Card>
+                ))}
+            </Typography>
+          </CardContent>
+        </Grid>
         <CreateChallengeModal />
       </Card>
+      <Button
+        sx={{
+          margin: "10px",
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+        variant="contained"
+        onClick={handleCreateChallenge}
+      >
+        Create challenge
+      </Button>
     </Container>
   );
 };

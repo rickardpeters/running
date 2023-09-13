@@ -20,7 +20,6 @@ const StravaCard = () => {
   const [loggedInState, setLoggedInState] = useRecoilState(stravaLoggedinAtom);
   const [athlete, setAthlete] = useRecoilState(athleteAtom);
   const [runTotals, setRunTotals] = useRecoilState(runTotalsAtom);
-  const [openModal, setOpenModal] = useState<boolean>(false);
 
   function capitalizeAndRemoveUnderscore(string: string) {
     const stringWithoutUnderscore = string.replace(/_/g, " ");
@@ -29,10 +28,6 @@ const StravaCard = () => {
       stringWithoutUnderscore.slice(1)
     );
   }
-
-  const handleCloseModal = () => {
-    setOpenModal(false);
-  };
 
   const signIn = async () => {
     window.location.href =
@@ -88,6 +83,7 @@ const StravaCard = () => {
       );
       setAthlete(response.data);
       var athlete = response.data;
+      console.log(athlete);
     } catch (error) {
       console.error(error);
     }
@@ -115,17 +111,21 @@ const StravaCard = () => {
     fetchData();
   }, [loggedInState]);
 
+  useEffect(() => {
+    getAthleteStats(athlete);
+  }, []);
+
   return (
     <Container
       sx={{
         display: "flex",
-        flexDirection: "row",
+        flexDirection: "column",
         justifyContent: "center",
       }}
     >
       <>
         <Typography fontWeight={"bold"} sx={{ m: 1 }}>
-          <Card sx={{ width: "250px", margin: "10px" }}>
+          <Card sx={{ width: "500px", margin: "10px" }}>
             <CardContent>
               <h3>{athlete.firstname !== "" ? athlete.firstname : null}</h3>
               {Object.entries(runTotals).map(([key, value]) => {
@@ -179,21 +179,6 @@ const StravaCard = () => {
             </ButtonGroup>
           </Card>
         </Typography>
-
-        <Modal open={openModal} onClose={handleCloseModal}>
-          <Container sx={{ p: 2, width: 300, bgcolor: "background.paper" }}>
-            <Typography variant="h5" gutterBottom>
-              Sign In Successful!
-            </Typography>
-            <Typography variant="body1" gutterBottom>
-              Hello, {athlete.firstname}! Your account is now connected to your
-              Strava account!
-            </Typography>
-            <Button variant="contained" onClick={handleCloseModal}>
-              Close
-            </Button>
-          </Container>
-        </Modal>
       </>
     </Container>
   );
