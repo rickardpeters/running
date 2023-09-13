@@ -13,7 +13,7 @@ import LoginIcon from "@mui/icons-material/Login";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useRecoilState } from "recoil";
-import { firebaseTokenAtom } from "../recoil/atoms";
+import { firebaseTokenAtom, emailAtom } from "../recoil/atoms";
 import { auth } from "../firebase";
 import { getUserToken } from "../utils";
 
@@ -23,7 +23,7 @@ interface LoginModalProps {
 }
 const LoginModal = (props: LoginModalProps) => {
   const [open, setOpen] = useState(false);
-  const [email, setEmail] = useState("");
+  const [email, setEmail] = useRecoilState(emailAtom);
   const [password, setPassword] = useState("");
   const { logInUser } = useContext(UserContext);
   const [token, setToken] = useRecoilState(firebaseTokenAtom);
@@ -35,7 +35,6 @@ const LoginModal = (props: LoginModalProps) => {
       await logInUser(email, password);
       props.setShow(false);
       getfireBaseToken();
-      sessionStorage.setItem("token", token);
       navigate("/homePage");
     } catch (error) {
       console.log(error);
@@ -58,7 +57,9 @@ const LoginModal = (props: LoginModalProps) => {
       .post(tokenUrl, requestData)
       .then((response) => {
         const idToken = response.data.idToken;
+        console.log(idToken);
         setToken(idToken);
+        sessionStorage.setItem("token", idToken);
       })
       .catch((error) => {
         console.error("Error fetching token:", error);
