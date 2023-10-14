@@ -5,16 +5,10 @@ import HomeIcon from "@mui/icons-material/Home";
 import FlightLandIcon from "@mui/icons-material/FlightLand";
 import SignOutButton from "./SignOutButton";
 import { UserContext } from "./auth/AuthContextProvider";
-import { auth } from "../firebase";
-import { useContext, useEffect, useState } from "react";
+import { useContext } from "react";
 
 const Header = () => {
   const { user } = useContext(UserContext);
-  const [isLoggedIn, setisLoggedIn] = useState(false);
-
-  useEffect(() => {
-    setisLoggedIn(user);
-  }, [user]);
 
   return (
     <AppBar sx={{ backgroundColor: "#fa6e43" }} position="sticky">
@@ -22,6 +16,16 @@ const Header = () => {
         <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
           Kubba på litt
         </Typography>
+        {sessionStorage.getItem("token") == null ? (
+          <Button color="inherit" component={Link} to="/newLogin">
+            Login
+          </Button>
+        ) : (
+          <Button color="inherit" component={Link} to="/newLogout">
+            Logout
+          </Button>
+        )}
+
         <Button color="inherit" component={Link} to="/">
           <FlightLandIcon></FlightLandIcon>
         </Button>

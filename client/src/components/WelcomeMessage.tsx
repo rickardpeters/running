@@ -1,9 +1,72 @@
-import React from 'react'
+import React, { useState } from "react";
+import runningImage from "../img/headerimg.png";
+import { Button, Dialog, Container } from "@mui/material";
+import LoginModal from "./LoginModal";
+import SignUpModal from "./SignupModal";
+import LoginIcon from "@mui/icons-material/Login";
+import RocketLaunchIcon from "@mui/icons-material/RocketLaunch";
 
 const WelcomeMessage = () => {
-  return (
-    <h1>Welcome to the application!</h1>
-  )
-}
+  const [openLogIn, setOpenLogIn] = useState(false);
+  const [openSignUp, setOpenSignUp] = useState(false);
 
-export default WelcomeMessage
+  const [signedUp, setSignedUp] = useState(false);
+
+  const handleLogIn = () => {
+    setOpenLogIn(true);
+  };
+
+  const handleSignUp = () => {
+    setOpenSignUp(true);
+  };
+  const handleCloseSignUp = () => {
+    setOpenSignUp(false);
+  };
+
+  const handleCloseLogIn = () => {
+    setOpenLogIn(false);
+  };
+  return (
+    <div
+      className="hero min-h-screen"
+      style={{
+        backgroundImage: `url(${runningImage})`,
+      }}
+    >
+      <div className="hero-overlay bg-opacity-60"></div>
+      <div className="hero-content text-center text-neutral-content">
+        <div className="max-w-md">
+          <h1 className="mb-5 text-5xl font-bold text-white">
+            Fellow runners,
+          </h1>
+          <p className="mb-5 text-2xl">Let's run!</p>
+          <Button variant="contained" sx={{ m: 2 }} onClick={handleLogIn}>
+            Log In <LoginIcon></LoginIcon>
+          </Button>
+          <Button variant="contained" sx={{ m: 2 }} onClick={handleSignUp}>
+            Sign Up <RocketLaunchIcon></RocketLaunchIcon>
+          </Button>
+        </div>
+
+        <Dialog open={openLogIn} onClose={handleCloseLogIn}>
+          <LoginModal setShow={setOpenLogIn}></LoginModal>
+        </Dialog>
+
+        <Dialog open={openSignUp} onClose={handleCloseSignUp}>
+          {signedUp ? (
+            <LoginModal setShow={setOpenLogIn}></LoginModal>
+          ) : (
+            <SignUpModal
+              show={openSignUp}
+              setShow={setOpenSignUp}
+              signedUp={signedUp}
+              setSignedUp={setSignedUp}
+            ></SignUpModal>
+          )}
+        </Dialog>
+      </div>
+    </div>
+  );
+};
+
+export default WelcomeMessage;

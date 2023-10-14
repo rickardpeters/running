@@ -35,7 +35,7 @@ const ChallengeList = () => {
 
   async function fetchChallenges() {
     try {
-      const response = await axios.get("http://127.0.0.1:8500/challenges/", {
+      const response = await axios.get("http://127.0.0.1:8000/challenges/", {
         headers: {
           Authorization: "Bearer " + sessionStorage.getItem("token"),
         },

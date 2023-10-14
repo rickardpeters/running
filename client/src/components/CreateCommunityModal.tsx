@@ -42,7 +42,7 @@ const CreateCommunityModal = () => {
 
     try {
       const response = await axios.post(
-        "http://127.0.0.1:8500/communities/",
+        "http://127.0.0.1:8000/communities/",
         newCommunity,
         config
       );

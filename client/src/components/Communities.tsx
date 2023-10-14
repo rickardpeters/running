@@ -6,25 +6,23 @@ import {
   Container,
   Typography,
 } from "@mui/material";
-import PeopleIcon from "@mui/icons-material/People";
 import axios from "axios";
-import { useRecoilState } from "recoil";
-import { communitiesAtom, emailAtom } from "../recoil/atoms";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { authTokenAtom, communitiesAtom, emailAtom } from "../recoil/atoms";
 import { useEffect } from "react";
-import { auth } from "../firebase";
-import { getUserToken } from "../utils";
 
 const Communities = () => {
   const [communities, setCommunities] = useRecoilState(communitiesAtom);
-  const [email, setEmail] = useRecoilState(emailAtom);
+  const authToken = useRecoilValue(authTokenAtom);
 
   async function fetchCommunities() {
     try {
-      const response = await axios.get("http://127.0.0.1:8500/communities/", {
+      const response = await axios.get("http://127.0.0.1:8000/communities", {
         headers: {
-          Authorization: "Bearer " + sessionStorage.getItem("token"),
+          Authorization: `Token ${authToken}`,
         },
       });
+      console.warn(response.data);
       setCommunities(response.data);
     } catch (error) {
       console.error(error);
@@ -55,8 +53,6 @@ const Communities = () => {
             <Typography variant="h5" component="div">
               {community.community_name}
               {"      "}
-              <PeopleIcon />
-              {community.members.length}
             </Typography>
             <Typography sx={{ mb: 1.5 }} color="text.secondary"></Typography>
             <Typography variant="body2">
@@ -68,22 +64,9 @@ const Communities = () => {
 
               <br />
               <br />
-              <b>Created: </b>
-              {community.created_at.split("T")[0]}
             </Typography>
           </CardContent>
-          <CardActions>
-            {community.members.some((member) => member.email === email) ? (
-              <Button>Leave Community</Button>
-            ) : (
-              <Button
-                style={{ display: "flex", flexDirection: "column" }}
-                onClick={handleJoinCommunity}
-              >
-                Join community
-              </Button>
-            )}
-          </CardActions>
+          <CardActions></CardActions>
         </Card>
       ))}
       <Container

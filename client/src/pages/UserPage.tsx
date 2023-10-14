@@ -19,6 +19,7 @@ const UserPage = () => {
         justifyContent: "center",
       }}
     >
+      {isSmallScreen ? null : <Sidebar></Sidebar>}
       <StravaCard />
       <ChallengeList />
     </Container>

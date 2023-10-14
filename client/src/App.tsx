@@ -15,22 +15,33 @@ import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
 import { AuthContextProvider } from "./components/auth/AuthContextProvider";
 import CommunityList from "./pages/CommunityList";
+import NewLoginPage from "./pages/NewLoginPage";
+import NewLogout from "./components/NewLogout";
 
 function App() {
   return (
     <RecoilRoot>
       <BrowserRouter>
-      <AuthContextProvider>
-        <Layout>
-          
+        <AuthContextProvider>
+          <Layout>
             <Routes>
               <Route path="/" element={<LandingPage></LandingPage>}></Route>
+              <Route
+                path="/newLogout"
+                element={<NewLogout></NewLogout>}
+              ></Route>
+              <Route
+                path="/newLogin"
+                element={<NewLoginPage></NewLoginPage>}
+              ></Route>
               <Route path="/userPage" element={<UserPage></UserPage>}></Route>
               <Route path="/homePage" element={<HomePage></HomePage>}></Route>
-              <Route path="/communityList" element={<CommunityList></CommunityList>}></Route>
+              <Route
+                path="/communityList"
+                element={<CommunityList></CommunityList>}
+              ></Route>
             </Routes>
-          
-        </Layout>
+          </Layout>
         </AuthContextProvider>
       </BrowserRouter>
     </RecoilRoot>

@@ -5,6 +5,11 @@ export const emailAtom = atom({
   default: "",
 });
 
+export const passwordAtom = atom({
+  key: "passwordAtom",
+  default: "",
+});
+
 export const loginModalState = atom({
   key: "loginModalState",
   default: false,
@@ -94,4 +99,9 @@ export interface Community {
 export const communitiesAtom = atom({
   key: "communitiesAtom",
   default: [] as Community[],
+});
+
+export const authTokenAtom = atom({
+  key: "authTokenAtom",
+  default: "",
 });
