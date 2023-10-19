@@ -1,50 +1,26 @@
-import { useState } from "react";
-import "./App.css";
-import axios from "axios";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import UserPage from "./pages/UserPage";
-import HomePage from "./pages/HomePage";
-import LandingPage from "./pages/LandingPage";
-import Layout from "./components/Layout";
-
-import { RecoilRoot } from "recoil";
-
-import "@fontsource/roboto/300.css";
-import "@fontsource/roboto/400.css";
-import "@fontsource/roboto/500.css";
-import "@fontsource/roboto/700.css";
-import { AuthContextProvider } from "./components/auth/AuthContextProvider";
-import CommunityList from "./pages/CommunityList";
-import NewLoginPage from "./pages/NewLoginPage";
-import NewLogout from "./components/NewLogout";
+import React, { Suspense, useContext } from "react";
+import AuthContext, { Context } from "./components/auth/AuthContextProvider";
+import { RecoilRoot, useRecoilValue } from "recoil";
+import { BrowserRouter } from "react-router-dom";
+import Layout from "./components/layout/Layout";
+import { userAtom } from "./recoil/atoms";
+import AuthenticatedApp from "./authenticated-app";
+import UnauthenticatedApp from "./unauthenticated-app";
 
 function App() {
+  const user = useContext(Context);
+  const user2 = useRecoilValue(userAtom);
+
   return (
-    <RecoilRoot>
-      <BrowserRouter>
-        <AuthContextProvider>
-          <Layout>
-            <Routes>
-              <Route path="/" element={<LandingPage></LandingPage>}></Route>
-              <Route
-                path="/newLogout"
-                element={<NewLogout></NewLogout>}
-              ></Route>
-              <Route
-                path="/newLogin"
-                element={<NewLoginPage></NewLoginPage>}
-              ></Route>
-              <Route path="/userPage" element={<UserPage></UserPage>}></Route>
-              <Route path="/homePage" element={<HomePage></HomePage>}></Route>
-              <Route
-                path="/communityList"
-                element={<CommunityList></CommunityList>}
-              ></Route>
-            </Routes>
-          </Layout>
-        </AuthContextProvider>
-      </BrowserRouter>
-    </RecoilRoot>
+    <BrowserRouter>
+      <Suspense fallback={<div>hello</div>}>
+        {user.user ? (
+          <AuthenticatedApp></AuthenticatedApp>
+        ) : (
+          <UnauthenticatedApp></UnauthenticatedApp>
+        )}
+      </Suspense>
+    </BrowserRouter>
   );
 }
 

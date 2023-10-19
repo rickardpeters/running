@@ -9,7 +9,6 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import { Grid, LinearProgress, TextField } from "@mui/material";
 import CountrySelect from "./CountrySelect";
-import { UserAuth, UserContext } from "./auth/AuthContextProvider";
 import LoginModal from "./LoginModal";
 import { passwordStrength, FirstOption, Option } from "check-password-strength";
 import PasswordStrength from "./PasswordStrength";
@@ -48,10 +47,6 @@ const SignUpModal = (props: SignUpModalProps) => {
 
   const navigate = useNavigate;
 
-  const { createUser, user } = useContext(UserContext);
-  
-  const { logOut } = UserAuth();
-
   
   const signUp = async () => {
     const newUser = {
@@ -59,31 +54,6 @@ const SignUpModal = (props: SignUpModalProps) => {
       first_name: firstName,
       last_name: lastName,
       
-    }
-   
-    try {
-      await createUser(email, password);
-      props.setSignedUp(true)
-
-      //Function to get user token from anywhere
-      const token = await getUserToken(auth);
-    
-      const unsubscribe = onAuthStateChanged(auth, async (user) => {
-        
-      
-      const config = {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        }
-      }
-      const response = await axios.post('http://localhost:8000/users/', newUser, config);
-      console.log(response)
-    });
-    return unsubscribe();
-      
-    } catch (error) {
-      console.error(error)
     }
     
     

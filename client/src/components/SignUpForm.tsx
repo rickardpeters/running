@@ -1,49 +1,53 @@
 import React, { useState } from "react";
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
-import { useNavigate } from "react-router-dom";
+import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../firebase";
 
-const NewLogin = () => {
+const SignUpForm = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const navigate = useNavigate();
-
-  const logIn = async (e: React.MouseEvent<HTMLElement>) => {
+  const handleEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
-    signInWithEmailAndPassword(auth, email, password)
+    console.log(email);
+    setEmail(e.target.value);
+  };
+
+  const handlePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
+    e.preventDefault();
+    console.log(password);
+    setPassword(e.target.value);
+  };
+
+  const signUp = async (e: React.MouseEvent<HTMLElement>) => {
+    e.preventDefault();
+    createUserWithEmailAndPassword(auth, email, password)
       .then((user) => {
         console.log(user);
-        navigate("/homePage");
       })
       .catch((error) => {
         console.log(error);
       });
   };
-
   return (
     <div className="grid place-items-center h-[45vh] relative">
       <div className="grid m-2">
         <input
           className="input input-bordered mb-2"
-          id="password"
+          type="email"
+          id="email"
           placeholder="E-mail"
           value={email}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-            setEmail(e.target.value)
-          }
+          onChange={handleEmail}
         ></input>
         <input
           placeholder="Password"
           className="input input-bordered"
           type="password"
           value={password}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-            setPassword(e.target.value)
-          }
+          onChange={handlePassword}
         ></input>
-        <button className="btn btn-accent mt-5" onClick={logIn}>
-          Login
+        <button className="btn btn-accent mt-5" onClick={signUp}>
+          SignUp
         </button>
       </div>
       <div></div>
@@ -51,4 +55,4 @@ const NewLogin = () => {
   );
 };
 
-export default NewLogin;
+export default SignUpForm;

@@ -1,30 +1,18 @@
-import { Link } from "react-router-dom";
 import { AppBar, Toolbar, Typography, Button } from "@mui/material";
+import React from "react";
+import { Link } from "react-router-dom";
+import SignOutButton from "../SignOutButton";
 import DirectionsRunIcon from "@mui/icons-material/DirectionsRun";
 import HomeIcon from "@mui/icons-material/Home";
 import FlightLandIcon from "@mui/icons-material/FlightLand";
-import SignOutButton from "./SignOutButton";
-import { UserContext } from "./auth/AuthContextProvider";
-import { useContext } from "react";
 
-const Header = () => {
-  const { user } = useContext(UserContext);
-
+const AuthHeader = () => {
   return (
     <AppBar sx={{ backgroundColor: "#fa6e43" }} position="sticky">
       <Toolbar>
         <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
           Kubba på litt
         </Typography>
-        {sessionStorage.getItem("token") == null ? (
-          <Button color="inherit" component={Link} to="/newLogin">
-            Login
-          </Button>
-        ) : (
-          <Button color="inherit" component={Link} to="/newLogout">
-            Logout
-          </Button>
-        )}
 
         <Button color="inherit" component={Link} to="/">
           <FlightLandIcon></FlightLandIcon>
@@ -38,10 +26,10 @@ const Header = () => {
         <Button color="inherit" component={Link} to="/communityList">
           communityList
         </Button>
-        {user && <SignOutButton></SignOutButton>}
+        <SignOutButton></SignOutButton>
       </Toolbar>
     </AppBar>
   );
 };
 
-export default Header;
+export default AuthHeader;

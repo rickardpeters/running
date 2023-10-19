@@ -7,7 +7,6 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import { Grid, TextField } from "@mui/material";
-import { UserContext } from "./auth/AuthContextProvider";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import LoginIcon from "@mui/icons-material/Login";
 import { useNavigate } from "react-router-dom";
@@ -25,20 +24,12 @@ const LoginModal = (props: LoginModalProps) => {
   const [open, setOpen] = useState(false);
   const [email, setEmail] = useRecoilState(emailAtom);
   const [password, setPassword] = useState("");
-  const { logInUser } = useContext(UserContext);
   const [token, setToken] = useRecoilState(firebaseTokenAtom);
 
   const navigate = useNavigate();
 
   const signIn = async () => {
-    try {
-      await logInUser(email, password);
-      props.setShow(false);
-      getfireBaseToken();
-      navigate("/homePage");
-    } catch (error) {
-      console.log(error);
-    }
+   
   };
 
   //Fetches token from firebase and stores to tokenAtom for querys.

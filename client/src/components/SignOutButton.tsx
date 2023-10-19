@@ -1,19 +1,20 @@
-import { UserAuth } from "./auth/AuthContextProvider";
+import { Context } from "./auth/AuthContextProvider";
 import { Button } from "@mui/base";
 import { useNavigate } from "react-router-dom";
 import React, { useContext } from "react";
-import { UserContext } from "./auth/AuthContextProvider";
+
 import LogoutIcon from "@mui/icons-material/Logout";
+import { signOut } from "firebase/auth";
+import { auth } from "../firebase";
 
 const SignOutButton = () => {
-  const { logOut } = UserAuth();
   const navigate = useNavigate();
-  const { user } = useContext(UserContext);
+  const { user } = useContext(Context);
 
   const handleSignOut = async () => {
     try {
-      await logOut();
-      sessionStorage.removeItem("token");
+      await signOut(auth);
+
       navigate("/");
       console.log("logged out");
     } catch (error) {
