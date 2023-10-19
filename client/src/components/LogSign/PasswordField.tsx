@@ -3,7 +3,7 @@ import { FirstOption, passwordStrength, Option } from "check-password-strength";
 import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 import PasswordStrength from "./PasswordStrength";
 import { useRecoilState } from "recoil";
-import { passwordTestPassed } from "../recoil/atoms";
+import { passwordTestPassed } from "../../recoil/atoms";
 
 interface PasswordFieldProps {
   password: string;
@@ -55,7 +55,7 @@ const PasswordField = (props: PasswordFieldProps) => {
   }, [passwordTest, props.password]);
   return (
     <>
-      <Grid item xs={6} style={{marginBottom:'25px'}}>
+      <Grid item xs={6} style={{ marginBottom: "25px" }}>
         <TextField
           autoFocus
           margin="dense"
@@ -106,7 +106,6 @@ const PasswordField = (props: PasswordFieldProps) => {
         )}
       </Grid>
       <Grid container spacing={2}>
-      
         {passStrength != null && props.password.length != 0 && (
           <Grid item xs={6}>
             <PasswordStrength
@@ -115,7 +114,6 @@ const PasswordField = (props: PasswordFieldProps) => {
             ></PasswordStrength>
           </Grid>
         )}
-        
       </Grid>
     </>
   );

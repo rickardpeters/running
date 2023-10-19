@@ -8,7 +8,7 @@ import {
 } from "@mui/material";
 import axios from "axios";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { authTokenAtom, communitiesAtom, emailAtom } from "../recoil/atoms";
+import { authTokenAtom, communitiesAtom, emailAtom } from "../../recoil/atoms";
 import { useEffect } from "react";
 
 const Communities = () => {

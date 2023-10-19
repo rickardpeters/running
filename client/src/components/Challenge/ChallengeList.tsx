@@ -5,7 +5,7 @@ import {
   runTotalsAtom,
   showCreateChallengeAtom,
   updateChallengeListAtom,
-} from "../recoil/atoms";
+} from "../../recoil/atoms";
 import axios from "axios";
 import { useEffect } from "react";
 import {

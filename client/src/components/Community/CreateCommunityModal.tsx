@@ -6,11 +6,11 @@ import {
   DialogActions,
   Button,
 } from "@mui/material";
-import { showCreateCommunityAtom } from "../recoil/atoms";
+import { showCreateCommunityAtom } from "../../recoil/atoms";
 import { useRecoilState } from "recoil";
 import CreateCommunityForm from "./CreateCommunityForm";
-import { getUserToken } from "../utils";
-import { auth } from "../firebase";
+import { getUserToken } from "../../utils";
+import { auth } from "../../firebase";
 import axios from "axios";
 
 const CreateCommunityModal = () => {

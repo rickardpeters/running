@@ -1,11 +1,11 @@
-import { Context } from "./auth/AuthContextProvider";
+import { Context } from "../auth/AuthContextProvider";
 import { Button } from "@mui/base";
 import { useNavigate } from "react-router-dom";
 import React, { useContext } from "react";
 
 import LogoutIcon from "@mui/icons-material/Logout";
 import { signOut } from "firebase/auth";
-import { auth } from "../firebase";
+import { auth } from "../../firebase";
 
 const SignOutButton = () => {
   const navigate = useNavigate();

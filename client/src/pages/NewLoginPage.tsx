@@ -3,7 +3,7 @@ import React from "react";
 import { emailAtom, passwordAtom } from "../recoil/atoms";
 import { useRecoilState } from "recoil";
 import axios from "axios";
-import NewLogin from "../components/NewLogin";
+import NewLogin from "../components/LogSign/NewLogin";
 
 const NewLoginPage = () => {
   return (

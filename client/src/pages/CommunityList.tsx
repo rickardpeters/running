@@ -1,6 +1,6 @@
 import { Grid, Paper } from "@mui/material";
 import React from "react";
-import Communities from "../components/Communities";
+import Communities from "../components/Community/Communities";
 
 const CommunityList = () => {
   const [isModalOpen, setIsModalOpen] = React.useState(false);

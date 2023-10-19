@@ -1,7 +1,7 @@
 import { AppBar, Toolbar, Typography, Button } from "@mui/material";
 import React from "react";
 import { Link } from "react-router-dom";
-import SignOutButton from "../SignOutButton";
+import SignOutButton from "../LogSign/SignOutButton";
 import FlightLandIcon from "@mui/icons-material/FlightLand";
 
 const UnAuthHeader = () => {

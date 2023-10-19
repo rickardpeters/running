@@ -1,20 +1,19 @@
-import Box from '@mui/material/Box';
-import CommunityCard from './CommunityCard';
-import ChallengeCard from './ChallengeCard';
-
+import Box from "@mui/material/Box";
+import CommunityCard from "./Community/CommunityCard";
+import ChallengeCard from "./Challenge/ChallengeCard";
 
 const Sidebar = () => {
-
   return (
     <Box
       sx={{
         width: 300,
         m: 1,
         p: 1,
-        alignItems: 'center',
-        flexDirection: 'column',
-        display: 'flex',
-      }}>
+        alignItems: "center",
+        flexDirection: "column",
+        display: "flex",
+      }}
+    >
       <CommunityCard></CommunityCard>
       <ChallengeCard></ChallengeCard>
     </Box>

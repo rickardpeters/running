@@ -9,11 +9,11 @@ import {
 import {
   showCreateChallengeAtom,
   updateChallengeListAtom,
-} from "../recoil/atoms";
+} from "../../recoil/atoms";
 import { useRecoilState } from "recoil";
 import CreateChallengeForm from "./CreateChallengeForm";
-import { getUserToken } from "../utils";
-import { auth } from "../firebase";
+import { getUserToken } from "../../utils";
+import { auth } from "../../firebase";
 import axios from "axios";
 
 const CreateChallengeModal = () => {

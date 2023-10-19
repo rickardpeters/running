@@ -12,9 +12,9 @@ import LoginIcon from "@mui/icons-material/Login";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useRecoilState } from "recoil";
-import { firebaseTokenAtom, emailAtom } from "../recoil/atoms";
-import { auth } from "../firebase";
-import { getUserToken } from "../utils";
+import { firebaseTokenAtom, emailAtom } from "../../recoil/atoms";
+import { auth } from "../../firebase";
+import { getUserToken } from "../../utils";
 
 interface LoginModalProps {
   show?: boolean;
@@ -28,9 +28,7 @@ const LoginModal = (props: LoginModalProps) => {
 
   const navigate = useNavigate();
 
-  const signIn = async () => {
-   
-  };
+  const signIn = async () => {};
 
   //Fetches token from firebase and stores to tokenAtom for querys.
 

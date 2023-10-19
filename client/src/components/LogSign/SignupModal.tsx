@@ -17,14 +17,14 @@ import { useRecoilValue } from "recoil";
 import {
   passwordStrengthTestPassed,
   passwordTestPassed,
-} from "../recoil/atoms";
+} from "../../recoil/atoms";
 import axios from "axios";
 
 import { Auth, onAuthStateChanged } from "firebase/auth";
-import { auth } from "../firebase";
-import firebase from 'firebase/app';
-import 'firebase/auth';
-import { getUserToken } from "../utils";
+import { auth } from "../../firebase";
+import firebase from "firebase/app";
+import "firebase/auth";
+import { getUserToken } from "../../utils";
 
 interface SignUpModalProps {
   show: boolean;
@@ -47,21 +47,13 @@ const SignUpModal = (props: SignUpModalProps) => {
 
   const navigate = useNavigate;
 
-  
   const signUp = async () => {
     const newUser = {
       email: email,
       first_name: firstName,
       last_name: lastName,
-      
-    }
-    
-    
-    
-  }
-
-
- 
+    };
+  };
 
   const handleClose = () => {
     props.setShow(false);

@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import runningImage from "../img/headerimg.png";
 import { Button, Dialog, Container } from "@mui/material";
-import LoginModal from "./LoginModal";
-import SignUpModal from "./SignupModal";
+import LoginModal from "./LogSign/LoginModal";
+import SignUpModal from "./LogSign/SignupModal";
 import LoginIcon from "@mui/icons-material/Login";
 import RocketLaunchIcon from "@mui/icons-material/RocketLaunch";
 
