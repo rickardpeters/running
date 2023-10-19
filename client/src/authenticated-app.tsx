@@ -1,6 +1,6 @@
 import React from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
-import NewLogout from "./components/NewLogout";
+import NewLogout from "./components/LogSign/NewLogout";
 import CommunityList from "./pages/CommunityList";
 import HomePage from "./pages/HomePage";
 import UserPage from "./pages/UserPage";
