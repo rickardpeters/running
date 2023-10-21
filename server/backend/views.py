@@ -43,8 +43,12 @@ def log_out(request):
         return JsonResponse(status.HTTP_200_OK, safe=False)
 
 
+"""
+This view handles READ and UPDATE for all communities.
+"""
+
+
 @csrf_exempt
-@login_required
 def communities(request):
     if request.method == "GET":
         communities = Community.objects.all()
@@ -55,3 +59,71 @@ def communities(request):
         ser_communities = CommunitySerializer(communities, many=True)
 
         return JsonResponse(ser_communities.data, safe=False)
+
+    if request.method == "POST":
+        data = json.loads(request.body.decode("utf-8"))
+
+        community_name = data["community_name"]
+        description = data["description"]
+
+        if Community.objects.filter(community_name=community_name):
+            return HttpResponse("A Community with that name already exists.")
+
+        new_community = Community.objects.create(
+            community_name=community_name, description=description
+        )
+
+        ser_community = CommunitySerializer(new_community)
+
+        return JsonResponse(ser_community.data, safe=False)
+
+
+"""
+This view handles READ, UPDATE and DELETE for community by id.
+"""
+
+
+@csrf_exempt
+def community_by_id(request, community_id):
+    print(community_id)
+    if request.method == "GET":
+        try:
+            community = Community.objects.get(id=community_id)
+            print(community)
+
+        except ObjectDoesNotExist:
+            return JsonResponse(status.HTTP_404_NOT_FOUND, safe=False)
+
+        ser_community = CommunitySerializer(community)
+
+        return JsonResponse(ser_community.data, safe=False)
+
+    if request.method == "DELETE":
+        try:
+            community = Community.objects.filter(id=community_id).first()
+
+        except ObjectDoesNotExist:
+            return JsonResponse(status.HTTP_404_NOT_FOUND, safe=False)
+
+        ser_community = CommunitySerializer(community)
+
+        community.delete()
+
+        return JsonResponse(ser_community.data, safe=False)
+
+    if request.method == "PUT":
+        try:
+            community = Community.objects.filter(id=community_id)
+
+        except ObjectDoesNotExist:
+            return JsonResponse(status.HTTP_404_NOT_FOUND, safe=False)
+
+        data = json.loads(request.body.decode("utf-8"))
+
+        community.update(**data)
+
+        updated_community = Community.objects.get(id=community_id)
+
+        ser_community = CommunitySerializer(updated_community)
+
+        return JsonResponse(ser_community.data, safe=False)

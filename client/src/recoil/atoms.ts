@@ -83,6 +83,11 @@ export const updateChallengeListAtom = atom({
   default: false,
 });
 
+export const updateCommunityListAtom = atom({
+  key: "updateCommunityListAtom",
+  default: false,
+});
+
 export interface Member {
   email: string;
   first_name: string;
