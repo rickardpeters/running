@@ -100,7 +100,7 @@ def community_by_id(request, community_id):
 
     if request.method == "DELETE":
         try:
-            community = Community.objects.filter(id=community_id).first()
+            community = Community.objects.filter(id=community_id)
 
         except ObjectDoesNotExist:
             return JsonResponse(status.HTTP_404_NOT_FOUND, safe=False)

@@ -53,6 +53,8 @@ const CreateCommunityModal = () => {
       );
       console.warn(response.data);
       setUpdateCommunityList(!updateCommunityList);
+      setCommunityName("");
+      setDescription("");
       handleCloseModal();
     } catch (error) {
       console.log(error);

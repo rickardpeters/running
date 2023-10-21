@@ -10,22 +10,33 @@ import {
 import axios from "axios";
 import { useRecoilState, useRecoilValue, useResetRecoilState } from "recoil";
 import {
+  Community,
   authTokenAtom,
   communitiesAtom,
   emailAtom,
   showCreateCommunityAtom,
+  showDeleteCommunityAtom,
   updateCommunityListAtom,
 } from "../../recoil/atoms";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import CreateCommunityModal from "./CreateCommunityModal";
+import DeleteCommuityModal from "./DeleteCommunityModal";
+import DeleteCommunityModal from "./DeleteCommunityModal";
+import DeleteCommunityConfirmation from "./DeleteCommunityConfirmation";
 
 const Communities = () => {
   const [communities, setCommunities] = useRecoilState(communitiesAtom);
   const [showCreateCommunity, setShowCreateCommunity] = useRecoilState(
     showCreateCommunityAtom
   );
+  const [showDeleteCommunity, setShowDeleteCommunity] = useRecoilState(
+    showDeleteCommunityAtom
+  );
   const updateCommunityList = useRecoilValue(updateCommunityListAtom);
   const authToken = useRecoilValue(authTokenAtom);
+  const [deleteCommunity, setDeleteCommunity] = useState<Community | null>(
+    null
+  );
 
   async function fetchCommunities() {
     try {
@@ -41,7 +52,10 @@ const Communities = () => {
     }
   }
 
-  const handleJoinCommunity = async () => {};
+  const handleDeleteClick = (community: Community) => {
+    setDeleteCommunity(community);
+    setShowDeleteCommunity(true);
+  };
 
   //Checks if updateCommunityList state changes, triggering the useEffect.
   useEffect(() => {
@@ -51,8 +65,8 @@ const Communities = () => {
   return (
     <Container style={{ marginTop: "25px" }}>
       <Grid container spacing={1}>
-        {communities.map((community) => (
-          <Grid item xs={12} sm={6} md={4} lg={6}>
+        {communities.map((community, index) => (
+          <Grid key={index} item xs={12} sm={6} md={4} lg={6}>
             <Card sx={{ minWidth: 200, margin: "10px" }}>
               <CardContent>
                 <Typography
@@ -80,7 +94,12 @@ const Communities = () => {
                 <Button variant="contained" size="small">
                   Edit
                 </Button>
-                <Button variant="contained" color="error" size="small">
+                <Button
+                  variant="contained"
+                  color="error"
+                  size="small"
+                  onClick={() => handleDeleteClick(community)}
+                >
                   Delete
                 </Button>
               </CardActions>
@@ -103,7 +122,9 @@ const Communities = () => {
           Create new community
         </Button>
       </Container>
-      {/* <CreateCommunityModal /> */}
+      <CreateCommunityModal />
+      <DeleteCommunityModal community={deleteCommunity} />
+      <DeleteCommunityConfirmation />
     </Container>
   );
 };
