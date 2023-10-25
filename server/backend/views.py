@@ -23,6 +23,7 @@ def log_in(request):
         user, _ = FirebaseAuthentication().authenticate(request)
         print(user)
         if user is not None:
+            # The login function for the django user model
             login(request, user.user)
             ser_user = UserSerializer(user)
             return Response(ser_user.data)

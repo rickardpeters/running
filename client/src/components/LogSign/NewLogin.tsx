@@ -1,11 +1,20 @@
 import React, { useState } from "react";
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import {
+  User,
+  UserCredential,
+  getAuth,
+  signInWithEmailAndPassword,
+  signOut,
+} from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import { auth } from "../../firebase";
+import { useRecoilState } from "recoil";
+import { authTokenAtom } from "../../recoil/atoms";
 
 const NewLogin = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [authToken, setAuthToken] = useRecoilState(authTokenAtom);
 
   const navigate = useNavigate();
 
@@ -14,11 +23,29 @@ const NewLogin = () => {
     signInWithEmailAndPassword(auth, email, password)
       .then((user) => {
         console.log(user);
+        signInToDjango(user);
         navigate("/homePage");
       })
       .catch((error) => {
         console.log(error);
       });
+  };
+
+  const signInToDjango = async (user: any) => {
+    const token = user.user.accessToken;
+    setAuthToken(token);
+
+    fetch("http://127.0.0.1:8000/users/login/", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }).catch((e) => {
+      //If the django auth fails, the user has to be logged out from firebase
+      // The order has to be firebase ->django since we need the auth token
+      console.log(e);
+      signOut(auth);
+    });
   };
 
   return (
