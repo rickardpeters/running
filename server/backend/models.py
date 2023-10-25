@@ -9,6 +9,14 @@ from rest_framework.authtoken.models import Token
 class UserExtended(models.Model):
     strava_key = models.CharField(max_length=255, blank=True, default="No key")
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
+    identifier = models.CharField(max_length=900, unique=True, default="")
+    USERNAME_FIELD = "identifier"
+
+    def is_authenticated(self):
+        
+        return self.user.is_authenticated
+    def is_active(self):
+        return self.user.is_active
 
 
 class Community(models.Model):

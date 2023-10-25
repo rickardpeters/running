@@ -1,11 +1,11 @@
-import React, { Suspense, useContext } from "react";
+import React, { Suspense, lazy, useContext } from "react";
 import { Context } from "./components/auth/AuthContextProvider";
 import { BrowserRouter } from "react-router-dom";
-import AuthenticatedApp from "./authenticated-app";
-import UnauthenticatedApp from "./unauthenticated-app";
-
 function App() {
   const user = useContext(Context);
+
+  const AuthenticatedApp = lazy(() => import("./authenticated-app"));
+  const UnauthenticatedApp = lazy(() => import("./unauthenticated-app"));
 
   return (
     <BrowserRouter>

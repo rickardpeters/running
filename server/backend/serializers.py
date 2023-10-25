@@ -1,19 +1,15 @@
 from rest_framework import serializers
 from rest_framework.authtoken.models import Token
-from .models import Community, Challenge
+from .models import Community, Challenge, UserExtended
 from django.contrib.auth.models import User
 
 
+
 class UserSerializer(serializers.ModelSerializer):
-    token = serializers.SerializerMethodField()
-
     class Meta:
-        model = User
-        fields = "username", "token"
+        model = UserExtended
+        fields = "__all__"
 
-    def get_token(self, user):
-        token = Token.objects.get(user=user)
-        return token.key
 
 
 class ChallengeSerializer(serializers.ModelSerializer):
