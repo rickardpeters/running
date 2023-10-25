@@ -6,7 +6,10 @@ import {
   DialogActions,
   Button,
 } from "@mui/material";
-import { showCreateCommunityAtom } from "../../recoil/atoms";
+import {
+  showCreateCommunityAtom,
+  updateCommunityListAtom,
+} from "../../recoil/atoms";
 import { useRecoilState } from "recoil";
 import CreateCommunityForm from "./CreateCommunityForm";
 import { getUserToken } from "../../utils";
@@ -16,6 +19,9 @@ import axios from "axios";
 const CreateCommunityModal = () => {
   const [showCreateCommunity, setShowCreateCommunity] = useRecoilState(
     showCreateCommunityAtom
+  );
+  const [updateCommunityList, setUpdateCommunityList] = useRecoilState(
+    updateCommunityListAtom
   );
   const [communityName, setCommunityName] = useState("");
   const [description, setDescription] = useState("");
@@ -43,10 +49,12 @@ const CreateCommunityModal = () => {
     try {
       const response = await axios.post(
         "http://127.0.0.1:8000/communities/",
-        newCommunity,
-        config
+        newCommunity
       );
-      console.log("community created:", response);
+      console.warn(response.data);
+      setUpdateCommunityList(!updateCommunityList);
+      setCommunityName("");
+      setDescription("");
       handleCloseModal();
     } catch (error) {
       console.log(error);

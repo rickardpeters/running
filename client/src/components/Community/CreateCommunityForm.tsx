@@ -2,20 +2,22 @@ import { Button, TextField } from "@mui/material";
 import React, { Dispatch, SetStateAction, useState } from "react";
 
 interface createCommunityFormProps {
-    name: string;
-    description: string;
-    setName: Dispatch<SetStateAction<string>>;
-    setDescription: Dispatch<SetStateAction<string>>;
+  name: string;
+  description: string;
+  setName: Dispatch<SetStateAction<string>>;
+  setDescription: Dispatch<SetStateAction<string>>;
 }
 
 const CreateCommunityForm = (props: createCommunityFormProps) => {
- 
-
-  const handleCommunityNameChange = (event: { target: { value: React.SetStateAction<string>; }; }) => {
+  const handleCommunityNameChange = (event: {
+    target: { value: React.SetStateAction<string> };
+  }) => {
     props.setName(event.target.value);
   };
 
-  const handleDescriptionChange = (event: { target: { value: React.SetStateAction<string>; }; }) => {
+  const handleDescriptionChange = (event: {
+    target: { value: React.SetStateAction<string> };
+  }) => {
     props.setDescription(event.target.value);
   };
 
@@ -35,9 +37,8 @@ const CreateCommunityForm = (props: createCommunityFormProps) => {
         fullWidth
         margin="normal"
         multiline
-        rows={4}
+        rows={2}
       />
-      
     </>
   );
 };
