@@ -1,4 +1,5 @@
 from django.http import HttpResponse, JsonResponse
+from django.shortcuts import get_object_or_404
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.decorators import api_view
@@ -12,7 +13,7 @@ from firebaseAuth.authentication import FirebaseAuthentication
 
 from server.settings import AUTHENTICATION_BACKENDS
 from .serializers import UserSerializer, CommunitySerializer, ChallengeSerializer
-from .models import Community, Challenge, UserExtended
+from .models import Community, Challenge, Membership, UserExtended
 import json
 
 @csrf_exempt
@@ -33,8 +34,9 @@ def log_in(request):
 
 @api_view(["GET"])
 def getUsers(request):
-    users = User.objects.all()
-    return Response("User not found.", status=404)
+    users = UserExtended.objects.all()
+    users_ser = UserSerializer(users, many=True)
+    return Response(users_ser.data)
 @csrf_exempt
 @login_required
 @api_view(["POST"])
@@ -47,8 +49,23 @@ def log_out(request):
     else:
         return JsonResponse(status.HTTP_404_NOT_FOUND, safe=False)
 
-        
 
+
+@api_view(["POST"])
+def join_community(request):
+    data = json.loads(request.body.decode("utf-8"))
+    user_id = data["user"]
+    community_id = data["community_id"]
+
+    user_extended = UserExtended.objects.get(identifier=user_id)  # Retrieve the UserExtended instance for the user
+    community = Community.objects.get(id=community_id)  # Retrieve the community by its ID
+    membership = Membership(user=user_extended.user, community=community)
+    membership.save()
+    memberships = Membership.objects.all().values()
+    
+    return JsonResponse(list(memberships), safe=False)
+
+    
 
 @csrf_exempt
 @login_required
@@ -98,7 +115,7 @@ def communities(request):
 
         ser_community = CommunitySerializer(new_community)
 
-        return JsonResponse(ser_community.data, safe=False)
+        return JsonResponse(ser_community.data[1].members, safe=False)
 
 
 """

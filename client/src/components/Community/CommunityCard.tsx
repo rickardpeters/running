@@ -37,7 +37,11 @@ const CommunityCard = ({ community }: CommunityCardProps) => {
       }}
     >
       <Link to={""}>
-        <Card sx={{ minWidth: 200, margin: "10px" }} className="community-card">
+        <Card
+          sx={{ minWidth: 200, margin: "10px" }}
+          className="community-card"
+          onClick={() => console.log(community)}
+        >
           <CardContent>
             <Typography
               sx={{ fontSize: 14 }}
