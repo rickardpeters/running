@@ -8,13 +8,13 @@ import {
 import React from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
 import {
-  Community,
   showDeleteCommunityAtom,
   showDeleteConfirmationAtom,
   updateCommunityListAtom,
 } from "../../recoil/atoms";
 import axios from "axios";
 import DeleteCommunityConfirmation from "./DeleteCommunityConfirmation";
+import { Community } from "../../types/types";
 
 interface DeleteCommuityModalProps {
   community: Community | null;

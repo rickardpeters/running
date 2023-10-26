@@ -1,65 +1,76 @@
-import { Paper, Box, Typography, Avatar, Stack } from '@mui/material';
+import {
+  Typography,
+  Card,
+  CardContent,
+  CardActions,
+  Button,
+  Container,
+} from "@mui/material";
+import { Community } from "../../types/types";
+import { useState } from "react";
+import { useRecoilState } from "recoil";
+import { showDeleteCommunityAtom } from "../../recoil/atoms";
+import DeleteCommunityModal from "./DeleteCommunityModal";
+import DeleteCommunityConfirmation from "./DeleteCommunityConfirmation";
+interface CommunityCardProps {
+  community: Community;
+}
 
-const CommunityCard = () => {
+const CommunityCard = ({ community }: CommunityCardProps) => {
+  const [deleteCommunity, setDeleteCommunity] = useState<Community | null>(
+    null
+  );
+  const [showDeleteCommunity, setShowDeleteCommunity] = useRecoilState(
+    showDeleteCommunityAtom
+  );
+  const handleDeleteClick = (community: Community) => {
+    setDeleteCommunity(community);
+    setShowDeleteCommunity(true);
+  };
   return (
-    <Paper
-      elevation={0}
-      sx={{
-        height: 300,
-        width: 280,
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        flexDirection: 'column',
-        bgcolor: 'white',
-        mb: 2,
-      }}>
-      <Avatar
-        alt='Avatar'
-        sx={{
-          height: 100,
-          width: 100,
-        }}></Avatar>
-      <Box
-        sx={{
-          textAlign: 'center',
-        }}>
-        <Typography variant={'h4'} sx={{ m: 2 }}>
-          Kubblagsnamn
-        </Typography>
-      </Box>
-      <Box>
-        <Stack direction={'row'}>
-          <Box
-            sx={{
-              textAlign: 'center',
-            }}>
-            <Typography fontWeight={'bold'} sx={{ m: 1 }}>
-              Antal Kubbare
-            </Typography>
-            <Typography>3</Typography>
-          </Box>
-          <Box
-            sx={{
-              textAlign: 'center',
-            }}>
-            <Typography fontWeight={'bold'} sx={{ m: 1 }}>
-              Kubbad Distans
-            </Typography>
-            <Typography>30mil</Typography>
-          </Box>
-          <Box
-            sx={{
-              textAlign: 'center',
-            }}>
-            <Typography fontWeight={'bold'} sx={{ m: 1 }}>
-              Kubbat Längst
-            </Typography>
-            <Typography>Sticky Petrus</Typography>
-          </Box>
-        </Stack>
-      </Box>
-    </Paper>
+    <Container
+      style={{
+        maxWidth: "300px",
+        minWidth: "300px",
+      }}
+    >
+      <Card sx={{ minWidth: 200, margin: "10px" }}>
+        <CardContent>
+          <Typography
+            sx={{ fontSize: 14 }}
+            color="text.secondary"
+            gutterBottom
+          ></Typography>
+          <Typography variant="h5" component="div">
+            {community.community_name}
+            {"      "}
+          </Typography>
+          <Typography sx={{ mb: 1.5 }} color="text.secondary"></Typography>
+          <Typography variant="body2">
+            {community.description === "" ? (
+              <i>No description</i>
+            ) : (
+              community.description
+            )}
+          </Typography>
+        </CardContent>
+        <CardActions>
+          <Button variant="contained" size="small">
+            Edit
+          </Button>
+          <Button
+            variant="contained"
+            color="error"
+            size="small"
+            onClick={() => handleDeleteClick(community)}
+          >
+            Delete
+          </Button>
+        </CardActions>
+      </Card>
+      <DeleteCommunityModal community={deleteCommunity} />
+      <DeleteCommunityConfirmation />
+    </Container>
   );
 };
 

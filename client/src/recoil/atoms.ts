@@ -1,4 +1,5 @@
 import { atom } from "recoil";
+import { Challenge, Community } from "../types/types";
 
 export const emailAtom = atom({
   key: "emailAtom",
@@ -75,13 +76,6 @@ export const stravaLoggedinAtom = atom({
   default: false,
 });
 
-export interface Challenge {
-  name: string;
-  start_date: string;
-  end_date: string;
-  goal: number;
-  community_id: number;
-}
 
 export const challengesAtom = atom({
   key: "challengesAtom",
@@ -98,18 +92,6 @@ export const updateCommunityListAtom = atom({
   default: false,
 });
 
-export interface Member {
-  email: string;
-  first_name: string;
-  last_name: string;
-}
-export interface Community {
-  community_name: string;
-  id: number;
-  description: string;
-  created_at: string;
-  members: [Member];
-}
 
 export const communitiesAtom = atom({
   key: "communitiesAtom",
