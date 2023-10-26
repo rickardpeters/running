@@ -6,3 +6,12 @@
     
 
 }
+
+.community-card{
+    transform: scale(1);
+    transition: transform 0.2s ease-in-out;
+  }
+  
+  .community-card:hover {
+    transform: scale(1.02);
+  }
