@@ -16,6 +16,7 @@ import {
   emailAtom,
   showCreateCommunityAtom,
   showDeleteCommunityAtom,
+  showUpdateCommunityAtom,
   updateCommunityListAtom,
 } from "../../recoil/atoms";
 import { useEffect, useState } from "react";
@@ -23,6 +24,7 @@ import CreateCommunityModal from "./CreateCommunityModal";
 import DeleteCommuityModal from "./DeleteCommunityModal";
 import DeleteCommunityModal from "./DeleteCommunityModal";
 import DeleteCommunityConfirmation from "./DeleteCommunityConfirmation";
+import UpdateCommunityModal from "./UpdateCommunityModal";
 
 const Communities = () => {
   const [communities, setCommunities] = useRecoilState(communitiesAtom);
@@ -32,11 +34,12 @@ const Communities = () => {
   const [showDeleteCommunity, setShowDeleteCommunity] = useRecoilState(
     showDeleteCommunityAtom
   );
+  const [showUpdateCommunity, setShowUpdateCommunity] = useRecoilState(
+    showUpdateCommunityAtom
+  );
   const updateCommunityList = useRecoilValue(updateCommunityListAtom);
   const authToken = useRecoilValue(authTokenAtom);
-  const [deleteCommunity, setDeleteCommunity] = useState<Community | null>(
-    null
-  );
+  const [community, setCommunity] = useState<Community | null>(null);
 
   async function fetchCommunities() {
     try {
@@ -53,8 +56,13 @@ const Communities = () => {
   }
 
   const handleDeleteClick = (community: Community) => {
-    setDeleteCommunity(community);
+    setCommunity(community);
     setShowDeleteCommunity(true);
+  };
+
+  const handleUpdateClick = (community: Community) => {
+    setCommunity(community);
+    setShowUpdateCommunity(true);
   };
 
   //Checks if updateCommunityList state changes, triggering the useEffect.
@@ -91,7 +99,11 @@ const Communities = () => {
                 </Typography>
               </CardContent>
               <CardActions>
-                <Button variant="contained" size="small">
+                <Button
+                  variant="contained"
+                  size="small"
+                  onClick={() => handleUpdateClick(community)}
+                >
                   Edit
                 </Button>
                 <Button
@@ -123,8 +135,9 @@ const Communities = () => {
         </Button>
       </Container>
       <CreateCommunityModal />
-      <DeleteCommunityModal community={deleteCommunity} />
+      <DeleteCommunityModal community={community} />
       <DeleteCommunityConfirmation />
+      <UpdateCommunityModal community={community} />
     </Container>
   );
 };
