@@ -6,14 +6,18 @@ import {
   showCreateCommunityAtom,
   updateCommunityListAtom,
 } from "../../recoil/atoms";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import CreateCommunityModal from "./CreateCommunityModal";
 import CommunityCard from "./CommunityCard";
+import { Community } from "../../types/types";
 
 const Communities = () => {
   const [communities, setCommunities] = useRecoilState(communitiesAtom);
   const [showCreateCommunity, setShowCreateCommunity] = useRecoilState(
     showCreateCommunityAtom
+  );
+  const [deleteCommunity, setDeleteCommunity] = useState<Community | null>(
+    null
   );
 
   const updateCommunityList = useRecoilValue(updateCommunityListAtom);

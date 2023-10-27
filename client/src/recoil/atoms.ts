@@ -46,6 +46,11 @@ export const showCreateChallengeAtom = atom({
   default: false,
 });
 
+export const deleteCommunityAtom = atom<Community | null>({
+  key: "deleteCommunityAtom",
+  default: null,
+});
+
 export const runTotalsAtom = atom({
   key: "runTotalsAtom",
   default: {
@@ -76,7 +81,6 @@ export const stravaLoggedinAtom = atom({
   default: false,
 });
 
-
 export const challengesAtom = atom({
   key: "challengesAtom",
   default: [] as Challenge[],
@@ -91,7 +95,6 @@ export const updateCommunityListAtom = atom({
   key: "updateCommunityListAtom",
   default: false,
 });
-
 
 export const communitiesAtom = atom({
   key: "communitiesAtom",

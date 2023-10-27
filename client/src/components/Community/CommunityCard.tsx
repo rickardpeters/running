@@ -9,23 +9,26 @@ import {
 import { Community } from "../../types/types";
 import { useState } from "react";
 import { useRecoilState } from "recoil";
-import { showDeleteCommunityAtom } from "../../recoil/atoms";
-import DeleteCommunityModal from "./DeleteCommunityModal";
-import DeleteCommunityConfirmation from "./DeleteCommunityConfirmation";
+import {
+  deleteCommunityAtom,
+  showDeleteCommunityAtom,
+} from "../../recoil/atoms";
 import "./comunityStyle.css";
 import { Link } from "react-router-dom";
+import DeleteCommunityModal from "./DeleteCommunityModal";
+import DeleteCommunityConfirmation from "./DeleteCommunityConfirmation";
 interface CommunityCardProps {
   community: Community;
 }
 
 const CommunityCard = ({ community }: CommunityCardProps) => {
-  const [deleteCommunity, setDeleteCommunity] = useState<Community | null>(
-    null
-  );
+  const [deleteCommunity, setDeleteCommunity] =
+    useRecoilState(deleteCommunityAtom);
   const [showDeleteCommunity, setShowDeleteCommunity] = useRecoilState(
     showDeleteCommunityAtom
   );
   const handleDeleteClick = (community: Community) => {
+    console.log(community);
     setDeleteCommunity(community);
     setShowDeleteCommunity(true);
   };
