@@ -8,18 +8,18 @@ import {
 import React from "react";
 import { useRecoilState } from "recoil";
 import {
-  Community,
   showUpdateCommunityAtom,
   updateCommunityListAtom,
 } from "../../recoil/atoms";
 import axios from "axios";
 import UpdateCommunityForm from "./UpdateCommunityForm";
+import { Community } from "../../types/types";
 
-interface UpdateCommuityModalProps {
+interface UpdateCommunityModalProps {
   community: Community | null;
 }
 
-const DeleteCommunityModal: React.FC<UpdateCommuityModalProps> = ({
+const DeleteCommunityModal: React.FC<UpdateCommunityModalProps> = ({
   community,
 }) => {
   const [showUpdateCommunity, setShowUpdateCommunity] = useRecoilState(

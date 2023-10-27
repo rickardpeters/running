@@ -56,8 +56,8 @@ export const showCreateChallengeAtom = atom({
   default: false,
 });
 
-export const deleteCommunityAtom = atom<Community | null>({
-  key: "deleteCommunityAtom",
+export const activeCommunityAtom = atom<Community | null>({
+  key: "activeCommunityAtom",
   default: null,
 });
 

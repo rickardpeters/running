@@ -6,15 +6,15 @@ import {
   Button,
   TextField,
 } from "@mui/material";
-import React from "react";
+import React, { useState } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
 import {
-  Community,
   showUpdateCommunityAtom,
   showUpdateConfirmationAtom,
   updateCommunityListAtom,
 } from "../../recoil/atoms";
 import axios from "axios";
+import { Community } from "../../types/types";
 
 interface UpdateCommuityModalProps {
   community: Community | null;
@@ -32,17 +32,25 @@ const UpdateCommunityModal: React.FC<UpdateCommuityModalProps> = ({
   const [showUpdateConfirmationCommunity, setShowUpdateConfirmationCommunity] =
     useRecoilState(showUpdateConfirmationAtom);
 
+  const [updateName, setUpdateName] = useState("");
+  const [updateDescription, setUpdateDescription] = useState("");
+
   const handleUpdate = async () => {
     if (!community) return;
+
+    const data = {
+      community_name: updateName,
+      description: updateDescription,
+    };
 
     try {
       const res = await axios.put(
         `http://127.0.0.1:8000/communities/${community.id}/`,
-        {}
+        { community_name: updateName, description: updateDescription }
       );
       console.warn(res.data);
     } catch (error) {
-      console.error("Could not Update: ", error);
+      console.error("Could not update: ", error);
     }
     setShowUpdateCommunity(false);
     setUpdateCommunityList(!updateCommunityList);
@@ -56,13 +64,25 @@ const UpdateCommunityModal: React.FC<UpdateCommuityModalProps> = ({
     >
       <DialogTitle>Edit {community && community.community_name}</DialogTitle>
       <DialogContent>
-        <TextField label="Community Name" fullWidth margin="normal" />
+        <TextField
+          label="Community Name"
+          fullWidth
+          margin="normal"
+          value={updateName}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+            setUpdateName(e.target.value)
+          }
+        />
         <TextField
           label="Description of Community"
           fullWidth
           margin="normal"
           multiline
           rows={2}
+          value={updateDescription}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+            setUpdateDescription(e.target.value)
+          }
         />
       </DialogContent>
       <DialogActions sx={{ justifyContent: "center" }}>

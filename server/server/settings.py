@@ -132,12 +132,12 @@ STATIC_URL = "static/"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 AUTHENTICATION_BACKENDS = [
-    
-    'firebaseAuth.authentication.FirebaseAuthentication',
+    "firebaseAuth.authentication.FirebaseAuthentication",
+    "django.contrib.auth.backends.ModelBackend",
 ]
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework.authentication.TokenAuthentication',
-        'firebaseAuth.authentication.FirebaseAuthentication',
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "rest_framework.authentication.TokenAuthentication",
+        "firebaseAuth.authentication.FirebaseAuthentication",
     ]
 }
