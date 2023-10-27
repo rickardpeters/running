@@ -5,12 +5,6 @@ from django.conf import settings
 from django.db.models.signals import post_save
 from rest_framework.authtoken.models import Token
 
-
-class UserExtended(models.Model):
-    strava_key = models.CharField(max_length=255, blank=True, default="No key")
-    user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
-
-
 class Community(models.Model):
     id = models.AutoField(primary_key=True, unique=True)
     community_name = models.CharField(max_length=255, blank=False, default="")
@@ -18,8 +12,34 @@ class Community(models.Model):
         max_length=255, blank=True, default="No description."
     )
 
+    members = models.ManyToManyField(User, through='Membership')
+
     def __str__(self):
         return str(self.id) + " - " + self.community_name
+
+class Membership(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    community = models.ForeignKey(Community, on_delete=models.CASCADE)
+    joined_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('user', 'community')
+
+class UserExtended(models.Model):
+    strava_key = models.CharField(max_length=255, blank=True, default="No key")
+    user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
+    identifier = models.CharField(max_length=900, unique=True, default="")
+    USERNAME_FIELD = "identifier"
+
+    communities = models.ManyToManyField(Community, related_name='users')
+
+    def is_authenticated(self):
+        
+        return self.user.is_authenticated
+    def is_active(self):
+        return self.user.is_active
+
+
 
 
 class Challenge(models.Model):

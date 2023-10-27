@@ -14,7 +14,6 @@ const Sidebar = () => {
         display: "flex",
       }}
     >
-      <CommunityCard></CommunityCard>
       <ChallengeCard></ChallengeCard>
     </Box>
   );

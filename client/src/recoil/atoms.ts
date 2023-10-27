@@ -1,4 +1,5 @@
 import { atom } from "recoil";
+import { Challenge, Community } from "../types/types";
 
 export const emailAtom = atom({
   key: "emailAtom",
@@ -55,6 +56,11 @@ export const showCreateChallengeAtom = atom({
   default: false,
 });
 
+export const deleteCommunityAtom = atom<Community | null>({
+  key: "deleteCommunityAtom",
+  default: null,
+});
+
 export const runTotalsAtom = atom({
   key: "runTotalsAtom",
   default: {
@@ -85,14 +91,6 @@ export const stravaLoggedinAtom = atom({
   default: false,
 });
 
-export interface Challenge {
-  name: string;
-  start_date: string;
-  end_date: string;
-  goal: number;
-  community_id: number;
-}
-
 export const challengesAtom = atom({
   key: "challengesAtom",
   default: [] as Challenge[],
@@ -107,19 +105,6 @@ export const updateCommunityListAtom = atom({
   key: "updateCommunityListAtom",
   default: false,
 });
-
-export interface Member {
-  email: string;
-  first_name: string;
-  last_name: string;
-}
-export interface Community {
-  community_name: string;
-  id: number;
-  description: string;
-  created_at: string;
-  members: [Member];
-}
 
 export const communitiesAtom = atom({
   key: "communitiesAtom",
