@@ -4,6 +4,8 @@ import { useRecoilState, useRecoilValue } from "recoil";
 import {
   communitiesAtom,
   showCreateCommunityAtom,
+  showDeleteCommunityAtom,
+  showUpdateCommunityAtom,
   updateCommunityListAtom,
 } from "../../recoil/atoms";
 import { useEffect, useState } from "react";
@@ -16,11 +18,18 @@ const Communities = () => {
   const [showCreateCommunity, setShowCreateCommunity] = useRecoilState(
     showCreateCommunityAtom
   );
+  const [showDeleteCommunity, setShowDeleteCommunity] = useRecoilState(
+    showDeleteCommunityAtom
+  );
+  const [showUpdateCommunity, setShowUpdateCommunity] = useRecoilState(
+    showUpdateCommunityAtom
+  );
+  const updateCommunityList = useRecoilValue(updateCommunityListAtom);
+
+  const [community, setCommunity] = useState<Community | null>(null);
   const [deleteCommunity, setDeleteCommunity] = useState<Community | null>(
     null
   );
-
-  const updateCommunityList = useRecoilValue(updateCommunityListAtom);
 
   async function fetchCommunities() {
     try {

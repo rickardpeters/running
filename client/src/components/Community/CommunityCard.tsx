@@ -10,28 +10,40 @@ import { Community } from "../../types/types";
 import { useState } from "react";
 import { useRecoilState } from "recoil";
 import {
-  deleteCommunityAtom,
+  activeCommunityAtom,
   showDeleteCommunityAtom,
+  showUpdateCommunityAtom,
 } from "../../recoil/atoms";
 import "./comunityStyle.css";
 import { Link } from "react-router-dom";
 import DeleteCommunityModal from "./DeleteCommunityModal";
 import DeleteCommunityConfirmation from "./DeleteCommunityConfirmation";
+import UpdateCommunityModal from "./UpdateCommunityForm";
 interface CommunityCardProps {
   community: Community;
 }
 
 const CommunityCard = ({ community }: CommunityCardProps) => {
-  const [deleteCommunity, setDeleteCommunity] =
-    useRecoilState(deleteCommunityAtom);
+  const [activeCommunity, setActiveCommunity] =
+    useRecoilState(activeCommunityAtom);
   const [showDeleteCommunity, setShowDeleteCommunity] = useRecoilState(
     showDeleteCommunityAtom
   );
+  const [showUpdateCommunity, setShowUpdateCommunity] = useRecoilState(
+    showUpdateCommunityAtom
+  );
   const handleDeleteClick = (community: Community) => {
     console.log(community);
-    setDeleteCommunity(community);
+    setActiveCommunity(community);
     setShowDeleteCommunity(true);
   };
+
+  const handleUpdateClick = (community: Community) => {
+    console.log(community);
+    setActiveCommunity(community);
+    setShowUpdateCommunity(true);
+  };
+
   return (
     <Container
       style={{
@@ -65,7 +77,11 @@ const CommunityCard = ({ community }: CommunityCardProps) => {
             </Typography>
           </CardContent>
           <CardActions>
-            <Button variant="contained" size="small">
+            <Button
+              variant="contained"
+              size="small"
+              onClick={() => handleUpdateClick(community)}
+            >
               Edit
             </Button>
             <Button
@@ -79,8 +95,9 @@ const CommunityCard = ({ community }: CommunityCardProps) => {
           </CardActions>
         </Card>
       </Link>
-      <DeleteCommunityModal community={deleteCommunity} />
+      <DeleteCommunityModal community={activeCommunity} />
       <DeleteCommunityConfirmation />
+      <UpdateCommunityModal community={activeCommunity} />
     </Container>
   );
 };

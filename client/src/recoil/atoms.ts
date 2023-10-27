@@ -36,6 +36,16 @@ export const showDeleteCommunityAtom = atom({
   default: false,
 });
 
+export const showUpdateCommunityAtom = atom({
+  key: "showUpdateCommunityAtom",
+  default: false,
+});
+
+export const showUpdateConfirmationAtom = atom({
+  key: "showUpdateConfirmationAtom",
+  default: false,
+});
+
 export const showDeleteConfirmationAtom = atom({
   key: "showDeleteConfirmationAtom",
   default: false,
@@ -46,8 +56,8 @@ export const showCreateChallengeAtom = atom({
   default: false,
 });
 
-export const deleteCommunityAtom = atom<Community | null>({
-  key: "deleteCommunityAtom",
+export const activeCommunityAtom = atom<Community | null>({
+  key: "activeCommunityAtom",
   default: null,
 });
 
