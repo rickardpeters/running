@@ -35,7 +35,7 @@ const NewLogin = () => {
     const token = user.user.accessToken;
     setAuthToken(token);
 
-    fetch("http://127.0.0.1:8000/users/login/", {
+    await fetch("http://127.0.0.1:8000/users/login/", {
       method: "POST",
       headers: {
         Authorization: `Bearer ${token}`,
