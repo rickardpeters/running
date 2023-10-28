@@ -1,29 +1,25 @@
 import * as React from "react";
-import { useState, useContext, SetStateAction, Dispatch } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState, SetStateAction, Dispatch } from "react";
+
 import Button from "@mui/material/Button";
-import Dialog from "@mui/material/Dialog";
+
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
-import { Grid, LinearProgress, TextField } from "@mui/material";
+import { Grid, TextField } from "@mui/material";
 import LoginModal from "./LoginModal";
-import { passwordStrength, FirstOption, Option } from "check-password-strength";
-import PasswordStrength from "./PasswordStrength";
 import PasswordField from "./PasswordField";
-import { useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import {
+  authTokenAtom,
   passwordStrengthTestPassed,
   passwordTestPassed,
 } from "../../recoil/atoms";
-import axios from "axios";
 
-import { Auth, onAuthStateChanged } from "firebase/auth";
+import { createUserWithEmailAndPassword, signOut } from "firebase/auth";
 import { auth } from "../../firebase";
-import firebase from "firebase/app";
 import "firebase/auth";
-import { getUserToken } from "../../utils";
 
 interface SignUpModalProps {
   show: boolean;
@@ -39,51 +35,54 @@ const SignUpModal = (props: SignUpModalProps) => {
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [passStrength, setStrength] = useState<number | null>(null);
-
+  const [authToken, setAuthToken] = useRecoilState(authTokenAtom);
   const testPassed = useRecoilValue(passwordTestPassed);
   const strengthTestPassed = useRecoilValue(passwordStrengthTestPassed);
 
-  const navigate = useNavigate;
+  const handleEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
+    e.preventDefault();
+    console.log(email);
+    setEmail(e.target.value);
+  };
 
-  const signUp = async () => {
-    const newUser = {
-      email: email,
-      first_name: firstName,
-      last_name: lastName,
-    };
+  const handlePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
+    e.preventDefault();
+    console.log(password);
+    setPassword(e.target.value);
+  };
+
+  const signUp = async (e: React.MouseEvent<HTMLElement>) => {
+    e.preventDefault();
+    createUserWithEmailAndPassword(auth, email, password)
+      .then((user) => {
+        console.log(user);
+        signInToDjango(user);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const signInToDjango = async (user: any) => {
+    const token = user.user.accessToken;
+    setAuthToken(token);
+
+    await fetch("http://127.0.0.1:8000/users/login/", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }).catch((e) => {
+      //If the django auth fails, the user has to be logged out from firebase
+      // The order has to be firebase ->django since we need the auth token
+      console.log(e);
+      signOut(auth);
+    });
   };
 
   const handleClose = () => {
     props.setShow(false);
   };
-
-  const customOptions: [FirstOption<string>, ...Option<string>[]] = [
-    {
-      id: 0,
-      value: "Too weak",
-      minDiversity: 0,
-      minLength: 0,
-    },
-    {
-      id: 1,
-      value: "Weak",
-      minDiversity: 2,
-      minLength: 8,
-    },
-    {
-      id: 2,
-      value: "Medium",
-      minDiversity: 4,
-      minLength: 8,
-    },
-    {
-      id: 3,
-      value: "Strong",
-      minDiversity: 4,
-      minLength: 10,
-    },
-  ];
 
   return (
     <>
@@ -139,9 +138,7 @@ const SignUpModal = (props: SignUpModalProps) => {
                   type="email"
                   fullWidth
                   variant="outlined"
-                  onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                    setEmail(event.target.value);
-                  }}
+                  onChange={() => handleEmail}
                 />
               </Grid>
             </Grid>

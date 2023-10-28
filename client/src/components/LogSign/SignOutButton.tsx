@@ -1,5 +1,4 @@
 import { Button } from "@mui/base";
-import { useNavigate } from "react-router-dom";
 import React from "react";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { signOut } from "firebase/auth";
@@ -8,8 +7,6 @@ import { useRecoilValue } from "recoil";
 import { authTokenAtom } from "../../recoil/atoms";
 
 const SignOutButton = () => {
-  const navigate = useNavigate();
-
   const authToken = useRecoilValue(authTokenAtom);
 
   const handleSignOut = async () => {
@@ -30,7 +27,6 @@ const SignOutButton = () => {
       .then(() => {
         // First sign out from django, then from firebase
         signOut(auth);
-        //navigate("/");
       })
       .catch((e) => {
         console.log(e);

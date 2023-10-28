@@ -1,9 +1,5 @@
 import React, { useState } from "react";
-import {
-  getAuth,
-  createUserWithEmailAndPassword,
-  signOut,
-} from "firebase/auth";
+import { createUserWithEmailAndPassword, signOut } from "firebase/auth";
 import { auth } from "../../firebase";
 import { useRecoilState } from "recoil";
 import { authTokenAtom } from "../../recoil/atoms";

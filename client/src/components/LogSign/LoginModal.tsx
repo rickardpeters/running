@@ -1,24 +1,17 @@
 import * as React from "react";
-import { useContext, useState } from "react";
+import { useState } from "react";
 import Button from "@mui/material/Button";
-import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import { Grid, TextField } from "@mui/material";
 import { signInWithEmailAndPassword, signOut } from "firebase/auth";
-import LoginIcon from "@mui/icons-material/Login";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+
 import { useRecoilState } from "recoil";
-import {
-  firebaseTokenAtom,
-  emailAtom,
-  authTokenAtom,
-} from "../../recoil/atoms";
+import { emailAtom, authTokenAtom } from "../../recoil/atoms";
 import { auth } from "../../firebase";
-import { getUserToken } from "../../utils";
 
 interface LoginModalProps {
   show?: boolean;
@@ -55,7 +48,7 @@ const LoginModal = (props: LoginModalProps) => {
       .then((user) => {
         signInToDjango(user);
         console.log(user);
-        navigate("/homePage");
+        navigate("/UserPage");
       })
       .catch((error) => {
         console.log(error);

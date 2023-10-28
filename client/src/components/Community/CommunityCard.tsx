@@ -7,20 +7,19 @@ import {
   Container,
 } from "@mui/material";
 import { Community } from "../../types/types";
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import { useRecoilState } from "recoil";
 import {
   activeCommunityAtom,
   showDeleteCommunityAtom,
   showUpdateCommunityAtom,
 } from "../../recoil/atoms";
-import "./comunityStyle.css";
+import "./communityStyle.css";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import { Context } from "../auth/AuthContextProvider";
 import DeleteCommunityModal from "./DeleteCommunityModal";
 import DeleteCommunityConfirmation from "./DeleteCommunityConfirmation";
-import UpdateCommunityModal from "./UpdateCommunityForm";
 import UpdateCommunityForm from "./UpdateCommunityForm";
 interface CommunityCardProps {
   community: Community;
@@ -28,9 +27,6 @@ interface CommunityCardProps {
 
 const CommunityCard = ({ community }: CommunityCardProps) => {
   const user = useContext(Context);
-  const [deleteCommunity, setDeleteCommunity] = useState<Community | null>(
-    null
-  );
   const [showDeleteCommunity, setShowDeleteCommunity] = useRecoilState(
     showDeleteCommunityAtom
   );

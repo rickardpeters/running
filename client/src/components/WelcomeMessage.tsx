@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import runningImage from "../img/headerimg.png";
-import { Button, Dialog, Container } from "@mui/material";
+import { Button, Dialog } from "@mui/material";
 import LoginModal from "./LogSign/LoginModal";
 import SignUpModal from "./LogSign/SignupModal";
 import LoginIcon from "@mui/icons-material/Login";

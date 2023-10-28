@@ -1,7 +1,6 @@
 import { useRecoilState } from "recoil";
 import {
   challengesAtom,
-  firebaseTokenAtom,
   runTotalsAtom,
   showCreateChallengeAtom,
   updateChallengeListAtom,
@@ -30,8 +29,6 @@ const ChallengeList = () => {
   const [updateChallengeList, setUpdateChallengeList] = useRecoilState(
     updateChallengeListAtom
   );
-
-  const isSmallScreen = useMediaQuery("(max-width: 850px)");
 
   async function fetchChallenges() {
     try {

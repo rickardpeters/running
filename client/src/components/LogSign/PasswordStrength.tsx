@@ -20,30 +20,30 @@ const PasswordStrength = (props: PasswordStrengthProps) => {
     | "inherit"
   >("primary");
   const [message, setMessage] = useState("");
-  const [strengthTest, setStrenthTest] = useRecoilState(
+  const [strengthTest, setStrengthTest] = useRecoilState(
     passwordStrengthTestPassed
   );
 
-  const normalise = (value: number) => ((value - 0) * 100) / 3;
+  const normalize = (value: number) => ((value - 0) * 100) / 3;
 
   useEffect(() => {
     console.log("strength effect", props.passStrength);
     if (props.passStrength == 0) {
       setColor("error");
       setMessage("The password is too Weak");
-      setStrenthTest(false);
+      setStrengthTest(false);
     } else if (props.passStrength == 1) {
       setColor("warning");
       setMessage("The password is Weak");
-      setStrenthTest(true);
+      setStrengthTest(true);
     } else if (props.passStrength == 2) {
       setColor("info");
       setMessage("The password is Strong");
-      setStrenthTest(true);
+      setStrengthTest(true);
     } else {
       setColor("success");
       setMessage("The password is very Strong");
-      setStrenthTest(true);
+      setStrengthTest(true);
     }
   }, [props.passStrength]);
 
@@ -53,7 +53,7 @@ const PasswordStrength = (props: PasswordStrengthProps) => {
         {props.password.length != 0 && (
           <LinearProgress
             variant="determinate"
-            value={normalise(props.passStrength)}
+            value={normalize(props.passStrength)}
             color={color}
             style={{ marginBottom: "10px" }}
           />

@@ -1,5 +1,5 @@
 import React, { Suspense, lazy, useContext } from "react";
-import { Context } from "./components/auth/AuthContextProvider";
+import { Context } from "../components/auth/AuthContextProvider";
 import { BrowserRouter } from "react-router-dom";
 function App() {
   const user = useContext(Context);

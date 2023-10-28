@@ -1,11 +1,10 @@
 import React from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
-import CommunityList from "./pages/CommunityList";
-import UserPage from "./pages/UserPage";
-import Layout from "./components/layout/Layout";
+import CommunityList from "../pages/CommunityList";
+import UserPage from "../pages/UserPage";
+import Layout from "../components/layout/Layout";
 
 function AuthenticatedApp() {
-  console.log("aut app");
   return (
     <Layout auth={true}>
       <Routes>

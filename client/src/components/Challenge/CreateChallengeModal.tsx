@@ -23,8 +23,6 @@ const CreateChallengeModal = () => {
   const [challengeName, setChallengeName] = useState("");
   const [goal, setGoal] = useState("");
   const [communityId, setCommunityId] = useState("");
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
   const [updateChallengeList, setUpdateChallengeList] = useRecoilState(
     updateChallengeListAtom
   );

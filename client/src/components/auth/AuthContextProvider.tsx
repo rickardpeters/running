@@ -2,11 +2,6 @@ import { createContext, useState, useEffect, ReactNode } from "react";
 import { onAuthStateChanged, User as FirebaseUser } from "firebase/auth";
 import { auth } from "../../firebase";
 
-type ContextValue = {
-  user: FirebaseUser | null;
-  setUser: React.Dispatch<React.SetStateAction<FirebaseUser | null>>;
-};
-
 interface LayoutProps {
   children: ReactNode;
 }

@@ -4,7 +4,6 @@ import {
   Card,
   CardContent,
   Container,
-  Modal,
   Typography,
 } from "@mui/material";
 import axios from "axios";
@@ -14,7 +13,7 @@ import {
   athleteAtom,
   runTotalsAtom,
 } from "../recoil/atoms";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 const StravaCard = () => {
   const [loggedInState, setLoggedInState] = useRecoilState(stravaLoggedinAtom);
