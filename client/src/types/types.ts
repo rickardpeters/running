@@ -1,10 +1,10 @@
 export interface Community {
-    community_name: string;
-    id: number;
-    description: string;
-    created_at: string;
-    members: [Member];
-  }
+  community_name: string;
+  id: number;
+  description: string;
+  created_at: string;
+  members: [Member];
+}
 
   export interface Member {
     email: string;
@@ -13,10 +13,10 @@ export interface Community {
     identifier:string;
   }
 
-  export interface Challenge {
-    name: string;
-    start_date: string;
-    end_date: string;
-    goal: number;
-    community_id: number;
-  }
+export interface Challenge {
+  name: string;
+  start_date: string;
+  end_date: string;
+  goal: number;
+  community_id: number;
+}

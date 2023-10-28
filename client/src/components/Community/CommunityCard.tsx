@@ -9,13 +9,19 @@ import {
 import { Community } from "../../types/types";
 import { useContext, useState } from "react";
 import { useRecoilState } from "recoil";
-import { showDeleteCommunityAtom } from "../../recoil/atoms";
-import DeleteCommunityModal from "./DeleteCommunityModal";
-import DeleteCommunityConfirmation from "./DeleteCommunityConfirmation";
+import {
+  activeCommunityAtom,
+  showDeleteCommunityAtom,
+  showUpdateCommunityAtom,
+} from "../../recoil/atoms";
 import "./comunityStyle.css";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import { Context } from "../auth/AuthContextProvider";
+import DeleteCommunityModal from "./DeleteCommunityModal";
+import DeleteCommunityConfirmation from "./DeleteCommunityConfirmation";
+import UpdateCommunityModal from "./UpdateCommunityForm";
+import UpdateCommunityForm from "./UpdateCommunityForm";
 interface CommunityCardProps {
   community: Community;
 }
@@ -29,8 +35,14 @@ const CommunityCard = ({ community }: CommunityCardProps) => {
     showDeleteCommunityAtom
   );
   const uid = user.user.uid;
+  const [activeCommunity, setActiveCommunity] =
+    useRecoilState(activeCommunityAtom);
+  const [showUpdateCommunity, setShowUpdateCommunity] = useRecoilState(
+    showUpdateCommunityAtom
+  );
   const handleDeleteClick = (community: Community) => {
-    setDeleteCommunity(community);
+    console.log(activeCommunity);
+    setActiveCommunity(community);
     setShowDeleteCommunity(true);
   };
 
@@ -79,6 +91,12 @@ const CommunityCard = ({ community }: CommunityCardProps) => {
         }
       );
   };
+  const handleUpdateClick = (community: Community) => {
+    console.log(activeCommunity);
+    setActiveCommunity(community);
+    setShowUpdateCommunity(true);
+  };
+
   return (
     <Container
       style={{
@@ -112,7 +130,11 @@ const CommunityCard = ({ community }: CommunityCardProps) => {
             </Typography>
           </CardContent>
           <CardActions>
-            <Button variant="contained" size="small">
+            <Button
+              variant="contained"
+              size="small"
+              onClick={() => handleUpdateClick(community)}
+            >
               Edit
             </Button>
             <Button
@@ -138,8 +160,9 @@ const CommunityCard = ({ community }: CommunityCardProps) => {
           </CardActions>
         </Card>
       </Link>
-      <DeleteCommunityModal community={deleteCommunity} />
+      <DeleteCommunityModal community={activeCommunity} />
       <DeleteCommunityConfirmation />
+      <UpdateCommunityForm community={activeCommunity} />
     </Container>
   );
 };

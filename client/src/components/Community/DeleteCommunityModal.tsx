@@ -16,11 +16,11 @@ import axios from "axios";
 import DeleteCommunityConfirmation from "./DeleteCommunityConfirmation";
 import { Community } from "../../types/types";
 
-interface DeleteCommuityModalProps {
+interface DeleteCommunityModalProps {
   community: Community | null;
 }
 
-const DeleteCommunityModal: React.FC<DeleteCommuityModalProps> = ({
+const DeleteCommunityModal: React.FC<DeleteCommunityModalProps> = ({
   community,
 }) => {
   const [showDeleteCommunity, setShowDeleteCommunity] = useRecoilState(
@@ -56,8 +56,7 @@ const DeleteCommunityModal: React.FC<DeleteCommuityModalProps> = ({
     >
       <DialogTitle>Confirm deletion</DialogTitle>
       <DialogContent>
-        Are you sure you want to delete "{community && community.community_name}
-        "?
+        Are you sure you want to delete {community && community.community_name}?
       </DialogContent>
       <DialogActions sx={{ justifyContent: "center" }}>
         <Button onClick={() => setShowDeleteCommunity(false)}>Cancel</Button>
