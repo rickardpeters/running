@@ -19,6 +19,7 @@ import { Link } from "react-router-dom";
 import DeleteCommunityModal from "./DeleteCommunityModal";
 import DeleteCommunityConfirmation from "./DeleteCommunityConfirmation";
 import UpdateCommunityModal from "./UpdateCommunityForm";
+import UpdateCommunityForm from "./UpdateCommunityForm";
 interface CommunityCardProps {
   community: Community;
 }
@@ -33,13 +34,13 @@ const CommunityCard = ({ community }: CommunityCardProps) => {
     showUpdateCommunityAtom
   );
   const handleDeleteClick = (community: Community) => {
-    console.log(community);
+    console.log(activeCommunity);
     setActiveCommunity(community);
     setShowDeleteCommunity(true);
   };
 
   const handleUpdateClick = (community: Community) => {
-    console.log(community);
+    console.log(activeCommunity);
     setActiveCommunity(community);
     setShowUpdateCommunity(true);
   };
@@ -97,7 +98,7 @@ const CommunityCard = ({ community }: CommunityCardProps) => {
       </Link>
       <DeleteCommunityModal community={activeCommunity} />
       <DeleteCommunityConfirmation />
-      <UpdateCommunityModal community={activeCommunity} />
+      <UpdateCommunityForm community={activeCommunity} />
     </Container>
   );
 };
