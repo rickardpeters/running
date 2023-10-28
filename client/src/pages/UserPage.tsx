@@ -1,6 +1,5 @@
 import "../App.css";
 import { useMediaQuery, Container } from "@mui/material";
-import Sidebar from "../components/Sidebar";
 import StravaCard from "../components/StravaCard";
 import ChallengeList from "../components/Challenge/ChallengeList";
 import { useRecoilState } from "recoil";
@@ -19,7 +18,6 @@ const UserPage = () => {
         justifyContent: "center",
       }}
     >
-      {isSmallScreen ? null : <Sidebar></Sidebar>}
       <StravaCard />
       <ChallengeList />
     </Container>

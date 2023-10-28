@@ -14,9 +14,7 @@ const SignOutButton = () => {
 
   const handleSignOut = async () => {
     try {
-      console.log(authToken);
       await signOutFromDjango();
-      navigate("/");
     } catch (error) {
       console.log(error);
     }
@@ -32,6 +30,7 @@ const SignOutButton = () => {
       .then(() => {
         // First sign out from django, then from firebase
         signOut(auth);
+        //navigate("/");
       })
       .catch((e) => {
         console.log(e);

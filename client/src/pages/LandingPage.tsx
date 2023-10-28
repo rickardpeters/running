@@ -3,10 +3,9 @@ import WelcomeMessage from "../components/WelcomeMessage";
 import { Container } from "@mui/material";
 const LandingPage = () => {
   return (
-    <Container>
+    <div>
       <WelcomeMessage></WelcomeMessage>
-      <SignUpForm></SignUpForm>
-    </Container>
+    </div>
   );
 };
 

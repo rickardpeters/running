@@ -6,14 +6,12 @@ import NewLoginPage from "./pages/NewLoginPage";
 
 function UnAuthenticatedApp() {
   return (
-    <Layout auth={false}>
-      <Routes>
-        <Route path="/" element={<LandingPage />} />
-        <Route path="/newLogin" element={<NewLoginPage />} />
-        // handle non-existing routes
-        <Route path="*" element={<Navigate to="/" replace />} />
-      </Routes>
-    </Layout>
+    <Routes>
+      <Route path="/" element={<LandingPage />} />
+      <Route path="/newLogin" element={<NewLoginPage />} />
+      // handle non-existing routes
+      <Route path="*" element={<Navigate to="/" replace />} />
+    </Routes>
   );
 }
 

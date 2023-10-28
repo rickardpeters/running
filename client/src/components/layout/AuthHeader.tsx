@@ -8,27 +8,14 @@ import FlightLandIcon from "@mui/icons-material/FlightLand";
 
 const AuthHeader = () => {
   return (
-    <AppBar sx={{ backgroundColor: "#fa6e43" }} position="sticky">
-      <Toolbar>
-        <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-          Kubba på litt
-        </Typography>
-
-        <Button color="inherit" component={Link} to="/">
-          <FlightLandIcon></FlightLandIcon>
-        </Button>
-        <Button color="inherit" component={Link} to="/UserPage">
-          <DirectionsRunIcon></DirectionsRunIcon>
-        </Button>
-        <Button color="inherit" component={Link} to="/homePage">
-          <HomeIcon></HomeIcon>
-        </Button>
-        <Button color="inherit" component={Link} to="/communityList">
-          communityList
-        </Button>
-        <SignOutButton></SignOutButton>
-      </Toolbar>
-    </AppBar>
+    <>
+      <div className="navbar bg-neutral text-neutral-content w-100 relative">
+        <a className="btn btn-ghost normal-case text-xl">RunNerds</a>
+        <div className="absolute right-0 p-[5vw]">
+          <SignOutButton></SignOutButton>
+        </div>
+      </div>
+    </>
   );
 };
 

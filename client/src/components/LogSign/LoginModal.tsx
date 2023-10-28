@@ -7,12 +7,16 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import { Grid, TextField } from "@mui/material";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { signInWithEmailAndPassword, signOut } from "firebase/auth";
 import LoginIcon from "@mui/icons-material/Login";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useRecoilState } from "recoil";
-import { firebaseTokenAtom, emailAtom } from "../../recoil/atoms";
+import {
+  firebaseTokenAtom,
+  emailAtom,
+  authTokenAtom,
+} from "../../recoil/atoms";
 import { auth } from "../../firebase";
 import { getUserToken } from "../../utils";
 
@@ -24,36 +28,39 @@ const LoginModal = (props: LoginModalProps) => {
   const [open, setOpen] = useState(false);
   const [email, setEmail] = useRecoilState(emailAtom);
   const [password, setPassword] = useState("");
-  const [token, setToken] = useRecoilState(firebaseTokenAtom);
+  const [authToken, setAuthToken] = useRecoilState(authTokenAtom);
 
   const navigate = useNavigate();
 
-  const signIn = async () => {};
+  const signInToDjango = async (user: any) => {
+    const token = user.user.accessToken;
+    setAuthToken(token);
 
-  //Fetches token from firebase and stores to tokenAtom for querys.
+    await fetch("http://127.0.0.1:8000/users/login/", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }).catch((e) => {
+      //If the django auth fails, the user has to be logged out from firebase
+      // The order has to be firebase ->django since we need the auth token
+      console.log(e);
+      signOut(auth);
+    });
+  };
 
-  function getfireBaseToken() {
-    const tokenUrl =
-      "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyCqoeW4zK9f5YNgAKAsMg36CRwqxbh4-Ao";
-
-    const requestData = {
-      email: email,
-      password: password,
-      returnSecureToken: true,
-    };
-
-    axios
-      .post(tokenUrl, requestData)
-      .then((response) => {
-        const idToken = response.data.idToken;
-        console.log(idToken);
-        setToken(idToken);
-        sessionStorage.setItem("token", idToken);
+  const logIn = async (e: React.MouseEvent<HTMLElement>) => {
+    e.preventDefault();
+    signInWithEmailAndPassword(auth, email, password)
+      .then((user) => {
+        signInToDjango(user);
+        console.log(user);
+        navigate("/homePage");
       })
       .catch((error) => {
-        console.error("Error fetching token:", error);
+        console.log(error);
       });
-  }
+  };
 
   const handleClose = () => {
     props.setShow(false);
@@ -100,7 +107,7 @@ const LoginModal = (props: LoginModalProps) => {
       </DialogContent>
       <DialogActions>
         <Button onClick={handleClose}>Cancel</Button>
-        <Button variant="contained" onClick={signIn}>
+        <Button variant="contained" onClick={logIn}>
           Log In
         </Button>
       </DialogActions>

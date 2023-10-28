@@ -28,7 +28,7 @@ const WelcomeMessage = () => {
   };
   return (
     <div
-      className="hero min-h-screen"
+      className="hero min-h-screen max-h-100 w-100 absolute top-0"
       style={{
         backgroundImage: `url(${runningImage})`,
       }}

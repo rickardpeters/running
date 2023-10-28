@@ -41,11 +41,13 @@ def getUsers(request):
 
 
 @csrf_exempt
-@login_required
 @api_view(["POST"])
 def log_out(request):
+    print("inne i första laget")
     user, created = FirebaseAuthentication().authenticate(request)
+    print("efter firebase")
     if user.is_authenticated:
+        print("authenticated", user)
         logout(request)
         return JsonResponse(status.HTTP_200_OK, safe=False)
     else:
@@ -58,11 +60,14 @@ def join_community(request):
     user_id = data["user"]
     community_id = data["community_id"]
 
-    user_extended = UserExtended.objects.get(identifier=user_id)  # Retrieve the UserExtended instance for the user
-    community = Community.objects.get(id=community_id)  # Retrieve the community by its ID
+    user_extended = UserExtended.objects.get(
+        identifier=user_id
+    )  # Retrieve the UserExtended instance for the user
+    community = Community.objects.get(
+        id=community_id
+    )  # Retrieve the community by its ID
     user_extended.communities.add(community)
-    
-    
+
     return JsonResponse("Success", safe=False)
 
 

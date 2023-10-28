@@ -6,21 +6,12 @@ import FlightLandIcon from "@mui/icons-material/FlightLand";
 
 const UnAuthHeader = () => {
   return (
-    <AppBar sx={{ backgroundColor: "#fa6e43" }} position="sticky">
-      <Toolbar>
-        <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-          Kubba på litt
-        </Typography>
-
-        <Button color="inherit" component={Link} to="/newLogin">
-          Login
-        </Button>
-
-        <Button color="inherit" component={Link} to="/">
-          <FlightLandIcon></FlightLandIcon>
-        </Button>
-      </Toolbar>
-    </AppBar>
+    <>
+      <div className="navbar bg-neutral text-neutral-content w-100 relative">
+        <a className="btn btn-ghost normal-case text-xl">RunNerds</a>
+        <div className="absolute right-0 p-[5vw]">hej</div>
+      </div>
+    </>
   );
 };
 

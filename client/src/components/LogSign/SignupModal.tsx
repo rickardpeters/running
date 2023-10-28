@@ -8,7 +8,6 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import { Grid, LinearProgress, TextField } from "@mui/material";
-import CountrySelect from "./CountrySelect";
 import LoginModal from "./LoginModal";
 import { passwordStrength, FirstOption, Option } from "check-password-strength";
 import PasswordStrength from "./PasswordStrength";
@@ -144,9 +143,6 @@ const SignUpModal = (props: SignUpModalProps) => {
                     setEmail(event.target.value);
                   }}
                 />
-              </Grid>
-              <Grid item xs={6}>
-                <CountrySelect />
               </Grid>
             </Grid>
             <Grid container spacing={2}>

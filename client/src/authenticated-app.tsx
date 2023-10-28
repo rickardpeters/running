@@ -1,8 +1,6 @@
 import React from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
-import NewLogout from "./components/LogSign/NewLogout";
 import CommunityList from "./pages/CommunityList";
-import HomePage from "./pages/HomePage";
 import UserPage from "./pages/UserPage";
 import Layout from "./components/layout/Layout";
 
@@ -11,12 +9,10 @@ function AuthenticatedApp() {
   return (
     <Layout auth={true}>
       <Routes>
-        <Route path="/newLogout" element={<NewLogout />} />
         <Route path="/userPage" element={<UserPage />} />
-        <Route path="/homePage" element={<HomePage />} />
         <Route path="/communityList" element={<CommunityList />} />
         //Handle non-existing routes
-        <Route path="*" element={<Navigate to="/homePage" replace />} />
+        <Route path="*" element={<Navigate to="/hej" replace />} />
       </Routes>
     </Layout>
   );
