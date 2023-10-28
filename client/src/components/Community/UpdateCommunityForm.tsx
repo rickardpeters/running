@@ -6,7 +6,7 @@ import {
   Button,
   TextField,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
 import {
   showUpdateCommunityAtom,
@@ -32,16 +32,20 @@ const UpdateCommunityModal: React.FC<UpdateCommuityModalProps> = ({
   const [showUpdateConfirmationCommunity, setShowUpdateConfirmationCommunity] =
     useRecoilState(showUpdateConfirmationAtom);
 
-  const [updateName, setUpdateName] = useState("");
-  const [updateDescription, setUpdateDescription] = useState("");
+  const [updateName, setUpdateName] = useState(community?.community_name);
+  const [updateDescription, setUpdateDescription] = useState(
+    community?.description
+  );
+
+  useEffect(() => {
+    if (community) {
+      setUpdateName(community.community_name);
+      setUpdateDescription(community.description);
+    }
+  }, [community]);
 
   const handleUpdate = async () => {
     if (!community) return;
-
-    const data = {
-      community_name: updateName,
-      description: updateDescription,
-    };
 
     try {
       const res = await axios.put(
