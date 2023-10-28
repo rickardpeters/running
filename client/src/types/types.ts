@@ -10,6 +10,7 @@ export interface Community {
     email: string;
     first_name: string;
     last_name: string;
+    identifier:string;
   }
 
   export interface Challenge {

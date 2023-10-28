@@ -20,6 +20,7 @@ class ChallengeSerializer(serializers.ModelSerializer):
 
 class CommunitySerializer(serializers.ModelSerializer):
     challenges = ChallengeSerializer(many=True, read_only=True)
+    members = UserSerializer(many=True, read_only=True)
 
     class Meta:
         model = Community

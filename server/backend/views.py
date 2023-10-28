@@ -13,7 +13,7 @@ from firebaseAuth.authentication import FirebaseAuthentication
 
 from server.settings import AUTHENTICATION_BACKENDS
 from .serializers import UserSerializer, CommunitySerializer, ChallengeSerializer
-from .models import Community, Challenge, Membership, UserExtended
+from .models import Community, Challenge, UserExtended
 import json
 
 @csrf_exempt
@@ -59,11 +59,10 @@ def join_community(request):
 
     user_extended = UserExtended.objects.get(identifier=user_id)  # Retrieve the UserExtended instance for the user
     community = Community.objects.get(id=community_id)  # Retrieve the community by its ID
-    membership = Membership(user=user_extended.user, community=community)
-    membership.save()
-    memberships = Membership.objects.all().values()
+    user_extended.communities.add(community)
     
-    return JsonResponse(list(memberships), safe=False)
+    
+    return JsonResponse("Success", safe=False)
 
     
 

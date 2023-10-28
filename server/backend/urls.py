@@ -6,5 +6,5 @@ urlpatterns = [
     path("users/logout/", log_out, name="login"),
     path("communities/", communities, name="communities"),
     path("communities/<int:community_id>/", community_by_id, name="communities/id"),
-    path("communities/join/",join_community, name="join-community")
+    path("communities/join/",join_community, name="join-community"),
 ]

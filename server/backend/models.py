@@ -12,33 +12,22 @@ class Community(models.Model):
         max_length=255, blank=True, default="No description."
     )
 
-    members = models.ManyToManyField(User, through='Membership')
-
-    def __str__(self):
-        return str(self.id) + " - " + self.community_name
-
-class Membership(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    community = models.ForeignKey(Community, on_delete=models.CASCADE)
-    joined_at = models.DateTimeField(auto_now_add=True)
-
-    class Meta:
-        unique_together = ('user', 'community')
 
 class UserExtended(models.Model):
+    
     strava_key = models.CharField(max_length=255, blank=True, default="No key")
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
-    identifier = models.CharField(max_length=900, unique=True, default="")
-    USERNAME_FIELD = "identifier"
-
-    communities = models.ManyToManyField(Community, related_name='users')
+    identifier = models.CharField(max_length=900, unique=True, blank=False)
+    
+ 
+    communities = models.ManyToManyField(Community, related_name='members')
 
     def is_authenticated(self):
         
         return self.user.is_authenticated
     def is_active(self):
         return self.user.is_active
-
+    
 
 
 
