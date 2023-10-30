@@ -46,11 +46,7 @@ const ChallengeList = () => {
   };
 
   useEffect(() => {
-    sessionStorage.getItem("token")
-      ? fetchChallenges()
-      : console.log(
-          "No token, cannot fetch challenges." + sessionStorage.getItem("token")
-        );
+    fetchChallenges();
   }, [updateChallengeList]);
 
   return (
@@ -77,7 +73,9 @@ const ChallengeList = () => {
               alignItems: "center",
             }}
           >
-            <h2 style={{ textAlign: "center" }}>Challenges</h2>
+            <div className="stat-value text-2xl my-2 text-center text-gray-500">
+              Challenges
+            </div>
             <Typography>
               {challenges
                 .slice()
@@ -96,9 +94,9 @@ const ChallengeList = () => {
                       textAlign: "center",
                     }}
                   >
-                    <CardActionArea sx={{}}>
+                    <CardActionArea>
                       <strong>{challenge.name}</strong>
-                      <br />
+
                       <br />
                       {runTotals.distance / 1000 >= challenge.goal
                         ? "Challenge complete!"
@@ -109,7 +107,7 @@ const ChallengeList = () => {
 
                       <LinearProgress
                         variant="determinate"
-                        color="success"
+                        color="primary"
                         value={
                           (runTotals.distance / 1000 / challenge.goal) * 100
                         }
@@ -122,20 +120,12 @@ const ChallengeList = () => {
         </Grid>
         <CreateChallengeModal />
       </Card>
-      <Button
-        sx={{
-          width: "100%",
-          margin: "10px",
-          display: "flex",
-          flexDirection: "row",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-        variant="contained"
-        onClick={handleCreateChallenge}
+      <button
+        className="btn btn-primary rounded-sm"
+        onClick={() => handleCreateChallenge()}
       >
         Create challenge
-      </Button>
+      </button>
     </Container>
   );
 };
