@@ -32,11 +32,7 @@ const ChallengeList = () => {
 
   async function fetchChallenges() {
     try {
-      const response = await axios.get("http://127.0.0.1:8000/challenges/", {
-        headers: {
-          Authorization: "Bearer " + sessionStorage.getItem("token"),
-        },
-      });
+      const response = await axios.get("http://127.0.0.1:8000/challenges/", {});
       setChallenges(response.data);
     } catch (error) {
       console.error(error);
@@ -63,11 +59,12 @@ const ChallengeList = () => {
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
+        marginTop: "4rem",
       }}
     >
       <Card
         sx={{
-          width: "500px",
+          width: "100%",
           margin: "10px",
           justifyContent: "center",
           placeItems: "center",
@@ -127,6 +124,7 @@ const ChallengeList = () => {
       </Card>
       <Button
         sx={{
+          width: "100%",
           margin: "10px",
           display: "flex",
           flexDirection: "row",
