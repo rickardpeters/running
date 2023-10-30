@@ -4,17 +4,10 @@ import ChallengeList from "../components/Challenge/ChallengeList";
 
 const UserPage = () => {
   return (
-    <Container
-      sx={{
-        display: "flex",
-        flexDirection: "row",
-        marginTop: "10px",
-        justifyContent: "center",
-      }}
-    >
+    <div className="grid grid-flow-row">
       <StravaCard />
       <ChallengeList />
-    </Container>
+    </div>
   );
 };
 
