@@ -74,10 +74,20 @@ def join_community(request):
 
     return JsonResponse("Success", safe=False)
 
+@api_view(["GET"])
 def get_joinded_communities(request, user_id):
-    user_extended = UserExtended.objects.get(identifier = user_id)
-    print(user_extended.user.is_authenticated)
-    return HttpResponse("OK")
+    user = UserExtended.objects.get(identifier = user_id)
+    if not user:
+        return JsonResponse("User not found")
+    comm_ids = user.communities.values_list('pk', flat=True)
+    if not comm_ids:
+        return Response([])
+    comm_joined = Community.objects.filter(id__in=comm_ids).all()
+    if not comm_joined:
+        return Response([])
+    comm_ser = CommunitySerializer(comm_joined, many=True)
+    
+    return Response(comm_ser.data)
     
    
 

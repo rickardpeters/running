@@ -50,7 +50,11 @@ const Communities = () => {
       >
         {communities.map((community, index) => (
           <>
-            <CommunityCard community={community} key={index}></CommunityCard>
+            <CommunityCard
+              community={community}
+              key={index}
+              profileList={false}
+            ></CommunityCard>
           </>
         ))}
       </Container>

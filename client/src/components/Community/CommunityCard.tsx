@@ -23,16 +23,21 @@ import DeleteCommunityConfirmation from "./DeleteCommunityConfirmation";
 import UpdateCommunityForm from "./UpdateCommunityForm";
 interface CommunityCardProps {
   community: Community;
+  profileList: boolean;
 }
 
 const CommunityCard = ({ community }: CommunityCardProps) => {
   const user = useContext(Context);
+  const uid = user.user.uid;
+  const token = user.user.accessToken;
+
   const [showDeleteCommunity, setShowDeleteCommunity] = useRecoilState(
     showDeleteCommunityAtom
   );
-  const uid = user.user.uid;
+
   const [activeCommunity, setActiveCommunity] =
     useRecoilState(activeCommunityAtom);
+
   const [showUpdateCommunity, setShowUpdateCommunity] = useRecoilState(
     showUpdateCommunityAtom
   );

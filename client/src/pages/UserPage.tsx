@@ -1,6 +1,7 @@
 import { Container } from "@mui/material";
-import StravaCard from "../components/StravaCard";
-import ChallengeList from "../components/Challenge/ChallengeList";
+import StravaCard from "../components/userpage/StravaCard";
+import ChallengeList from "../components/userpage/Challenge/ChallengeList";
+import JoinedCommunities from "../components/userpage/JoinedCommunities";
 
 const UserPage = () => {
   return (
@@ -12,6 +13,7 @@ const UserPage = () => {
         justifyContent: "center",
       }}
     >
+      <JoinedCommunities />
       <StravaCard />
       <ChallengeList />
     </Container>
