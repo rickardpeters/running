@@ -12,9 +12,7 @@ import {
   Card,
   CardContent,
   Typography,
-  Button,
   CardActionArea,
-  useMediaQuery,
   Grid,
   LinearProgress,
 } from "@mui/material";
@@ -52,6 +50,7 @@ const ChallengeList = () => {
   return (
     <Container
       sx={{
+        width: "100%",
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
@@ -61,7 +60,7 @@ const ChallengeList = () => {
       <Card
         sx={{
           width: "100%",
-          margin: "10px",
+          marginTop: "0.5vw",
           justifyContent: "center",
           placeItems: "center",
         }}
@@ -73,7 +72,7 @@ const ChallengeList = () => {
               alignItems: "center",
             }}
           >
-            <div className="stat-value text-2xl my-2 text-center text-gray-500">
+            <div className="stat-value text-2xl my-2 text-center text-accent-content">
               Challenges
             </div>
             <Typography>
@@ -121,7 +120,7 @@ const ChallengeList = () => {
         <CreateChallengeModal />
       </Card>
       <button
-        className="btn btn-primary rounded-sm"
+        className="btn btn-primary rounded-sm m-[0.5vw]"
         onClick={() => handleCreateChallenge()}
       >
         Create challenge
