@@ -2,7 +2,6 @@ export interface Community {
   community_name: string;
   id: number;
   description: string;
-  created_at: string;
   members: [Member];
 }
 
@@ -15,8 +14,6 @@ export interface Member {
 
 export interface Challenge {
   name: string;
-  start_date: string;
-  end_date: string;
   goal: number;
   community_id: number;
 }
