@@ -6,6 +6,7 @@ from .views import (
     communities,
     community_by_id,
     challenges,
+    leave_community,
 )
 
 urlpatterns = [
@@ -14,5 +15,6 @@ urlpatterns = [
     path("communities/", communities, name="communities"),
     path("communities/<int:community_id>/", community_by_id, name="communities/id"),
     path("communities/join/", join_community, name="join-community"),
+    path("communities/leave/", leave_community, name="leave-community"),
     path("challenges/", challenges, name="challenges"),
 ]
