@@ -6,7 +6,7 @@ import {
   updateChallengeListAtom,
 } from "../../recoil/atoms";
 import axios from "axios";
-import { useEffect } from "react";
+import { useContext, useEffect } from "react";
 import {
   Container,
   Card,
@@ -17,8 +17,12 @@ import {
   LinearProgress,
 } from "@mui/material";
 import CreateChallengeModal from "./CreateChallengeModal";
+import { Context } from "../auth/AuthContextProvider";
 
 const ChallengeList = () => {
+  const user = useContext(Context);
+  const uid = user.user.uid;
+  const token = user.user.token;
   const [challenges, setChallenges] = useRecoilState(challengesAtom);
   const [runTotals, setRunTotals] = useRecoilState(runTotalsAtom);
   const [showCreateChallenge, setShowCreateChallenge] = useRecoilState(
@@ -30,7 +34,14 @@ const ChallengeList = () => {
 
   async function fetchChallenges() {
     try {
-      const response = await axios.get("http://127.0.0.1:8000/challenges/", {});
+      const response = await axios.get(
+        `http://127.0.0.1:8000/challenges/${uid}/`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
       setChallenges(response.data);
     } catch (error) {

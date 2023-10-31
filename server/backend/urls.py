@@ -19,4 +19,5 @@ urlpatterns = [
     path("communities/join/", join_community, name="join-community"),
     path("communities/leave/", leave_community, name="leave-community"),
     path("challenges/", challenges, name="challenges"),
+    path("challenges/<str:user_id>/", challenges, name="challenges"),
 ]
