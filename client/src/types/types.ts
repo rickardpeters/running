@@ -6,12 +6,12 @@ export interface Community {
   members: [Member];
 }
 
-  export interface Member {
-    email: string;
-    first_name: string;
-    last_name: string;
-    identifier:string;
-  }
+export interface Member {
+  email: string;
+  first_name: string;
+  last_name: string;
+  identifier: string;
+}
 
 export interface Challenge {
   name: string;

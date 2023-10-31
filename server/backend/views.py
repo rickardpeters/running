@@ -72,6 +72,20 @@ def join_community(request):
 
 
 @csrf_exempt
+@api_view(["POST"])
+def leave_community(request):
+    data = json.loads(request.body.decode("utf-8"))
+    user_id = data["user"]
+    community_id = data["community_id"]
+
+    user_extended = UserExtended.objects.get(identifier=user_id)
+    community = Community.objects.get(id=community_id)
+    user_extended.communities.remove(community)
+
+    return JsonResponse("Success", safe=False)
+
+
+@csrf_exempt
 @login_required
 @api_view(["GET"])
 def communities(request):
