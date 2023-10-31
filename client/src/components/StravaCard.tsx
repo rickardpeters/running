@@ -105,7 +105,7 @@ const StravaCard = () => {
   return (
     <div className="relative grid place-items-center w-[100%] my-12">
       <div className="stat-value my-5">{athlete && athlete.firstname}</div>
-      <div className="stats stats-vertical lg:stats-horizontal shadow w-auto">
+      <div className="stats stats-vertical lg:stats-horizontal shadow w-auto rounded-sm bg-primary">
         <div className="stat">
           <div className="stat-title text-center">Number of runs</div>
           <div className="stat-value text-center">
