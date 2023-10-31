@@ -21,12 +21,15 @@ import json
 @api_view(["POST"])
 def log_in(request):
     if request.method == "POST":
-        user, _ = FirebaseAuthentication().authenticate(request)
-        print(user)
+        fire_user, _ = FirebaseAuthentication().authenticate(request)
+        user = fire_user.user
+        
+        
         if user is not None:
             # The login function for the django user model
-            login(request, user.user)
-            ser_user = UserSerializer(user)
+            login(request, user, "django.contrib.auth.backends.ModelBackend")
+            print(user.is_authenticated)
+            ser_user = UserSerializer(fire_user)
             return Response(ser_user.data)
 
         else:
@@ -41,13 +44,14 @@ def getUsers(request):
 
 
 @csrf_exempt
+@login_required
 @api_view(["POST"])
 def log_out(request):
     print("inne i första laget")
-    user, created = FirebaseAuthentication().authenticate(request)
-    print("efter firebase")
+    fire_user, created = FirebaseAuthentication().authenticate(request)
+    user=fire_user.user
+    
     if user.is_authenticated:
-        print("authenticated", user)
         logout(request)
         return JsonResponse(status.HTTP_200_OK, safe=False)
     else:
@@ -69,6 +73,13 @@ def join_community(request):
     user_extended.communities.add(community)
 
     return JsonResponse("Success", safe=False)
+
+def get_joinded_communities(request, user_id):
+    user_extended = UserExtended.objects.get(identifier = user_id)
+    print(user_extended.user.is_authenticated)
+    return HttpResponse("OK")
+    
+   
 
 
 @csrf_exempt
