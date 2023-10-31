@@ -13,6 +13,7 @@ import {
   activeCommunityAtom,
   showDeleteCommunityAtom,
   showUpdateCommunityAtom,
+  updateCommunityListAtom,
 } from "../../recoil/atoms";
 import "./communityStyle.css";
 import { Link } from "react-router-dom";
@@ -46,6 +47,9 @@ const CommunityCard = ({ community }: CommunityCardProps) => {
     setActiveCommunity(community);
     setShowDeleteCommunity(true);
   };
+  const [updateCommunityList, setUpdateCommunityList] = useRecoilState(
+    updateCommunityListAtom
+  );
 
   const joined = () => {
     var joined = false;
@@ -85,6 +89,36 @@ const CommunityCard = ({ community }: CommunityCardProps) => {
       .then(
         (response) => {
           console.log("joined: ", response);
+          setUpdateCommunityList(!updateCommunityList);
+
+          //Navigate to the community page to give the list a cance to update
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+  };
+
+  const handleLeaveClick = async (community: Community) => {
+    const token = user.user.accessToken;
+
+    axios
+      .post(
+        "http://127.0.0.1:8000/communities/leave/",
+        {
+          user: `${uid}`,
+          community_id: community.id,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
+      .then(
+        (response) => {
+          console.log("left: ", response);
+          setUpdateCommunityList(!updateCommunityList);
           //Navigate to the community page to give the list a cance to update
         },
         (error) => {
@@ -131,23 +165,32 @@ const CommunityCard = ({ community }: CommunityCardProps) => {
             </Typography>
           </CardContent>
           <CardActions>
-            <Button
-              variant="contained"
-              size="small"
-              onClick={() => handleUpdateClick(community)}
-            >
-              Edit
-            </Button>
-            <Button
-              variant="contained"
-              color="error"
-              size="small"
-              onClick={() => handleDeleteClick(community)}
-            >
-              Delete
-            </Button>
             {joined() ? (
-              <></>
+              <>
+                <Button
+                  variant="contained"
+                  size="small"
+                  onClick={() => handleUpdateClick(community)}
+                >
+                  Edit
+                </Button>
+                <Button
+                  variant="contained"
+                  color="error"
+                  size="small"
+                  onClick={() => handleDeleteClick(community)}
+                >
+                  Delete
+                </Button>
+                <Button
+                  variant="contained"
+                  color="success"
+                  size="small"
+                  onClick={() => handleLeaveClick(community)}
+                >
+                  Leave
+                </Button>
+              </>
             ) : (
               <Button
                 variant="contained"

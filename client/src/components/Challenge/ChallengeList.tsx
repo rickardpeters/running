@@ -12,9 +12,7 @@ import {
   Card,
   CardContent,
   Typography,
-  Button,
   CardActionArea,
-  useMediaQuery,
   Grid,
   LinearProgress,
 } from "@mui/material";
@@ -32,11 +30,8 @@ const ChallengeList = () => {
 
   async function fetchChallenges() {
     try {
-      const response = await axios.get("http://127.0.0.1:8000/challenges/", {
-        headers: {
-          Authorization: "Bearer " + sessionStorage.getItem("token"),
-        },
-      });
+      const response = await axios.get("http://127.0.0.1:8000/challenges/", {});
+
       setChallenges(response.data);
     } catch (error) {
       console.error(error);
@@ -50,25 +45,23 @@ const ChallengeList = () => {
   };
 
   useEffect(() => {
-    sessionStorage.getItem("token")
-      ? fetchChallenges()
-      : console.log(
-          "No token, cannot fetch challenges." + sessionStorage.getItem("token")
-        );
+    fetchChallenges();
   }, [updateChallengeList]);
 
   return (
     <Container
       sx={{
+        width: "100%",
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
+        marginTop: "4rem",
       }}
     >
       <Card
         sx={{
-          width: "500px",
-          margin: "10px",
+          width: "100%",
+          marginTop: "0.5vw",
           justifyContent: "center",
           placeItems: "center",
         }}
@@ -80,7 +73,9 @@ const ChallengeList = () => {
               alignItems: "center",
             }}
           >
-            <h2 style={{ textAlign: "center" }}>Challenges</h2>
+            <div className="stat-value text-2xl my-2 text-center text-accent-content">
+              Challenges
+            </div>
             <Typography>
               {challenges
                 .slice()
@@ -99,9 +94,9 @@ const ChallengeList = () => {
                       textAlign: "center",
                     }}
                   >
-                    <CardActionArea sx={{}}>
+                    <CardActionArea>
                       <strong>{challenge.name}</strong>
-                      <br />
+
                       <br />
                       {runTotals.distance / 1000 >= challenge.goal
                         ? "Challenge complete!"
@@ -112,7 +107,7 @@ const ChallengeList = () => {
 
                       <LinearProgress
                         variant="determinate"
-                        color="success"
+                        color="primary"
                         value={
                           (runTotals.distance / 1000 / challenge.goal) * 100
                         }
@@ -125,19 +120,12 @@ const ChallengeList = () => {
         </Grid>
         <CreateChallengeModal />
       </Card>
-      <Button
-        sx={{
-          margin: "10px",
-          display: "flex",
-          flexDirection: "row",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-        variant="contained"
-        onClick={handleCreateChallenge}
+      <button
+        className="btn btn-primary rounded-sm m-[0.5vw]"
+        onClick={() => handleCreateChallenge()}
       >
         Create challenge
-      </Button>
+      </button>
     </Container>
   );
 };

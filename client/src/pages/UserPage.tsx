@@ -5,18 +5,11 @@ import JoinedCommunities from "../components/userpage/JoinedCommunities";
 
 const UserPage = () => {
   return (
-    <Container
-      sx={{
-        display: "flex",
-        flexDirection: "row",
-        marginTop: "10px",
-        justifyContent: "center",
-      }}
-    >
+    <div className="grid grid-flow-row">
       <JoinedCommunities />
       <StravaCard />
       <ChallengeList />
-    </Container>
+    </div>
   );
 };
 

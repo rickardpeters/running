@@ -20,166 +20,151 @@ const StravaCard = () => {
   const [athlete, setAthlete] = useRecoilState(athleteAtom);
   const [runTotals, setRunTotals] = useRecoilState(runTotalsAtom);
 
-  function capitalizeAndRemoveUnderscore(string: string) {
-    const stringWithoutUnderscore = string.replace(/_/g, " ");
-    return (
-      stringWithoutUnderscore.charAt(0).toUpperCase() +
-      stringWithoutUnderscore.slice(1)
-    );
-  }
+  useEffect(() => {
+    fetchData().catch((err) => console.error(err));
+  }, [loggedInState]);
 
-  const signIn = async () => {
-    window.location.href =
-      "https://www.strava.com/oauth/authorize?client_id=105576&redirect_uri=http://localhost:3000/UserPage&response_type=code&scope=read";
-    setLoggedInState(!loggedInState);
-  };
+  useEffect(() => {
+    if (athlete) {
+      getAthleteStats(athlete).catch((err) => console.error(err));
+    }
+  }, [athlete]);
 
   const fetchData = async () => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const code = urlParams.get("code");
-    getAccessToken(code);
-    getAthleteInfo();
+    const code = new URLSearchParams(window.location.search).get("code");
+    const accessToken = await getAccessToken(code);
+    if (accessToken) {
+      await fetchAthleteInfo();
+    }
   };
 
-  async function getAccessToken(code: any): Promise<string> {
+  const getAccessToken = async (code: any) => {
     try {
-      const response = await axios.post(
+      const params = {
+        client_id: "105576",
+        client_secret: "d91be7e7d6dc2775e6ee24f494d7079c172e2c8f",
+        code,
+        grant_type: "authorization_code",
+        redirect_uri: "http://localhost:3000/UserPage",
+      };
+      const { data } = await axios.post(
         "https://www.strava.com/oauth/token?",
         null,
-        {
-          params: {
-            client_id: "105576",
-            client_secret: "d91be7e7d6dc2775e6ee24f494d7079c172e2c8f",
-            code: code,
-            grant_type: "authorization_code",
-            redirect_uri: "http://localhost:3000/UserPage",
-          },
-        }
+        { params }
       );
-
-      const accessToken = response.data.access_token;
-      const refreshToken = response.data.refresh_token;
-
-      sessionStorage.setItem("access_token", accessToken);
-      sessionStorage.setItem("refresh_token", refreshToken);
-
-      return accessToken;
+      sessionStorage.setItem("access_token", data.access_token);
+      sessionStorage.setItem("refresh_token", data.refresh_token);
+      return data.access_token;
     } catch (error) {
       console.error(error);
       throw new Error("Error getting access token from Strava API");
     }
-  }
+  };
 
-  const getAthleteInfo = async () => {
+  const fetchAthleteInfo = async () => {
     try {
-      const response = await axios.get(
+      const { data } = await axios.get(
         "https://www.strava.com/api/v3/athlete",
         {
           headers: {
-            Authorization: "Bearer " + sessionStorage.getItem("access_token"),
+            Authorization: `Bearer ${sessionStorage.getItem("access_token")}`,
           },
         }
       );
-      setAthlete(response.data);
-      var athlete = response.data;
-      console.log(athlete);
+      setAthlete(data);
+      await getAthleteStats(data);
     } catch (error) {
       console.error(error);
     }
-    getAthleteStats(athlete);
   };
 
   const getAthleteStats = async (athlete: any) => {
     try {
-      const response = await axios.get(
-        "https://www.strava.com/api/v3/athletes/" + athlete.id + "/stats",
+      const { data } = await axios.get(
+        `https://www.strava.com/api/v3/athletes/${athlete.id}/stats`,
         {
           headers: {
-            Authorization: "Bearer " + sessionStorage.getItem("access_token"),
+            Authorization: `Bearer ${sessionStorage.getItem("access_token")}`,
           },
         }
       );
-      setRunTotals(response.data.all_run_totals);
-      return response.data;
+      setRunTotals(data.all_run_totals);
     } catch (error) {
       console.error(error);
     }
   };
 
-  useEffect(() => {
-    fetchData();
-  }, [loggedInState]);
-
-  useEffect(() => {
-    getAthleteStats(athlete);
-  }, []);
+  const signIn = () => {
+    const authUrl =
+      "https://www.strava.com/oauth/authorize?client_id=" +
+      `${105576}&redirect_uri=http://localhost:3000/UserPage&response_type=code&scope=read`;
+    window.location.href = authUrl;
+    setLoggedInState(!loggedInState);
+  };
 
   return (
-    <Container
-      sx={{
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-      }}
-    >
-      <>
-        <Typography fontWeight={"bold"} sx={{ m: 1 }}>
-          <Card sx={{ width: "500px", margin: "10px" }}>
-            <CardContent>
-              <h3>{athlete.firstname !== "" ? athlete.firstname : null}</h3>
-              {Object.entries(runTotals).map(([key, value]) => {
-                const formattedValue =
-                  key === "count"
-                    ? `${Number(value).toLocaleString("en", {
-                        minimumFractionDigits: 0,
-                        maximumFractionDigits: 0,
-                      })} runs`
-                    : key === "distance"
-                    ? `${(Number(value) / 1000).toLocaleString("en", {
-                        minimumFractionDigits: 1,
-                        maximumFractionDigits: 1,
-                      })} km`
-                    : key === "moving_time" || key === "elapsed_time"
-                    ? `${(Number(value) / 3600).toLocaleString("en", {
-                        minimumFractionDigits: 1,
-                        maximumFractionDigits: 1,
-                      })} h`
-                    : key === "distance"
-                    ? `${(Number(value) / 1000).toLocaleString("en", {
-                        minimumFractionDigits: 1,
-                        maximumFractionDigits: 1,
-                      })} km`
-                    : key === "elevation_gain"
-                    ? `${Number(value).toLocaleString("en", {
-                        minimumFractionDigits: 0,
-                        maximumFractionDigits: 0,
-                      })} m`
-                    : String(value);
+    <div className="relative grid place-items-center w-[100%] my-12">
+      <div className="stat-value my-5">{athlete && athlete.firstname}</div>
+      <div className="stats stats-vertical lg:stats-horizontal shadow w-auto rounded-sm bg-primary">
+        <div className="stat">
+          <div className="stat-title text-center">Number of runs</div>
+          <div className="stat-value text-center">
+            {runTotals.count.toLocaleString("en", {
+              minimumFractionDigits: 0,
+              maximumFractionDigits: 0,
+            })}
+          </div>
+        </div>
 
-                return (
-                  <Typography key={key} gutterBottom>
-                    <b>{capitalizeAndRemoveUnderscore(key)}</b>:{" "}
-                    {formattedValue}
-                  </Typography>
-                );
-              })}
-            </CardContent>
-            <ButtonGroup
-              sx={{
-                display: "flex",
-                flexDirection: "row",
-                margin: "20px",
-                justifyContent: "center",
-              }}
-            >
-              <Button variant="outlined" type="button" onClick={signIn}>
-                Sign in to Strava account
-              </Button>
-            </ButtonGroup>
-          </Card>
-        </Typography>
-      </>
-    </Container>
+        <div className="stat">
+          <div className="stat-title text-center">Total Distance</div>
+          <div className="stat-value text-center">
+            {(runTotals.distance / 1000).toLocaleString("en", {
+              minimumFractionDigits: 1,
+              maximumFractionDigits: 1,
+            }) + " km"}
+          </div>
+        </div>
+
+        <div className="stat">
+          <div className="stat-title text-center">Moving time</div>
+          <div className="stat-value text-center">
+            {(runTotals.moving_time / 3600).toLocaleString("en", {
+              minimumFractionDigits: 1,
+              maximumFractionDigits: 1,
+            }) + " h"}
+          </div>
+        </div>
+
+        <div className="stat">
+          <div className="stat-title text-center">Elapsed time</div>
+          <div className="stat-value text-center">
+            {(runTotals.elapsed_time / 3600).toLocaleString("en", {
+              minimumFractionDigits: 1,
+              maximumFractionDigits: 1,
+            }) + " h"}
+          </div>
+        </div>
+
+        <div className="stat">
+          <div className="stat-title text-center">Elevation gain</div>
+          <div className="stat-value text-center">
+            {runTotals.elevation_gain.toLocaleString("en", {
+              minimumFractionDigits: 0,
+              maximumFractionDigits: 0,
+            }) + " m"}
+          </div>
+        </div>
+      </div>
+      <div className="absolute -bottom-20">
+        <button
+          className="btn btn-primary m-2 w-[100%] rounded-sm"
+          onClick={signIn}
+        >
+          Log in to Strava
+        </button>
+      </div>
+    </div>
   );
 };
 

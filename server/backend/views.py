@@ -93,6 +93,20 @@ def get_joinded_communities(request, user_id):
 
 
 @csrf_exempt
+@api_view(["POST"])
+def leave_community(request):
+    data = json.loads(request.body.decode("utf-8"))
+    user_id = data["user"]
+    community_id = data["community_id"]
+
+    user_extended = UserExtended.objects.get(identifier=user_id)
+    community = Community.objects.get(id=community_id)
+    user_extended.communities.remove(community)
+
+    return JsonResponse("Success", safe=False)
+
+
+@csrf_exempt
 @login_required
 @api_view(["GET"])
 def communities(request):
@@ -190,3 +204,36 @@ def community_by_id(request, community_id):
         ser_community = CommunitySerializer(updated_community)
 
         return JsonResponse(ser_community.data, safe=False)
+
+
+@csrf_exempt
+def challenges(request):
+    if request.method == "GET":
+        challenges = Challenge.objects.all()
+
+        if not challenges:
+            return HttpResponse("No challenges found.")
+
+        ser_challenges = ChallengeSerializer(challenges, many=True)
+
+        return JsonResponse(ser_challenges.data, safe=False)
+
+    if request.method == "POST":
+        data = json.loads(request.body.decode("utf-8"))
+
+        name = data["name"]
+        goal = data["goal"]
+        community_id = data["community_id"]
+
+        if Challenge.objects.filter(name=name):
+            return HttpResponse("A Challenge with that name already exists.")
+
+        community = Community.objects.get(id=community_id)
+
+        new_challenge = Challenge.objects.create(
+            name=name, goal=goal, community_id=community
+        )
+
+        ser_challenge = ChallengeSerializer(new_challenge)
+
+        return JsonResponse(ser_challenge.data, safe=False)
