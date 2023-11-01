@@ -7,13 +7,13 @@ from .views import (
     community_by_id,
     challenges,
     leave_community,
-    get_joinded_communities,
+    get_joined_communities,
 )
 
 urlpatterns = [
     path("users/login/", log_in, name="login"),
     path("users/logout/", log_out, name="login"),
-    path("users/communities/<str:user_id>/", get_joinded_communities, name="get_joined"),
+    path("users/communities/<str:user_id>/", get_joined_communities, name="get_joined"),
     path("communities/", communities, name="communities"),
     path("communities/<int:community_id>/", community_by_id, name="communities/id"),
     path("communities/join/", join_community, name="join-community"),
