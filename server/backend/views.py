@@ -1,17 +1,12 @@
 from django.http import HttpResponse, JsonResponse
-from django.shortcuts import get_object_or_404
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.decorators import api_view
 from django.contrib.auth import login, logout
-from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 from django.core.exceptions import ObjectDoesNotExist
-from rest_framework.authtoken.models import Token
 from firebaseAuth.authentication import FirebaseAuthentication
-
-from server.settings import AUTHENTICATION_BACKENDS
 from .serializers import UserSerializer, CommunitySerializer, ChallengeSerializer
 from .models import Community, Challenge, UserExtended
 import json
@@ -20,11 +15,10 @@ import json
 @csrf_exempt
 @api_view(["POST"])
 def log_in(request):
-    if request.method == "POST":
+    if request.method == "POST":  ##### Behövs denna? Iom att vi har api_view
         fire_user, _ = FirebaseAuthentication().authenticate(request)
         user = fire_user.user
-        
-        
+
         if user is not None:
             # The login function for the django user model
             login(request, user, "django.contrib.auth.backends.ModelBackend")
@@ -36,21 +30,15 @@ def log_in(request):
             return Response("User not found.", status=404)
 
 
-@api_view(["GET"])
-def getUsers(request):
-    users = UserExtended.objects.all()
-    users_ser = UserSerializer(users, many=True)
-    return Response(users_ser.data)
-
-
 @csrf_exempt
 @login_required
 @api_view(["POST"])
 def log_out(request):
-    print("inne i första laget")
-    fire_user, created = FirebaseAuthentication().authenticate(request)
-    user=fire_user.user
-    
+    fire_user, created = FirebaseAuthentication().authenticate(
+        request
+    )  ## Behövs created? Ska motsvara ett token från firebase?
+    user = fire_user.user
+
     if user.is_authenticated:
         logout(request)
         return JsonResponse(status.HTTP_200_OK, safe=False)
@@ -58,7 +46,14 @@ def log_out(request):
         return JsonResponse(status.HTTP_404_NOT_FOUND, safe=False)
 
 
-@api_view(["POST"])
+@api_view(["GET"])  #### Göra om till inte api_view?
+def getUsers(request):
+    users = UserExtended.objects.all()
+    users_ser = UserSerializer(users, many=True)
+    return Response(users_ser.data)
+
+
+@api_view(["POST"])  #### Göra om till inte api_view?
 def join_community(request):
     data = json.loads(request.body.decode("utf-8"))
     user_id = data["user"]
@@ -74,26 +69,24 @@ def join_community(request):
 
     return JsonResponse("Success", safe=False)
 
-@api_view(["GET"])
-def get_joinded_communities(request, user_id):
-    user = UserExtended.objects.get(identifier = user_id)
+
+@api_view(["GET"])  #### Göra om till inte api_view?
+def get_joined_communities(request, user_id):
+    user = UserExtended.objects.get(identifier=user_id)
     if not user:
         return JsonResponse("User not found")
-    comm_ids = user.communities.values_list('pk', flat=True)
+    comm_ids = user.communities.values_list("pk", flat=True)
     if not comm_ids:
         return Response([])
     comm_joined = Community.objects.filter(id__in=comm_ids).all()
     if not comm_joined:
         return Response([])
     comm_ser = CommunitySerializer(comm_joined, many=True)
-    
     return Response(comm_ser.data)
-    
-   
 
 
 @csrf_exempt
-@api_view(["POST"])
+@api_view(["POST"])  #### Göra om till inte api_view?
 def leave_community(request):
     data = json.loads(request.body.decode("utf-8"))
     user_id = data["user"]
@@ -108,7 +101,7 @@ def leave_community(request):
 
 @csrf_exempt
 @login_required
-@api_view(["GET"])
+@api_view(["GET"])  #### Varför dubbel?
 def communities(request):
     communities = Community.objects.all()
 
@@ -121,17 +114,18 @@ def communities(request):
 
 
 """
-This view handles READ and UPDATE for all communities.
+This view handles CREATE and READ for all communities.
 """
 
 
 @csrf_exempt
-def communities(request):
+def communities(request):  #### Lägga in try/except
     if request.method == "GET":
-        communities = Community.objects.all()
+        try:
+            communities = Community.objects.all()
 
-        if not communities:
-            return HttpResponse("No communities found.")
+        except ObjectDoesNotExist:
+            return JsonResponse(status.HTTP_404_NOT_FOUND, safe=False)
 
         ser_communities = CommunitySerializer(communities, many=True)
 
@@ -166,7 +160,6 @@ def community_by_id(request, community_id):
     if request.method == "GET":
         try:
             community = Community.objects.get(id=community_id)
-            print(community)
 
         except ObjectDoesNotExist:
             return JsonResponse(status.HTTP_404_NOT_FOUND, safe=False)
@@ -209,13 +202,11 @@ def community_by_id(request, community_id):
 @csrf_exempt
 def challenges(request, user_id):
     if request.method == "GET":
-        
         user_extended = UserExtended.objects.get(identifier=user_id)
 
         # Retrieve the challenges related to the user's communities
         user_communities = user_extended.communities.all()
         challenges = Challenge.objects.filter(community_id__in=user_communities)
-    
 
         if not challenges:
             return HttpResponse("No challenges found.")
