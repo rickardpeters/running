@@ -43,6 +43,21 @@ const Communities = () => {
         style={{
           display: "flex",
           flexDirection: "row",
+          justifyContent: "center",
+        }}
+      >
+        <Button
+          sx={{ mb: 1.5 }}
+          variant="contained"
+          onClick={() => setShowCreateCommunity(true)}
+        >
+          Create new community
+        </Button>
+      </Container>
+      <Container
+        style={{
+          display: "flex",
+          flexDirection: "row",
           justifyContent: "space-evenly",
           alignItems: "center",
           flexWrap: "wrap",
@@ -58,21 +73,7 @@ const Communities = () => {
           </>
         ))}
       </Container>
-      <Container
-        style={{
-          display: "flex",
-          flexDirection: "row",
-          justifyContent: "center",
-        }}
-      >
-        <Button
-          sx={{ mb: 1.5 }}
-          variant="contained"
-          onClick={() => setShowCreateCommunity(true)}
-        >
-          Create new community
-        </Button>
-      </Container>
+
       <CreateCommunityModal />
     </Container>
   );
