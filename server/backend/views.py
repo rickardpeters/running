@@ -207,9 +207,15 @@ def community_by_id(request, community_id):
 
 
 @csrf_exempt
-def challenges(request):
+def challenges(request, user_id):
     if request.method == "GET":
-        challenges = Challenge.objects.all()
+        
+        user_extended = UserExtended.objects.get(identifier=user_id)
+
+        # Retrieve the challenges related to the user's communities
+        user_communities = user_extended.communities.all()
+        challenges = Challenge.objects.filter(community_id__in=user_communities)
+    
 
         if not challenges:
             return HttpResponse("No challenges found.")

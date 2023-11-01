@@ -70,9 +70,6 @@ const CommunityCard = ({ community }: CommunityCardProps) => {
     return memberIdentifiers;
   };
   const handleJoinClick = async (community: Community) => {
-    const token = user.user.accessToken;
-    console.log();
-
     axios
       .post(
         "http://127.0.0.1:8000/communities/join/",
@@ -100,8 +97,6 @@ const CommunityCard = ({ community }: CommunityCardProps) => {
   };
 
   const handleLeaveClick = async (community: Community) => {
-    const token = user.user.accessToken;
-
     axios
       .post(
         "http://127.0.0.1:8000/communities/leave/",

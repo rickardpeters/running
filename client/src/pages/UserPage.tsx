@@ -1,4 +1,3 @@
-import { Container } from "@mui/material";
 import StravaCard from "../components/StravaCard";
 import ChallengeList from "../components/Challenge/ChallengeList";
 import JoinedCommunities from "../components/userpage/JoinedCommunities";
