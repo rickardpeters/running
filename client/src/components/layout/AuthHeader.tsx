@@ -4,6 +4,7 @@ import SignOutButton from "../LogSign/SignOutButton";
 import DirectionsRunIcon from "@mui/icons-material/DirectionsRun";
 import HomeIcon from "@mui/icons-material/Home";
 import GroupsIcon from "@mui/icons-material/Groups";
+import InfoIcon from "@mui/icons-material/Info";
 
 const AuthHeader = () => {
   return (
@@ -20,6 +21,11 @@ const AuthHeader = () => {
         <div className="btn btn-ghost">
           <Link to="/communityList">
             <GroupsIcon className="scale-125" />
+          </Link>
+        </div>
+        <div className="btn btn-ghost">
+          <Link to="/About">
+            <InfoIcon className="scale-125" />
           </Link>
         </div>
         <div className="absolute right-0 p-[5vw]">
