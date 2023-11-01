@@ -1,32 +1,15 @@
 import { useRecoilState } from "recoil";
-import {
-  challengesAtom,
-  runTotalsAtom,
-  showCreateChallengeAtom,
-  updateChallengeListAtom,
-} from "../../recoil/atoms";
+import { challengesAtom, runTotalsAtom, showCreateChallengeAtom, updateChallengeListAtom } from "../../recoil/atoms";
 import axios from "axios";
 import { useEffect } from "react";
-import {
-  Container,
-  Card,
-  CardContent,
-  Typography,
-  CardActionArea,
-  Grid,
-  LinearProgress,
-} from "@mui/material";
+import { Container, Card, CardContent, Typography, CardActionArea, Grid, LinearProgress } from "@mui/material";
 import CreateChallengeModal from "./CreateChallengeModal";
 
 const ChallengeList = () => {
   const [challenges, setChallenges] = useRecoilState(challengesAtom);
   const [runTotals, setRunTotals] = useRecoilState(runTotalsAtom);
-  const [showCreateChallenge, setShowCreateChallenge] = useRecoilState(
-    showCreateChallengeAtom
-  );
-  const [updateChallengeList, setUpdateChallengeList] = useRecoilState(
-    updateChallengeListAtom
-  );
+  const [showCreateChallenge, setShowCreateChallenge] = useRecoilState(showCreateChallengeAtom);
+  const [updateChallengeList, setUpdateChallengeList] = useRecoilState(updateChallengeListAtom);
 
   async function fetchChallenges() {
     try {
@@ -56,26 +39,21 @@ const ChallengeList = () => {
         flexDirection: "column",
         justifyContent: "center",
         marginTop: "4rem",
-      }}
-    >
+      }}>
       <Card
         sx={{
           width: "100%",
           marginTop: "0.5vw",
           justifyContent: "center",
           placeItems: "center",
-        }}
-      >
+        }}>
         <Grid>
           <CardContent
             sx={{
               justifyContent: "center",
               alignItems: "center",
-            }}
-          >
-            <div className="stat-value text-2xl my-2 text-center text-accent-content">
-              Challenges
-            </div>
+            }}>
+            <div className="stat-value text-2xl my-2 text-center text-accent-content">Challenges</div>
             <Typography>
               {challenges
                 .slice()
@@ -92,25 +70,20 @@ const ChallengeList = () => {
                       justifyContent: "center",
                       placeItems: "center",
                       textAlign: "center",
-                    }}
-                  >
+                    }}>
                     <CardActionArea>
                       <strong>{challenge.name}</strong>
 
                       <br />
                       {runTotals.distance / 1000 >= challenge.goal
                         ? "Challenge complete!"
-                        : `${(runTotals.distance / 1000).toFixed(0)} of ${
-                            challenge.goal
-                          } km`}
+                        : `${(runTotals.distance / 1000).toFixed(0)} of ${challenge.goal} km`}
                       <br />
 
                       <LinearProgress
                         variant="determinate"
                         color="primary"
-                        value={
-                          (runTotals.distance / 1000 / challenge.goal) * 100
-                        }
+                        value={(runTotals.distance / 1000 / challenge.goal) * 100}
                       />
                     </CardActionArea>
                   </Card>
@@ -120,10 +93,7 @@ const ChallengeList = () => {
         </Grid>
         <CreateChallengeModal />
       </Card>
-      <button
-        className="btn btn-primary rounded-sm m-[0.5vw]"
-        onClick={() => handleCreateChallenge()}
-      >
+      <button className="btn btn-secondary rounded-sm m-[0.5vw]" onClick={() => handleCreateChallenge()}>
         Create challenge
       </button>
     </Container>

@@ -1,11 +1,4 @@
-import {
-  Container,
-  Typography,
-  Card,
-  CardContent,
-  ButtonGroup,
-  Button,
-} from "@mui/material";
+import { Container, Typography, Card, CardContent } from "@mui/material";
 import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
 import { Context } from "../auth/AuthContextProvider";
@@ -20,14 +13,11 @@ const JoinedCommunities = () => {
   useEffect(() => {
     const getComm = async () => {
       try {
-        const response = await axios.get(
-          `http://127.0.0.1:8000/users/communities/${uid}/`,
-          {
-            headers: {
-              Authorization: `Token ${authToken}`,
-            },
-          }
-        );
+        const response = await axios.get(`http://127.0.0.1:8000/users/communities/${uid}/`, {
+          headers: {
+            Authorization: `Token ${authToken}`,
+          },
+        });
         console.warn(response.data);
         setCommunities(response.data);
       } catch (error) {
@@ -41,19 +31,16 @@ const JoinedCommunities = () => {
       sx={{
         display: "flex",
         flexDirection: "column",
-        justifyContent: "center",
-      }}
-    >
+        alignItems: "center",
+        marginTop: "1.5rem",
+      }}>
       <>
-        <Card sx={{ width: "500px", margin: "10px" }}>
+        <Card sx={{ width: "350px" }}>
           <Typography fontWeight={"bold"} sx={{ m: 1 }}>
             Joined Communities
             <CardContent>
               {communities.map((comm) => (
-                <CommunityCard
-                  community={comm}
-                  profileList={false}
-                ></CommunityCard>
+                <CommunityCard community={comm} profileList={false}></CommunityCard>
               ))}
             </CardContent>
           </Typography>
