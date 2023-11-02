@@ -11,11 +11,7 @@ import { Grid, TextField } from "@mui/material";
 import LoginModal from "./LoginModal";
 import PasswordField from "./PasswordField";
 import { useRecoilState, useRecoilValue } from "recoil";
-import {
-  authTokenAtom,
-  passwordStrengthTestPassed,
-  passwordTestPassed,
-} from "../../recoil/atoms";
+import { authTokenAtom, passwordStrengthTestPassed, passwordTestPassed } from "../../recoil/atoms";
 
 import { createUserWithEmailAndPassword, signOut } from "firebase/auth";
 import { auth } from "../../firebase";
@@ -87,17 +83,12 @@ const SignUpModal = (props: SignUpModalProps) => {
   return (
     <>
       {props.signedUp ? (
-        <LoginModal
-          show={props.signedUp}
-          setShow={props.setSignedUp}
-        ></LoginModal>
+        <LoginModal show={props.signedUp} setShow={props.setSignedUp}></LoginModal>
       ) : (
         <>
           <DialogTitle>Sign Up</DialogTitle>
           <DialogContent>
-            <DialogContentText sx={{ mb: 2 }}>
-              Please enter your information below to Join the club!
-            </DialogContentText>
+            <DialogContentText sx={{ mb: 2 }}>Please enter your information below to Join the club!</DialogContentText>
             <Grid container spacing={2}>
               <Grid item xs={6}>
                 <TextField
@@ -143,22 +134,19 @@ const SignUpModal = (props: SignUpModalProps) => {
               </Grid>
             </Grid>
             <Grid container spacing={2}>
-              <PasswordField
-                password={password}
-                setPassword={setPassword}
-              ></PasswordField>
+              <PasswordField password={password} setPassword={setPassword}></PasswordField>
             </Grid>
           </DialogContent>
           <DialogActions>
-            <Button onClick={handleClose}>Cancel</Button>
+            <button className="btn rounded-md" onClick={handleClose}>
+              Cancel
+            </button>
             {strengthTestPassed && testPassed ? (
-              <Button type="button" variant="contained" onClick={signUp}>
+              <button className="btn btn-info rounded-md" onClick={signUp}>
                 Sign Up
-              </Button>
+              </button>
             ) : (
-              <Button type="button" variant="contained" disabled>
-                Sign Up
-              </Button>
+              <button className="btn btn-disabled rounded-md">Sign Up</button>
             )}
           </DialogActions>
         </>

@@ -1,21 +1,14 @@
 import { Button, Container } from "@mui/material";
 import axios from "axios";
 import { useRecoilState, useRecoilValue } from "recoil";
-import {
-  communitiesAtom,
-  showCreateCommunityAtom,
-  updateCommunityListAtom,
-} from "../../recoil/atoms";
+import { communitiesAtom, showCreateCommunityAtom, updateCommunityListAtom } from "../../recoil/atoms";
 import { useEffect, useState } from "react";
 import CreateCommunityModal from "./CreateCommunityModal";
 import CommunityCard from "./CommunityCard";
 
 const Communities = () => {
   const [communities, setCommunities] = useRecoilState(communitiesAtom);
-  const [showCreateCommunity, setShowCreateCommunity] = useRecoilState(
-    showCreateCommunityAtom
-  );
-
+  const [showCreateCommunity, setShowCreateCommunity] = useRecoilState(showCreateCommunityAtom);
   const updateCommunityList = useRecoilValue(updateCommunityListAtom);
 
   async function fetchCommunities() {
@@ -25,7 +18,7 @@ const Communities = () => {
           // Authorization: `Token ${authToken}`,
         },
       });
-      console.warn(response.data);
+
       setCommunities(response.data);
     } catch (error) {
       console.error(error);
@@ -38,44 +31,24 @@ const Communities = () => {
   }, [updateCommunityList]);
 
   return (
-    <Container style={{ marginTop: "25px" }}>
-      <Container
-        style={{
-          display: "flex",
-          flexDirection: "row",
-          justifyContent: "center",
-        }}
-      >
-        <Button
-          sx={{ mb: 1.5 }}
-          variant="contained"
-          onClick={() => setShowCreateCommunity(true)}
-        >
+    <div className="w-full">
+      <div className="flex justify-center">
+        <button
+          className="btn btn-info rounded-md left-[50%] mt-6 hover:scale-105"
+          onClick={() => setShowCreateCommunity(true)}>
           Create new community
-        </Button>
-      </Container>
-      <Container
-        style={{
-          display: "flex",
-          flexDirection: "row",
-          justifyContent: "space-evenly",
-          alignItems: "center",
-          flexWrap: "wrap",
-        }}
-      >
+        </button>
+      </div>
+      <div className="justify-center m-3 grid gap-2 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {communities.map((community, index) => (
           <>
-            <CommunityCard
-              community={community}
-              key={index}
-              profileList={false}
-            ></CommunityCard>
+            <CommunityCard community={community} key={index} profileList={false}></CommunityCard>
           </>
         ))}
-      </Container>
+      </div>
 
       <CreateCommunityModal />
-    </Container>
+    </div>
   );
 };
 
