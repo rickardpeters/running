@@ -29,30 +29,40 @@ const LoginModal = (props: LoginModalProps) => {
     const token = user.user.accessToken;
     setAuthToken(token);
 
-    await fetch("http://127.0.0.1:8000/users/login/", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }).catch((e) => {
-      //If the django auth fails, the user has to be logged out from firebase
-      // The order has to be firebase ->django since we need the auth token
-      console.log(e);
-      signOut(auth);
-    });
+    try {
+      const response = await fetch("http://127.0.0.1:8000/users/login/", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      console.log(response);
+      if (!response.ok) {
+        console.log("wehaa");
+        // If the Django authentication fails, throw an error
+        throw new Error("Django authentication failed");
+      }
+    } catch (error) {
+      // Handle the error or log it as needed
+      console.error(error);
+      // You can choose to rethrow the error or handle it differently here
+    }
   };
 
   const logIn = async (e: React.MouseEvent<HTMLElement>) => {
     e.preventDefault();
-    signInWithEmailAndPassword(auth, email, password)
-      .then((user) => {
-        signInToDjango(user);
-        console.log(user);
-        navigate("/UserPage");
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    try {
+      const user = await signInWithEmailAndPassword(auth, email, password);
+      console.log(user);
+
+      await signInToDjango(user);
+
+      navigate("/UserPage");
+    } catch (error) {
+      console.log(error);
+
+      // If there's an error during Django sign-in, you can choose to show an error message or take other actions
+    }
   };
 
   const handleClose = () => {

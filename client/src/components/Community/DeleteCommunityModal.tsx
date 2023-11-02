@@ -8,6 +8,7 @@ import {
 import React from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
 import {
+  onScreenAlertAtom,
   showDeleteCommunityAtom,
   showDeleteConfirmationAtom,
   updateCommunityListAtom,
@@ -32,6 +33,8 @@ const DeleteCommunityModal: React.FC<DeleteCommunityModalProps> = ({
   const [showDeleteConfirmationCommunity, setShowDeleteConfirmationCommunity] =
     useRecoilState(showDeleteConfirmationAtom);
 
+  const [alert, setAlert] = useRecoilState(onScreenAlertAtom);
+
   const handleDelete = async () => {
     if (!community) return;
 
@@ -41,12 +44,20 @@ const DeleteCommunityModal: React.FC<DeleteCommunityModalProps> = ({
         {}
       );
       console.warn(res.data);
+      setAlert({
+        showSnack: true,
+        snackColor: "info",
+        snackMessage: "Community Deleted",
+      });
     } catch (error) {
-      console.error("Could not delete: ", error);
+      setAlert({
+        showSnack: true,
+        snackColor: "error",
+        snackMessage: "Unable to delete community",
+      });
     }
     setShowDeleteCommunity(false);
     setUpdateCommunityList(!updateCommunityList);
-    setShowDeleteConfirmationCommunity(true);
   };
 
   return (
@@ -68,7 +79,6 @@ const DeleteCommunityModal: React.FC<DeleteCommunityModalProps> = ({
           Delete
         </Button>
       </DialogActions>
-      <DeleteCommunityConfirmation />
     </Dialog>
   );
 };

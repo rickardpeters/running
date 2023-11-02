@@ -3,11 +3,12 @@ import React from "react";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { signOut } from "firebase/auth";
 import { auth } from "../../firebase";
-import { useRecoilValue } from "recoil";
-import { authTokenAtom } from "../../recoil/atoms";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { authTokenAtom, onScreenAlertAtom } from "../../recoil/atoms";
 
 const SignOutButton = () => {
   const authToken = useRecoilValue(authTokenAtom);
+  const [alert, setAlert] = useRecoilState(onScreenAlertAtom);
 
   const handleSignOut = async () => {
     try {
@@ -26,10 +27,20 @@ const SignOutButton = () => {
     })
       .then(() => {
         // First sign out from django, then from firebase
+        setAlert({
+          showSnack: true,
+          snackColor: "info",
+          snackMessage: "Signed Out",
+        });
         signOut(auth);
       })
       .catch((e) => {
         console.log(e);
+        setAlert({
+          showSnack: true,
+          snackColor: "error",
+          snackMessage: "Unable to sign out.",
+        });
       });
   };
 

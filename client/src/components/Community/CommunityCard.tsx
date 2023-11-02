@@ -11,6 +11,7 @@ import { useContext } from "react";
 import { useRecoilState } from "recoil";
 import {
   activeCommunityAtom,
+  onScreenAlertAtom,
   showDeleteCommunityAtom,
   showUpdateCommunityAtom,
   updateCommunityListAtom,
@@ -31,7 +32,7 @@ const CommunityCard = ({ community }: CommunityCardProps) => {
   const user = useContext(Context);
   const uid = user.user.uid;
   const token = user.user.accessToken;
-
+  const [alert, setAlert] = useRecoilState(onScreenAlertAtom);
   const [showDeleteCommunity, setShowDeleteCommunity] = useRecoilState(
     showDeleteCommunityAtom
   );
@@ -57,8 +58,7 @@ const CommunityCard = ({ community }: CommunityCardProps) => {
     if (members.includes(uid)) {
       joined = true;
     }
-    console.log(members, uid);
-    console.log(joined);
+
     return joined;
   };
 
@@ -70,7 +70,7 @@ const CommunityCard = ({ community }: CommunityCardProps) => {
     return memberIdentifiers;
   };
   const handleJoinClick = async (community: Community) => {
-    axios
+    await axios
       .post(
         "http://127.0.0.1:8000/communities/join/",
         {
@@ -87,11 +87,21 @@ const CommunityCard = ({ community }: CommunityCardProps) => {
         (response) => {
           console.log("joined: ", response);
           setUpdateCommunityList(!updateCommunityList);
+          setAlert({
+            showSnack: true,
+            snackColor: "success",
+            snackMessage: "You have joined the community!",
+          });
 
           //Navigate to the community page to give the list a cance to update
         },
         (error) => {
           console.log(error);
+          setAlert({
+            showSnack: true,
+            snackColor: "error",
+            snackMessage: "Unable to join community.",
+          });
         }
       );
   };
@@ -114,10 +124,20 @@ const CommunityCard = ({ community }: CommunityCardProps) => {
         (response) => {
           console.log("left: ", response);
           setUpdateCommunityList(!updateCommunityList);
+          setAlert({
+            showSnack: true,
+            snackColor: "info",
+            snackMessage: "You have left the community",
+          });
           //Navigate to the community page to give the list a cance to update
         },
         (error) => {
           console.log(error);
+          setAlert({
+            showSnack: true,
+            snackColor: "error",
+            snackMessage: "Unable to leave community",
+          });
         }
       );
   };
@@ -200,7 +220,7 @@ const CommunityCard = ({ community }: CommunityCardProps) => {
         </Card>
       </Link>
       <DeleteCommunityModal community={activeCommunity} />
-      <DeleteCommunityConfirmation />
+
       <UpdateCommunityForm community={activeCommunity} />
     </Container>
   );

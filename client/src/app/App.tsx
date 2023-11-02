@@ -1,6 +1,8 @@
 import React, { Suspense, lazy, useContext } from "react";
 import { Context } from "../components/auth/AuthContextProvider";
 import { BrowserRouter } from "react-router-dom";
+import OnScreenAlert from "../components/layout/OnScreenAlert";
+
 function App() {
   const user = useContext(Context);
 
@@ -9,12 +11,14 @@ function App() {
 
   return (
     <BrowserRouter>
-      <Suspense fallback={<div>Loading...</div>}>
-        {user.user ? (
-          <AuthenticatedApp></AuthenticatedApp>
-        ) : (
-          <UnauthenticatedApp></UnauthenticatedApp>
-        )}
+      <Suspense
+        fallback={
+          <div>
+            <OnScreenAlert />
+          </div>
+        }
+      >
+        {user.user ? <AuthenticatedApp /> : <UnauthenticatedApp />}
       </Suspense>
     </BrowserRouter>
   );

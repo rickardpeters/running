@@ -1,6 +1,7 @@
 import { createContext, useState, useEffect, ReactNode } from "react";
 import { onAuthStateChanged, User as FirebaseUser } from "firebase/auth";
 import { auth } from "../../firebase";
+import OnScreenAlert from "../layout/OnScreenAlert";
 
 interface LayoutProps {
   children: ReactNode;
@@ -34,7 +35,14 @@ const AuthContext = ({ children }: LayoutProps) => {
 
   return (
     <Context.Provider value={values}>
-      {loading ? <>loading...</> : children}
+      {loading ? (
+        <>
+          <OnScreenAlert />
+          loading...
+        </>
+      ) : (
+        children
+      )}
     </Context.Provider>
   );
 };

@@ -5,8 +5,12 @@ import {
   DialogContent,
   DialogActions,
   Button,
+  Snackbar,
+  Alert,
+  Collapse,
 } from "@mui/material";
 import {
+  onScreenAlertAtom,
   showCreateCommunityAtom,
   updateCommunityListAtom,
 } from "../../recoil/atoms";
@@ -15,6 +19,7 @@ import CreateCommunityForm from "./CreateCommunityForm";
 import { getUserToken } from "../../utils";
 import { auth } from "../../firebase";
 import axios from "axios";
+import OnScreenAlert from "../layout/OnScreenAlert";
 
 const CreateCommunityModal = () => {
   const [showCreateCommunity, setShowCreateCommunity] = useRecoilState(
@@ -25,6 +30,8 @@ const CreateCommunityModal = () => {
   );
   const [communityName, setCommunityName] = useState("");
   const [description, setDescription] = useState("");
+
+  const [alert, setAlert] = useRecoilState(onScreenAlertAtom);
 
   const handleCloseModal = () => {
     setShowCreateCommunity(false);
@@ -55,9 +62,20 @@ const CreateCommunityModal = () => {
       setUpdateCommunityList(!updateCommunityList);
       setCommunityName("");
       setDescription("");
-      handleCloseModal();
+
+      setAlert({
+        showSnack: true,
+        snackColor: "success",
+        snackMessage: "Community Created",
+      });
     } catch (error) {
       console.log(error);
+      setAlert({
+        showSnack: true,
+        snackColor: "error",
+        snackMessage:
+          "There was an error creating the community, please try again!",
+      });
     }
   };
 
@@ -75,7 +93,12 @@ const CreateCommunityModal = () => {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleCloseModal}>Cancel</Button>
-          <Button onClick={handleSubmit} variant="contained" color="primary">
+          <Button
+            onClick={handleSubmit}
+            variant="contained"
+            color="primary"
+            type="submit"
+          >
             Create Community
           </Button>
         </DialogActions>

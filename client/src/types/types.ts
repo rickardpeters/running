@@ -17,3 +17,9 @@ export interface Challenge {
   goal: number;
   community_id: number;
 }
+
+export interface OnScreenAlertProps {
+  showSnack:boolean,
+snackColor:"error"| "success"|"info",
+snackMessage: string,
+}

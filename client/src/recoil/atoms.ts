@@ -1,5 +1,5 @@
-import { atom } from "recoil";
-import { Challenge, Community } from "../types/types";
+import { RecoilState, atom } from "recoil";
+import { Challenge, Community, OnScreenAlertProps } from "../types/types";
 
 export const emailAtom = atom({
   key: "emailAtom",
@@ -114,4 +114,12 @@ export const communitiesAtom = atom({
 export const authTokenAtom = atom({
   key: "authTokenAtom",
   default: "",
+});
+
+export const onScreenAlertAtom = atom<OnScreenAlertProps>({
+  key: "onScreenAlertAtom",
+  default: {showSnack: false,
+  snackColor: 'success',
+  snackMessage: "",
+  }
 });

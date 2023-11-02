@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import {
   Dialog,
   DialogTitle,
@@ -7,6 +7,7 @@ import {
   Button,
 } from "@mui/material";
 import {
+  onScreenAlertAtom,
   showCreateChallengeAtom,
   updateChallengeListAtom,
 } from "../../recoil/atoms";
@@ -15,11 +16,15 @@ import CreateChallengeForm from "./CreateChallengeForm";
 import { getUserToken } from "../../utils";
 import { auth } from "../../firebase";
 import axios from "axios";
+import { Context } from "../auth/AuthContextProvider";
 
 const CreateChallengeModal = () => {
+  const user = useContext(Context);
+  const uid = user.user.uid;
   const [showCreateChallenge, setShowCreateChallenge] = useRecoilState(
     showCreateChallengeAtom
   );
+  const [alert, setAlert] = useRecoilState(onScreenAlertAtom);
   const [challengeName, setChallengeName] = useState("");
   const [goal, setGoal] = useState("");
   const [communityId, setCommunityId] = useState("");
@@ -69,14 +74,24 @@ const CreateChallengeModal = () => {
 
     try {
       const response = await axios.post(
-        "http://127.0.0.1:8000/challenges/",
+        `http://127.0.0.1:8000/challenges/${uid}/`,
         newChallenge,
         config
       );
       console.log("challenge created:", response);
+      setAlert({
+        showSnack: true,
+        snackColor: "success",
+        snackMessage: "Challenge created!",
+      });
       handleCloseModal();
     } catch (error) {
       console.log(error);
+      setAlert({
+        showSnack: true,
+        snackColor: "error",
+        snackMessage: "Unable to create Challenge",
+      });
     }
   };
 
