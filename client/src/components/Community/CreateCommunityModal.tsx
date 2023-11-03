@@ -39,6 +39,7 @@ const CreateCommunityModal = () => {
     try {
       const response = await axios.post("http://127.0.0.1:8000/communities/", newCommunity);
       console.warn(response.data);
+      setShowCreateCommunity(false);
       setUpdateCommunityList(!updateCommunityList);
       setCommunityName("");
       setDescription("");
@@ -61,23 +62,22 @@ const CreateCommunityModal = () => {
   return (
     <Dialog open={showCreateCommunity} onClose={handleCloseModal}>
       <DialogTitle>Create Community</DialogTitle>
-      <form onSubmit={handleSubmit}>
-        <DialogContent>
-          <CreateCommunityForm
-            name={communityName}
-            description={description}
-            setName={setCommunityName}
-            setDescription={setDescription}></CreateCommunityForm>
-        </DialogContent>
-        <DialogActions>
-          <button className="btn rounded-md" onClick={handleCloseModal}>
-            Cancel
-          </button>
-          <button className="btn btn-info rounded-md" onClick={handleSubmit} type="submit">
-            Create Community
-          </button>
-        </DialogActions>
-      </form>
+
+      <DialogContent>
+        <CreateCommunityForm
+          name={communityName}
+          description={description}
+          setName={setCommunityName}
+          setDescription={setDescription}></CreateCommunityForm>
+      </DialogContent>
+      <DialogActions>
+        <button className="btn rounded-md" onClick={handleCloseModal}>
+          Cancel
+        </button>
+        <button className="btn btn-info rounded-md" onClick={handleSubmit} type="submit">
+          Create Community
+        </button>
+      </DialogActions>
     </Dialog>
   );
 };

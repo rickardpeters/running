@@ -118,8 +118,10 @@ export const authTokenAtom = atom({
 
 export const onScreenAlertAtom = atom<OnScreenAlertProps>({
   key: "onScreenAlertAtom",
-  default: {showSnack: false,
-  snackColor: 'success',
-  snackMessage: "",
-  }
+  default: { showSnack: false, snackColor: "success", snackMessage: "" },
+});
+
+export const joinedCommunitiesAtom = atom({
+  key: "joinedCommunitiesAtom",
+  default: [] as Community[],
 });

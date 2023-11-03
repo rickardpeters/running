@@ -61,25 +61,23 @@ const CreateChallengeModal = () => {
   return (
     <Dialog open={showCreateChallenge} onClose={handleCloseModal}>
       <DialogTitle>Create Challenge</DialogTitle>
-      <form onSubmit={handleSubmit}>
-        <DialogContent>
-          <CreateChallengeForm
-            name={challengeName}
-            goal={goal}
-            communityId={communityId}
-            setName={setChallengeName}
-            setGoal={setGoal}
-            setCommunityId={setCommunityId}></CreateChallengeForm>
-        </DialogContent>
-        <DialogActions>
-          <button className="btn rounded-md" onClick={handleCloseModal}>
-            Cancel
-          </button>
-          <button className="btn btn-info rounded-md" onClick={handleSubmit}>
-            Create Challenge
-          </button>
-        </DialogActions>
-      </form>
+      <DialogContent>
+        <CreateChallengeForm
+          name={challengeName}
+          goal={goal}
+          communityId={communityId}
+          setName={setChallengeName}
+          setGoal={setGoal}
+          setCommunityId={setCommunityId}></CreateChallengeForm>
+      </DialogContent>
+      <DialogActions>
+        <button className="btn rounded-md" onClick={handleCloseModal}>
+          Cancel
+        </button>
+        <button className="btn btn-info rounded-md" onClick={handleSubmit}>
+          Create Challenge
+        </button>
+      </DialogActions>
     </Dialog>
   );
 };
