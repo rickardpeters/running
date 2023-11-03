@@ -3,11 +3,11 @@ import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
 import { Context } from "../auth/AuthContextProvider";
 import CommunityCard from "../Community/CommunityCard";
-import { updateCommunityListAtom } from "../../recoil/atoms";
-import { useRecoilValue } from "recoil";
+import { joinedCommunitiesAtom, updateCommunityListAtom } from "../../recoil/atoms";
+import { useRecoilState, useRecoilValue } from "recoil";
 
 const JoinedCommunities = () => {
-  const [communities, setCommunities] = useState([]);
+  const [joinedCommunities, setJoinedCommunities] = useRecoilState(joinedCommunitiesAtom);
   const updateCommunityList = useRecoilValue(updateCommunityListAtom);
   const user = useContext(Context);
   const uid = user.user.uid;
@@ -29,7 +29,7 @@ const JoinedCommunities = () => {
         },
       });
       console.warn(response.data);
-      setCommunities(response.data);
+      setJoinedCommunities(response.data);
     } catch (error) {
       console.error(error);
     }
@@ -40,8 +40,8 @@ const JoinedCommunities = () => {
       <div className="card-content justify-center m-4">
         <div className="card-title text-2xl justify-center m-4">Joined Communities</div>
 
-        <div className="h-[100vh] grid-flow-col overflow-y-auto overflow-x-visible justify-center">
-          {communities.map((community, index) => (
+        <div className="h-[100vh]  grid-flow-col overflow-y-auto overflow-x-visible justify-center">
+          {joinedCommunities.map((community, index) => (
             <CommunityCard community={community} key={index} profileList={false}></CommunityCard>
           ))}
         </div>

@@ -28,7 +28,6 @@ const DeleteCommunityModal: React.FC<DeleteCommunityModalProps> = ({ community }
 
     try {
       const res = await axios.delete(`http://127.0.0.1:8000/communities/${community.id}/`, {});
-      console.warn(res.data);
       setAlert({
         showSnack: true,
         snackColor: "info",
@@ -46,7 +45,7 @@ const DeleteCommunityModal: React.FC<DeleteCommunityModalProps> = ({ community }
   };
 
   return (
-    <Dialog open={showDeleteCommunity} onClose={() => setShowDeleteCommunity(false)}>
+    <Dialog hideBackdrop open={showDeleteCommunity} onClose={() => setShowDeleteCommunity(false)}>
       <DialogTitle>Confirm deletion</DialogTitle>
       <DialogContent>Are you sure you want to delete {community && community.community_name}?</DialogContent>
       <DialogActions sx={{ justifyContent: "center" }}>

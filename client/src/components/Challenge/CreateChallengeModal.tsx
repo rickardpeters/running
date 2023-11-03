@@ -1,19 +1,8 @@
 import React, { useContext, useState } from "react";
-import {
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-} from "@mui/material";
-import {
-  onScreenAlertAtom,
-  showCreateChallengeAtom,
-  updateChallengeListAtom,
-} from "../../recoil/atoms";
+import { Dialog, DialogTitle, DialogContent, DialogActions } from "@mui/material";
+import { onScreenAlertAtom, showCreateChallengeAtom, updateChallengeListAtom } from "../../recoil/atoms";
 import { useRecoilState } from "recoil";
 import CreateChallengeForm from "./CreateChallengeForm";
-import { getUserToken } from "../../utils";
-import { auth } from "../../firebase";
 import axios from "axios";
 import { Context } from "../auth/AuthContextProvider";
 
@@ -21,16 +10,12 @@ const CreateChallengeModal = () => {
   const user = useContext(Context);
   const uid = user.user.uid;
   const token = user.user.token;
-  const [showCreateChallenge, setShowCreateChallenge] = useRecoilState(
-    showCreateChallengeAtom
-  );
+  const [showCreateChallenge, setShowCreateChallenge] = useRecoilState(showCreateChallengeAtom);
   const [alert, setAlert] = useRecoilState(onScreenAlertAtom);
   const [challengeName, setChallengeName] = useState("");
   const [goal, setGoal] = useState("");
   const [communityId, setCommunityId] = useState("");
-  const [updateChallengeList, setUpdateChallengeList] = useRecoilState(
-    updateChallengeListAtom
-  );
+  const [updateChallengeList, setUpdateChallengeList] = useRecoilState(updateChallengeListAtom);
 
   const handleCloseModal = () => {
     setShowCreateChallenge(false);
@@ -51,11 +36,7 @@ const CreateChallengeModal = () => {
     };
 
     try {
-      const response = await axios.post(
-        `http://127.0.0.1:8000/challenges/${uid}/`,
-        newChallenge,
-        config
-      );
+      const response = await axios.post(`http://127.0.0.1:8000/challenges/${uid}/`, newChallenge, config);
       console.log("challenge created:", response);
       setAlert({
         showSnack: true,
@@ -77,26 +58,23 @@ const CreateChallengeModal = () => {
   return (
     <Dialog open={showCreateChallenge} onClose={handleCloseModal}>
       <DialogTitle>Create Challenge</DialogTitle>
-      <form onSubmit={handleSubmit}>
-        <DialogContent>
-          <CreateChallengeForm
-            name={challengeName}
-            goal={goal}
-            communityId={communityId}
-            setName={setChallengeName}
-            setGoal={setGoal}
-            setCommunityId={setCommunityId}
-          ></CreateChallengeForm>
-        </DialogContent>
-        <DialogActions>
-          <button className="btn rounded-md" onClick={handleCloseModal}>
-            Cancel
-          </button>
-          <button className="btn btn-info rounded-md" onClick={handleSubmit}>
-            Create Challenge
-          </button>
-        </DialogActions>
-      </form>
+      <DialogContent>
+        <CreateChallengeForm
+          name={challengeName}
+          goal={goal}
+          communityId={communityId}
+          setName={setChallengeName}
+          setGoal={setGoal}
+          setCommunityId={setCommunityId}></CreateChallengeForm>
+      </DialogContent>
+      <DialogActions>
+        <button className="btn rounded-md" onClick={handleCloseModal}>
+          Cancel
+        </button>
+        <button className="btn btn-info rounded-md" onClick={handleSubmit}>
+          Create Challenge
+        </button>
+      </DialogActions>
     </Dialog>
   );
 };

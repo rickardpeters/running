@@ -1,4 +1,3 @@
-import { Typography, Card, CardContent, CardActions, Button, Container } from "@mui/material";
 import { Community } from "../../types/types";
 import { useContext } from "react";
 import { useRecoilState } from "recoil";
@@ -7,14 +6,12 @@ import {
   onScreenAlertAtom,
   showDeleteCommunityAtom,
   showUpdateCommunityAtom,
+  updateChallengeListAtom,
   updateCommunityListAtom,
 } from "../../recoil/atoms";
-import "./communityStyle.css";
-import { Link } from "react-router-dom";
 import axios from "axios";
 import { Context } from "../auth/AuthContextProvider";
 import DeleteCommunityModal from "./DeleteCommunityModal";
-import DeleteCommunityConfirmation from "./DeleteCommunityConfirmation";
 import UpdateCommunityForm from "./UpdateCommunityForm";
 interface CommunityCardProps {
   community: Community;
@@ -31,11 +28,9 @@ const CommunityCard = ({ community }: CommunityCardProps) => {
   const [activeCommunity, setActiveCommunity] = useRecoilState(activeCommunityAtom);
 
   const [showUpdateCommunity, setShowUpdateCommunity] = useRecoilState(showUpdateCommunityAtom);
-  const handleDeleteClick = (community: Community) => {
-    setActiveCommunity(community);
-    setShowDeleteCommunity(true);
-  };
+
   const [updateCommunityList, setUpdateCommunityList] = useRecoilState(updateCommunityListAtom);
+  const [updateChallengeList, setUpdateChallengeList] = useRecoilState(updateChallengeListAtom);
 
   const joined = () => {
     var joined = false;
@@ -70,8 +65,8 @@ const CommunityCard = ({ community }: CommunityCardProps) => {
       )
       .then(
         (response) => {
-          console.log("joined: ", response);
           setUpdateCommunityList(!updateCommunityList);
+          setUpdateChallengeList(!updateChallengeList);
           setAlert({
             showSnack: true,
             snackColor: "success",
@@ -109,8 +104,8 @@ const CommunityCard = ({ community }: CommunityCardProps) => {
       )
       .then(
         (response) => {
-          console.log("left: ", response);
           setUpdateCommunityList(!updateCommunityList);
+          setUpdateChallengeList(!updateChallengeList);
           setAlert({
             showSnack: true,
             snackColor: "info",
@@ -129,9 +124,14 @@ const CommunityCard = ({ community }: CommunityCardProps) => {
       );
   };
   const handleUpdateClick = (community: Community) => {
-    console.log(activeCommunity);
     setActiveCommunity(community);
     setShowUpdateCommunity(true);
+    console.log("hej");
+  };
+
+  const handleDeleteClick = (community: Community) => {
+    setActiveCommunity(community);
+    setShowDeleteCommunity(true);
   };
 
   return (
