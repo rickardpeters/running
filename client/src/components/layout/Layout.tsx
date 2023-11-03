@@ -11,7 +11,6 @@ interface LayoutProps {
 const Layout = (props: LayoutProps) => {
   return (
     <div>
-      <OnScreenAlert />
       <Header auth={props.auth} />
       {props.children}
     </div>

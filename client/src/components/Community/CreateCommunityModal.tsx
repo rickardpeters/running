@@ -1,16 +1,38 @@
-import React, { FC, useState } from "react";
-import { Dialog, DialogTitle, DialogContent, DialogActions, Button, Snackbar, Alert, Collapse } from "@mui/material";
-import { onScreenAlertAtom, showCreateCommunityAtom, updateCommunityListAtom } from "../../recoil/atoms";
+import React, { FC, useContext, useState } from "react";
+import {
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Button,
+  Snackbar,
+  Alert,
+  Collapse,
+} from "@mui/material";
+import {
+  onScreenAlertAtom,
+  showCreateCommunityAtom,
+  updateCommunityListAtom,
+} from "../../recoil/atoms";
 import { useRecoilState } from "recoil";
 import CreateCommunityForm from "./CreateCommunityForm";
 import { getUserToken } from "../../utils";
 import { auth } from "../../firebase";
 import axios from "axios";
 import OnScreenAlert from "../layout/OnScreenAlert";
+import AuthContext, { Context } from "../auth/AuthContextProvider";
 
 const CreateCommunityModal = () => {
-  const [showCreateCommunity, setShowCreateCommunity] = useRecoilState(showCreateCommunityAtom);
-  const [updateCommunityList, setUpdateCommunityList] = useRecoilState(updateCommunityListAtom);
+  const user = useContext(Context);
+
+  const token = user.user.token;
+
+  const [showCreateCommunity, setShowCreateCommunity] = useRecoilState(
+    showCreateCommunityAtom
+  );
+  const [updateCommunityList, setUpdateCommunityList] = useRecoilState(
+    updateCommunityListAtom
+  );
   const [communityName, setCommunityName] = useState("");
   const [description, setDescription] = useState("");
 
@@ -20,9 +42,7 @@ const CreateCommunityModal = () => {
     setShowCreateCommunity(false);
   };
 
-  const handleSubmit = async () => {
-    const token = await getUserToken(auth);
-
+  async function handleSubmit() {
     console.log(description, communityName);
     const newCommunity = {
       community_name: communityName,
@@ -37,7 +57,11 @@ const CreateCommunityModal = () => {
     };
 
     try {
-      const response = await axios.post("http://127.0.0.1:8000/communities/", newCommunity);
+      const response = await axios.post(
+        "http://127.0.0.1:8000/communities/",
+        newCommunity,
+        config
+      );
       console.warn(response.data);
       setUpdateCommunityList(!updateCommunityList);
       setCommunityName("");
@@ -53,10 +77,11 @@ const CreateCommunityModal = () => {
       setAlert({
         showSnack: true,
         snackColor: "error",
-        snackMessage: "There was an error creating the community, please try again!",
+        snackMessage:
+          "There was an error creating the community, please try again!",
       });
     }
-  };
+  }
 
   return (
     <Dialog open={showCreateCommunity} onClose={handleCloseModal}>
@@ -67,13 +92,18 @@ const CreateCommunityModal = () => {
             name={communityName}
             description={description}
             setName={setCommunityName}
-            setDescription={setDescription}></CreateCommunityForm>
+            setDescription={setDescription}
+          ></CreateCommunityForm>
         </DialogContent>
         <DialogActions>
           <button className="btn rounded-md" onClick={handleCloseModal}>
             Cancel
           </button>
-          <button className="btn btn-info rounded-md" onClick={handleSubmit} type="submit">
+          <button
+            className="btn btn-info rounded-md"
+            onClick={() => handleSubmit()}
+            type="submit"
+          >
             Create Community
           </button>
         </DialogActions>
