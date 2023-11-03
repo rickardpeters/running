@@ -1,5 +1,7 @@
-import { TextField } from "@mui/material";
+import { InputLabel, MenuItem, Select, TextField } from "@mui/material";
 import React, { Dispatch, SetStateAction } from "react";
+import { joinedCommunitiesAtom } from "../../recoil/atoms";
+import { useRecoilState } from "recoil";
 
 interface createChallengeFormProps {
   name: string;
@@ -11,21 +13,19 @@ interface createChallengeFormProps {
 }
 
 const CreateChallengeForm = (props: createChallengeFormProps) => {
-  const handleChallengeNameChange = (event: {
-    target: { value: React.SetStateAction<string> };
-  }) => {
+  //props.setCommunityId(""); // Det här är bara för att få till något typ av "placeholder-beteende" i select nedan..
+
+  const [joinedCommunities, setJoinedCommunities] = useRecoilState(joinedCommunitiesAtom);
+
+  const handleChallengeNameChange = (event: { target: { value: React.SetStateAction<string> } }) => {
     props.setName(event.target.value);
   };
 
-  const handleGoalChange = (event: {
-    target: { value: React.SetStateAction<string> };
-  }) => {
+  const handleGoalChange = (event: { target: { value: React.SetStateAction<string> } }) => {
     props.setGoal(event.target.value);
   };
 
-  const handleCommunityIdChange = (event: {
-    target: { value: React.SetStateAction<string> };
-  }) => {
+  const handleCommunityIdChange = (event: { target: { value: React.SetStateAction<string> } }) => {
     props.setCommunityId(event.target.value);
   };
 
@@ -38,20 +38,22 @@ const CreateChallengeForm = (props: createChallengeFormProps) => {
         fullWidth
         margin="normal"
       />
-      <TextField
-        label="Goal (km)"
-        value={props.goal}
-        onChange={handleGoalChange}
-        fullWidth
-        margin="normal"
-      />
-      <TextField
-        label="Community ID"
+      <TextField label="Goal (km)" value={props.goal} onChange={handleGoalChange} fullWidth margin="normal" />
+      <Select
+        labelId="select-community"
         value={props.communityId}
         onChange={handleCommunityIdChange}
-        fullWidth
-        margin="normal"
-      />
+        displayEmpty
+        fullWidth>
+        <MenuItem value="" disabled>
+          Select Community
+        </MenuItem>
+        {joinedCommunities.map((community) => (
+          <MenuItem key={community.id} value={community.id}>
+            {community.community_name}
+          </MenuItem>
+        ))}
+      </Select>
     </>
   );
 };
