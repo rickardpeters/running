@@ -2,7 +2,6 @@ import { useRecoilState } from "recoil";
 import { challengesAtom, runTotalsAtom, showCreateChallengeAtom, updateChallengeListAtom } from "../../recoil/atoms";
 import axios from "axios";
 import { useContext, useEffect } from "react";
-import { Container, Card, CardContent, Typography, CardActionArea, Grid, LinearProgress } from "@mui/material";
 import CreateChallengeModal from "./CreateChallengeModal";
 import { Context } from "../auth/AuthContextProvider";
 
@@ -45,32 +44,33 @@ const ChallengeList = () => {
         <div className="card-body">
           <div className="stat-value text-2xl my-2 text-center text-accent-content">Challenges</div>
           <div>
-            {challenges
-              .slice()
-              .sort((a, b) => {
-                const differenceA = a.goal - runTotals.distance / 1000;
-                const differenceB = b.goal - runTotals.distance / 1000;
-                return differenceB - differenceA;
-              })
-              .map((challenge) => (
-                <div className="card shadow-md w-128 my-2 bg-white">
-                  <div className="card-body">
-                    <div className="card-title">{challenge.name}</div>
+            {Array.isArray(challenges) &&
+              challenges
+                .slice()
+                .sort((a, b) => {
+                  const differenceA = a.goal - runTotals.distance / 1000;
+                  const differenceB = b.goal - runTotals.distance / 1000;
+                  return differenceB - differenceA;
+                })
+                .map((challenge) => (
+                  <div className="card shadow-md w-128 my-2 bg-white">
+                    <div className="card-body">
+                      <div className="card-title">{challenge.name}</div>
 
-                    <br />
-                    {runTotals.distance / 1000 >= challenge.goal
-                      ? "Challenge complete!"
-                      : `${(runTotals.distance / 1000).toFixed(0)} of ${challenge.goal} km`}
-                    <br />
+                      <br />
+                      {runTotals.distance / 1000 >= challenge.goal
+                        ? "Challenge complete!"
+                        : `${(runTotals.distance / 1000).toFixed(0)} of ${challenge.goal} km`}
+                      <br />
 
-                    <progress
-                      className="progress progress-info w-64 transition ease-in-out"
-                      value={runTotals.distance / 1000}
-                      max={challenge.goal}
-                    />
+                      <progress
+                        className="progress progress-info w-64 transition ease-in-out"
+                        value={runTotals.distance / 1000}
+                        max={challenge.goal}
+                      />
+                    </div>
                   </div>
-                </div>
-              ))}
+                ))}
           </div>
         </div>
         <button className="btn btn-secondary rounded-sm mb-4" onClick={() => handleCreateChallenge()}>

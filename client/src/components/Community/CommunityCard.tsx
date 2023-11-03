@@ -136,11 +136,13 @@ const CommunityCard = ({ community }: CommunityCardProps) => {
 
   return (
     <div className="m-2">
-      <div className="card w-96 bg-white shadow-md text-primary-content rounded-md hover:scale-[102%] transition ease-in-out max-w-[350px] h-[250px]">
-        <div className="card-body">
+      <div className="card w-92 bg-white shadow-md text-primary-content rounded-md hover:scale-[102%] transition ease-in-out max-w-[350px] h-[250px]">
+        <div className="card-body w-full p-4 max-h-[178px]">
           <h2 className="card-title text-2xl">{community.community_name}</h2>
           <br />
-          <p>{community.description === "" ? <i>No description</i> : community.description}</p>
+          <div className=" overflow-auto break-words">
+            {community.description === "" ? <i>No description</i> : community.description}
+          </div>
         </div>
         <div className="card-actions justify-center p-3">
           {joined() ? (

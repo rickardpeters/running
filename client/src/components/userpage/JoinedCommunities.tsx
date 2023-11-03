@@ -15,6 +15,10 @@ const JoinedCommunities = () => {
 
   useEffect(() => {
     getComm();
+  }, []);
+
+  useEffect(() => {
+    getComm();
   }, [updateCommunityList]);
 
   const getComm = async () => {
@@ -36,7 +40,7 @@ const JoinedCommunities = () => {
       <div className="card-content justify-center m-4">
         <div className="card-title text-2xl justify-center m-4">Joined Communities</div>
 
-        <div className="h-[100vh] grid-flow-col overflow-y-auto justify-center">
+        <div className="h-[100vh] grid-flow-col overflow-y-auto overflow-x-visible justify-center">
           {communities.map((community, index) => (
             <CommunityCard community={community} key={index} profileList={false}></CommunityCard>
           ))}
