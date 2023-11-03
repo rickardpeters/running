@@ -11,7 +11,12 @@ import { Grid, TextField } from "@mui/material";
 import LoginModal from "./LoginModal";
 import PasswordField from "./PasswordField";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { authTokenAtom, passwordStrengthTestPassed, passwordTestPassed } from "../../recoil/atoms";
+import {
+  authTokenAtom,
+  onScreenAlertAtom,
+  passwordStrengthTestPassed,
+  passwordTestPassed,
+} from "../../recoil/atoms";
 
 import { createUserWithEmailAndPassword, signOut } from "firebase/auth";
 import { auth } from "../../firebase";
@@ -26,6 +31,7 @@ interface SignUpModalProps {
 }
 
 const SignUpModal = (props: SignUpModalProps) => {
+  const [alert, setAlert] = useRecoilState(onScreenAlertAtom);
   const [open, setOpen] = useState(false);
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -52,28 +58,15 @@ const SignUpModal = (props: SignUpModalProps) => {
     createUserWithEmailAndPassword(auth, email, password)
       .then((user) => {
         console.log(user);
-        signInToDjango(user);
       })
       .catch((error) => {
         console.log(error);
+        setAlert({
+          showSnack: true,
+          snackColor: "error",
+          snackMessage: "There was an error creating your account",
+        });
       });
-  };
-
-  const signInToDjango = async (user: any) => {
-    const token = user.user.accessToken;
-    setAuthToken(token);
-
-    await fetch("http://127.0.0.1:8000/users/login/", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }).catch((e) => {
-      //If the django auth fails, the user has to be logged out from firebase
-      // The order has to be firebase ->django since we need the auth token
-      console.log(e);
-      signOut(auth);
-    });
   };
 
   const handleClose = () => {
@@ -83,12 +76,17 @@ const SignUpModal = (props: SignUpModalProps) => {
   return (
     <>
       {props.signedUp ? (
-        <LoginModal show={props.signedUp} setShow={props.setSignedUp}></LoginModal>
+        <LoginModal
+          show={props.signedUp}
+          setShow={props.setSignedUp}
+        ></LoginModal>
       ) : (
         <>
           <DialogTitle>Sign Up</DialogTitle>
           <DialogContent>
-            <DialogContentText sx={{ mb: 2 }}>Please enter your information below to Join the club!</DialogContentText>
+            <DialogContentText sx={{ mb: 2 }}>
+              Please enter your information below to Join the club!
+            </DialogContentText>
             <Grid container spacing={2}>
               <Grid item xs={6}>
                 <TextField
@@ -122,19 +120,22 @@ const SignUpModal = (props: SignUpModalProps) => {
             <Grid container spacing={2}>
               <Grid item xs={6}>
                 <TextField
-                  autoFocus
-                  margin="dense"
                   id="name"
-                  label="Email Adress"
+                  label="jfdo"
                   type="email"
                   fullWidth
                   variant="outlined"
-                  onChange={() => handleEmail}
+                  onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                    setEmail(event.target.value);
+                  }}
                 />
               </Grid>
             </Grid>
             <Grid container spacing={2}>
-              <PasswordField password={password} setPassword={setPassword}></PasswordField>
+              <PasswordField
+                password={password}
+                setPassword={setPassword}
+              ></PasswordField>
             </Grid>
           </DialogContent>
           <DialogActions>

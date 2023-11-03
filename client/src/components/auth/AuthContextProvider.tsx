@@ -27,8 +27,10 @@ const AuthContext = ({ children }: LayoutProps) => {
           Authorization: `Bearer ${token}`,
         },
       });
+      if (response.ok) {
+        setUser(user);
+      }
       console.log(response);
-      setUser(user);
     } catch (error) {
       console.error(error);
       setUser(null);
