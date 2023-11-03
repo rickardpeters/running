@@ -1,14 +1,18 @@
-import React, { FC, useState } from "react";
-import { Dialog, DialogTitle, DialogContent, DialogActions, Button, Snackbar, Alert, Collapse } from "@mui/material";
+import React, { useContext, useState } from "react";
+import { Dialog, DialogTitle, DialogContent, DialogActions } from "@mui/material";
 import { onScreenAlertAtom, showCreateCommunityAtom, updateCommunityListAtom } from "../../recoil/atoms";
 import { useRecoilState } from "recoil";
 import CreateCommunityForm from "./CreateCommunityForm";
-import { getUserToken } from "../../utils";
-import { auth } from "../../firebase";
+
 import axios from "axios";
-import OnScreenAlert from "../layout/OnScreenAlert";
+
+import { Context } from "../auth/AuthContextProvider";
 
 const CreateCommunityModal = () => {
+  const user = useContext(Context);
+
+  const token = user.user.token;
+
   const [showCreateCommunity, setShowCreateCommunity] = useRecoilState(showCreateCommunityAtom);
   const [updateCommunityList, setUpdateCommunityList] = useRecoilState(updateCommunityListAtom);
   const [communityName, setCommunityName] = useState("");
@@ -20,9 +24,7 @@ const CreateCommunityModal = () => {
     setShowCreateCommunity(false);
   };
 
-  const handleSubmit = async () => {
-    const token = await getUserToken(auth);
-
+  async function handleSubmit() {
     console.log(description, communityName);
     const newCommunity = {
       community_name: communityName,
@@ -37,7 +39,7 @@ const CreateCommunityModal = () => {
     };
 
     try {
-      const response = await axios.post("http://127.0.0.1:8000/communities/", newCommunity);
+      const response = await axios.post("http://127.0.0.1:8000/communities/", newCommunity, config);
       console.warn(response.data);
       setShowCreateCommunity(false);
       setUpdateCommunityList(!updateCommunityList);
@@ -57,7 +59,7 @@ const CreateCommunityModal = () => {
         snackMessage: "There was an error creating the community, please try again!",
       });
     }
-  };
+  }
 
   return (
     <Dialog open={showCreateCommunity} onClose={handleCloseModal}>

@@ -1,10 +1,11 @@
 import { useRecoilState, useRecoilValue } from "recoil";
 import {
   challengesAtom,
-  joinedCommunitiesAtom,
+  onScreenAlertAtom,
   runTotalsAtom,
   showCreateChallengeAtom,
   updateChallengeListAtom,
+  joinedCommunitiesAtom,
 } from "../../recoil/atoms";
 import axios from "axios";
 import { useContext, useEffect } from "react";
@@ -12,6 +13,7 @@ import CreateChallengeModal from "./CreateChallengeModal";
 import { Context } from "../auth/AuthContextProvider";
 
 const ChallengeList = () => {
+  const [alert, setAlert] = useRecoilState(onScreenAlertAtom);
   const user = useContext(Context);
   const uid = user.user.uid;
   const token = user.user.token;
@@ -31,7 +33,11 @@ const ChallengeList = () => {
 
       setChallenges(response.data);
     } catch (error) {
-      console.error(error);
+      setAlert({
+        showSnack: true,
+        snackColor: "error",
+        snackMessage: "No challenges loaded",
+      });
     }
   }
 
@@ -90,7 +96,6 @@ const ChallengeList = () => {
                 ))}
           </div>
         </div>
-
         <CreateChallengeModal />
       </div>
     </div>

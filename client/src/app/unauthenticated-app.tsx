@@ -6,7 +6,6 @@ import OnScreenAlert from "../components/layout/OnScreenAlert";
 function UnAuthenticatedApp() {
   return (
     <>
-      <OnScreenAlert />
       <Routes>
         <Route path="/" element={<LandingPage />} />
         // handle non-existing routes

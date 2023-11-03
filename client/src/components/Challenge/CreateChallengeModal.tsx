@@ -3,14 +3,13 @@ import { Dialog, DialogTitle, DialogContent, DialogActions } from "@mui/material
 import { onScreenAlertAtom, showCreateChallengeAtom, updateChallengeListAtom } from "../../recoil/atoms";
 import { useRecoilState } from "recoil";
 import CreateChallengeForm from "./CreateChallengeForm";
-import { getUserToken } from "../../utils";
-import { auth } from "../../firebase";
 import axios from "axios";
 import { Context } from "../auth/AuthContextProvider";
 
 const CreateChallengeModal = () => {
   const user = useContext(Context);
   const uid = user.user.uid;
+  const token = user.user.token;
   const [showCreateChallenge, setShowCreateChallenge] = useRecoilState(showCreateChallengeAtom);
   const [alert, setAlert] = useRecoilState(onScreenAlertAtom);
   const [challengeName, setChallengeName] = useState("");
@@ -23,8 +22,6 @@ const CreateChallengeModal = () => {
   };
 
   const handleSubmit = async () => {
-    const token = await getUserToken(auth);
-
     const newChallenge = {
       name: challengeName,
       goal: goal,

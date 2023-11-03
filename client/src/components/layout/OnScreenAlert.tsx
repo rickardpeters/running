@@ -13,7 +13,14 @@ const OnScreenAlert = () => {
         anchorOrigin={{ vertical: "top", horizontal: "center" }}
         open={snack.showSnack}
         autoHideDuration={6000}
-        onClose={() => setSnack({ showSnack: false, snackColor: "info", snackMessage: "" })}>
+        onClose={() =>
+          setSnack({
+            showSnack: false,
+            snackColor: "info",
+            snackMessage: "",
+          })
+        }
+      >
         <Alert severity={snack.snackColor}>{snack.snackMessage}</Alert>
       </Snackbar>
     </div>
