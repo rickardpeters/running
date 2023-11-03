@@ -1,16 +1,6 @@
 import React, { useContext, useState } from "react";
-import {
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  Button,
-} from "@mui/material";
-import {
-  onScreenAlertAtom,
-  showCreateChallengeAtom,
-  updateChallengeListAtom,
-} from "../../recoil/atoms";
+import { Dialog, DialogTitle, DialogContent, DialogActions } from "@mui/material";
+import { onScreenAlertAtom, showCreateChallengeAtom, updateChallengeListAtom } from "../../recoil/atoms";
 import { useRecoilState } from "recoil";
 import CreateChallengeForm from "./CreateChallengeForm";
 import { getUserToken } from "../../utils";
@@ -21,46 +11,22 @@ import { Context } from "../auth/AuthContextProvider";
 const CreateChallengeModal = () => {
   const user = useContext(Context);
   const uid = user.user.uid;
-  const [showCreateChallenge, setShowCreateChallenge] = useRecoilState(
-    showCreateChallengeAtom
-  );
+  const [showCreateChallenge, setShowCreateChallenge] = useRecoilState(showCreateChallengeAtom);
   const [alert, setAlert] = useRecoilState(onScreenAlertAtom);
   const [challengeName, setChallengeName] = useState("");
   const [goal, setGoal] = useState("");
   const [communityId, setCommunityId] = useState("");
-  const [updateChallengeList, setUpdateChallengeList] = useRecoilState(
-    updateChallengeListAtom
-  );
+  const [updateChallengeList, setUpdateChallengeList] = useRecoilState(updateChallengeListAtom);
 
   const handleCloseModal = () => {
     setShowCreateChallenge(false);
-    setUpdateChallengeList(true);
   };
-
-  function formatCurrentDate(): string {
-    const currentDate = new Date();
-    const year = currentDate.getFullYear();
-    const month = String(currentDate.getMonth() + 1).padStart(2, "0");
-    const day = String(currentDate.getDate()).padStart(2, "0");
-    const hours = String(currentDate.getHours()).padStart(2, "0");
-    const minutes = String(currentDate.getMinutes()).padStart(2, "0");
-    const seconds = String(currentDate.getSeconds()).padStart(2, "0");
-
-    const formattedDate = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
-    return formattedDate;
-  }
-
-  const formattedDateString = formatCurrentDate();
 
   const handleSubmit = async () => {
     const token = await getUserToken(auth);
-    console.log("userToken: " + token);
 
-    console.log(challengeName, goal);
     const newChallenge = {
       name: challengeName,
-      start_date: formattedDateString,
-      end_date: formattedDateString,
       goal: goal,
       community_id: communityId,
     };
@@ -73,11 +39,7 @@ const CreateChallengeModal = () => {
     };
 
     try {
-      const response = await axios.post(
-        `http://127.0.0.1:8000/challenges/${uid}/`,
-        newChallenge,
-        config
-      );
+      const response = await axios.post(`http://127.0.0.1:8000/challenges/${uid}/`, newChallenge, config);
       console.log("challenge created:", response);
       setAlert({
         showSnack: true,
@@ -85,6 +47,7 @@ const CreateChallengeModal = () => {
         snackMessage: "Challenge created!",
       });
       handleCloseModal();
+      setUpdateChallengeList(!updateChallengeList);
     } catch (error) {
       console.log(error);
       setAlert({
@@ -106,14 +69,15 @@ const CreateChallengeModal = () => {
             communityId={communityId}
             setName={setChallengeName}
             setGoal={setGoal}
-            setCommunityId={setCommunityId}
-          ></CreateChallengeForm>
+            setCommunityId={setCommunityId}></CreateChallengeForm>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleCloseModal}>Cancel</Button>
-          <Button onClick={handleSubmit} variant="contained" color="primary">
+          <button className="btn rounded-md" onClick={handleCloseModal}>
+            Cancel
+          </button>
+          <button className="btn btn-info rounded-md" onClick={handleSubmit}>
             Create Challenge
-          </Button>
+          </button>
         </DialogActions>
       </form>
     </Dialog>

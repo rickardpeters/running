@@ -57,9 +57,7 @@ const LoginModal = (props: LoginModalProps) => {
     <>
       <DialogTitle>Sign In</DialogTitle>
       <DialogContent>
-        <DialogContentText sx={{ mb: 2 }}>
-          Add your credentials to sign in to the application.
-        </DialogContentText>
+        <DialogContentText sx={{ mb: 2 }}>Add your credentials to sign in to the application.</DialogContentText>
         <Grid container spacing={2}>
           <Grid item xs={6}>
             <TextField
@@ -92,10 +90,12 @@ const LoginModal = (props: LoginModalProps) => {
         </Grid>
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleClose}>Cancel</Button>
-        <Button variant="contained" onClick={logIn}>
+        <button className="btn rounded-md" onClick={handleClose}>
+          Cancel
+        </button>
+        <button className="btn btn-info rounded-md" onClick={logIn}>
           Log In
-        </Button>
+        </button>
       </DialogActions>
     </>
   );

@@ -9,15 +9,11 @@ interface createCommunityFormProps {
 }
 
 const CreateCommunityForm = (props: createCommunityFormProps) => {
-  const handleCommunityNameChange = (event: {
-    target: { value: React.SetStateAction<string> };
-  }) => {
+  const handleCommunityNameChange = (event: { target: { value: React.SetStateAction<string> } }) => {
     props.setName(event.target.value);
   };
 
-  const handleDescriptionChange = (event: {
-    target: { value: React.SetStateAction<string> };
-  }) => {
+  const handleDescriptionChange = (event: { target: { value: React.SetStateAction<string> } }) => {
     props.setDescription(event.target.value);
   };
 

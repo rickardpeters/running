@@ -9,7 +9,6 @@ import RocketLaunchIcon from "@mui/icons-material/RocketLaunch";
 const WelcomeMessage = () => {
   const [openLogIn, setOpenLogIn] = useState(false);
   const [openSignUp, setOpenSignUp] = useState(false);
-
   const [signedUp, setSignedUp] = useState(false);
 
   const handleLogIn = () => {
@@ -19,6 +18,7 @@ const WelcomeMessage = () => {
   const handleSignUp = () => {
     setOpenSignUp(true);
   };
+
   const handleCloseSignUp = () => {
     setOpenSignUp(false);
   };
@@ -31,21 +31,18 @@ const WelcomeMessage = () => {
       className="hero min-h-screen max-h-100 w-100 absolute top-0"
       style={{
         backgroundImage: `url(${runningImage})`,
-      }}
-    >
+      }}>
       <div className="hero-overlay bg-opacity-60"></div>
       <div className="hero-content text-center text-neutral-content">
         <div className="max-w-md">
-          <h1 className="mb-5 text-5xl font-bold text-white">
-            Fellow runners,
-          </h1>
+          <h1 className="mb-5 text-5xl font-bold text-white">Fellow runners,</h1>
           <p className="mb-5 text-2xl">Let's run!</p>
-          <Button variant="contained" sx={{ m: 2 }} onClick={handleLogIn}>
+          <button className="btn btn-info rounded-md mx-2" onClick={handleLogIn}>
             Log In <LoginIcon></LoginIcon>
-          </Button>
-          <Button variant="contained" sx={{ m: 2 }} onClick={handleSignUp}>
+          </button>
+          <button className="btn btn-info rounded-md mx-2" onClick={handleSignUp}>
             Sign Up <RocketLaunchIcon></RocketLaunchIcon>
-          </Button>
+          </button>
         </div>
 
         <Dialog open={openLogIn} onClose={handleCloseLogIn}>
@@ -60,8 +57,7 @@ const WelcomeMessage = () => {
               show={openSignUp}
               setShow={setOpenSignUp}
               signedUp={signedUp}
-              setSignedUp={setSignedUp}
-            ></SignUpModal>
+              setSignedUp={setSignedUp}></SignUpModal>
           )}
         </Dialog>
       </div>

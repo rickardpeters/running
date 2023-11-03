@@ -8,15 +8,6 @@ import {
 } from "../../recoil/atoms";
 import axios, { AxiosError } from "axios";
 import { useContext, useEffect } from "react";
-import {
-  Container,
-  Card,
-  CardContent,
-  Typography,
-  CardActionArea,
-  Grid,
-  LinearProgress,
-} from "@mui/material";
 import CreateChallengeModal from "./CreateChallengeModal";
 import { Context } from "../auth/AuthContextProvider";
 
@@ -66,88 +57,53 @@ const ChallengeList = () => {
   }, [updateChallengeList]);
 
   return (
-    <Container
-      sx={{
-        width: "100%",
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        marginTop: "4rem",
-      }}
-    >
-      <Card
-        sx={{
-          width: "100%",
-          marginTop: "0.5vw",
-          justifyContent: "center",
-          placeItems: "center",
-        }}
-      >
-        <Grid>
-          <CardContent
-            sx={{
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            <div className="stat-value text-2xl my-2 text-center text-accent-content">
-              Challenges
-            </div>
-            {challenges.length != 0 ? (
-              <Typography>
-                {challenges
-                  .slice()
-                  .sort((a, b) => {
-                    const differenceA = a.goal - runTotals.distance / 1000;
-                    const differenceB = b.goal - runTotals.distance / 1000;
-                    return differenceB - differenceA;
-                  })
-                  .map((challenge) => (
-                    <Card
-                      sx={{
-                        padding: "10px",
-                        margin: "10px",
-                        justifyContent: "center",
-                        placeItems: "center",
-                        textAlign: "center",
-                      }}
-                    >
-                      <CardActionArea>
-                        <strong>{challenge.name}</strong>
+    <div className="my-20">
+      <div className="card place-items-center bg-slate-100 m-12 shadow-md">
+        <div className="card-body">
+          <div className="stat-value text-2xl my-2 text-center text-accent-content">
+            Challenges
+          </div>
+          <div>
+            {Array.isArray(challenges) &&
+              challenges
+                .slice()
+                .sort((a, b) => {
+                  const differenceA = a.goal - runTotals.distance / 1000;
+                  const differenceB = b.goal - runTotals.distance / 1000;
+                  return differenceB - differenceA;
+                })
+                .map((challenge) => (
+                  <div className="card shadow-md w-128 my-2 bg-white">
+                    <div className="card-body">
+                      <div className="card-title">{challenge.name}</div>
 
-                        <br />
-                        {runTotals.distance / 1000 >= challenge.goal
-                          ? "Challenge complete!"
-                          : `${(runTotals.distance / 1000).toFixed(0)} of ${
-                              challenge.goal
-                            } km`}
-                        <br />
+                      <br />
+                      {runTotals.distance / 1000 >= challenge.goal
+                        ? "Challenge complete!"
+                        : `${(runTotals.distance / 1000).toFixed(0)} of ${
+                            challenge.goal
+                          } km`}
+                      <br />
 
-                        <LinearProgress
-                          variant="determinate"
-                          color="primary"
-                          value={
-                            (runTotals.distance / 1000 / challenge.goal) * 100
-                          }
-                        />
-                      </CardActionArea>
-                    </Card>
-                  ))}
-              </Typography>
-            ) : (
-              <>You dont have any active challenges</>
-            )}
-          </CardContent>
-        </Grid>
+                      <progress
+                        className="progress progress-info w-64 transition ease-in-out"
+                        value={runTotals.distance / 1000}
+                        max={challenge.goal}
+                      />
+                    </div>
+                  </div>
+                ))}
+          </div>
+        </div>
+        <button
+          className="btn btn-secondary rounded-sm mb-4"
+          onClick={() => handleCreateChallenge()}
+        >
+          Create challenge
+        </button>
         <CreateChallengeModal />
-      </Card>
-      <button
-        className="btn btn-secondary rounded-sm m-[0.5vw]"
-        onClick={() => handleCreateChallenge()}
-      >
-        Create challenge
-      </button>
-    </Container>
+      </div>
+    </div>
   );
 };
 

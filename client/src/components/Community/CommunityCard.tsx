@@ -1,11 +1,4 @@
-import {
-  Typography,
-  Card,
-  CardContent,
-  CardActions,
-  Button,
-  Container,
-} from "@mui/material";
+import { Typography, Card, CardContent, CardActions, Button, Container } from "@mui/material";
 import { Community } from "../../types/types";
 import { useContext } from "react";
 import { useRecoilState } from "recoil";
@@ -33,24 +26,16 @@ const CommunityCard = ({ community }: CommunityCardProps) => {
   const uid = user.user.uid;
   const token = user.user.accessToken;
   const [alert, setAlert] = useRecoilState(onScreenAlertAtom);
-  const [showDeleteCommunity, setShowDeleteCommunity] = useRecoilState(
-    showDeleteCommunityAtom
-  );
+  const [showDeleteCommunity, setShowDeleteCommunity] = useRecoilState(showDeleteCommunityAtom);
 
-  const [activeCommunity, setActiveCommunity] =
-    useRecoilState(activeCommunityAtom);
+  const [activeCommunity, setActiveCommunity] = useRecoilState(activeCommunityAtom);
 
-  const [showUpdateCommunity, setShowUpdateCommunity] = useRecoilState(
-    showUpdateCommunityAtom
-  );
+  const [showUpdateCommunity, setShowUpdateCommunity] = useRecoilState(showUpdateCommunityAtom);
   const handleDeleteClick = (community: Community) => {
-    console.log(activeCommunity);
     setActiveCommunity(community);
     setShowDeleteCommunity(true);
   };
-  const [updateCommunityList, setUpdateCommunityList] = useRecoilState(
-    updateCommunityListAtom
-  );
+  const [updateCommunityList, setUpdateCommunityList] = useRecoilState(updateCommunityListAtom);
 
   const joined = () => {
     var joined = false;
@@ -58,7 +43,6 @@ const CommunityCard = ({ community }: CommunityCardProps) => {
     if (members.includes(uid)) {
       joined = true;
     }
-
     return joined;
   };
 
@@ -69,6 +53,7 @@ const CommunityCard = ({ community }: CommunityCardProps) => {
     }
     return memberIdentifiers;
   };
+
   const handleJoinClick = async (community: Community) => {
     await axios
       .post(
@@ -107,6 +92,8 @@ const CommunityCard = ({ community }: CommunityCardProps) => {
   };
 
   const handleLeaveClick = async (community: Community) => {
+    const token = user.user.accessToken;
+
     axios
       .post(
         "http://127.0.0.1:8000/communities/leave/",
@@ -148,81 +135,40 @@ const CommunityCard = ({ community }: CommunityCardProps) => {
   };
 
   return (
-    <Container
-      style={{
-        maxWidth: "300px",
-        minWidth: "300px",
-      }}
-    >
-      <Link to={""}>
-        <Card
-          sx={{ minWidth: 200, margin: "10px" }}
-          className="community-card"
-          onClick={() => console.log(community)}
-        >
-          <CardContent>
-            <Typography
-              sx={{ fontSize: 14 }}
-              color="text.secondary"
-              gutterBottom
-            ></Typography>
-            <Typography variant="h5" component="div">
-              {community.community_name}
-              {"      "}
-            </Typography>
-            <Typography sx={{ mb: 1.5 }} color="text.secondary"></Typography>
-            <Typography variant="body2">
-              {community.description === "" ? (
-                <i>No description</i>
-              ) : (
-                community.description
-              )}
-            </Typography>
-          </CardContent>
-          <CardActions>
-            {joined() ? (
-              <>
-                <Button
-                  variant="contained"
-                  size="small"
-                  onClick={() => handleUpdateClick(community)}
-                >
-                  Edit
-                </Button>
-                <Button
-                  variant="contained"
-                  color="error"
-                  size="small"
-                  onClick={() => handleDeleteClick(community)}
-                >
-                  Delete
-                </Button>
-                <Button
-                  variant="contained"
-                  color="success"
-                  size="small"
-                  onClick={() => handleLeaveClick(community)}
-                >
-                  Leave
-                </Button>
-              </>
-            ) : (
-              <Button
-                variant="contained"
-                color="success"
-                size="small"
-                onClick={() => handleJoinClick(community)}
-              >
-                Join
-              </Button>
-            )}
-          </CardActions>
-        </Card>
-      </Link>
+    <div className="m-2">
+      <div className="card w-92 bg-white shadow-md text-primary-content rounded-md hover:scale-[102%] transition ease-in-out max-w-[350px] h-[250px]">
+        <div className="card-body w-full p-4 max-h-[178px]">
+          <h2 className="card-title text-2xl">{community.community_name}</h2>
+          <br />
+          <div className=" overflow-auto break-words">
+            {community.description === "" ? <i>No description</i> : community.description}
+          </div>
+        </div>
+        <div className="card-actions justify-center p-3">
+          {joined() ? (
+            <>
+              <button className="btn btn-sm bg-info rounded-md" onClick={() => handleUpdateClick(community)}>
+                Edit
+              </button>
+              <button className="btn btn-sm bg-error rounded-md" onClick={() => handleDeleteClick(community)}>
+                Delete
+              </button>
+              <button className="btn btn-sm bg-success rounded-md" onClick={() => handleLeaveClick(community)}>
+                Leave
+              </button>
+            </>
+          ) : (
+            <button className="btn bg-success rounded-md" onClick={() => handleJoinClick(community)}>
+              Join
+            </button>
+          )}
+        </div>
+      </div>
+
       <DeleteCommunityModal community={activeCommunity} />
 
       <UpdateCommunityForm community={activeCommunity} />
-    </Container>
+    </div>
   );
 };
 
