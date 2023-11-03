@@ -10,24 +10,24 @@ const AuthHeader = () => {
   return (
     <>
       <div className="navbar bg-neutral text-neutral-content w-100 relative">
-        <div className="btn btn-ghost px-[2vw]">
+        <div className="btn btn-ghost rounded-md">
           <HomeIcon className="scale-150" />
         </div>
-        <div className="btn btn-ghost">
-          <Link to="/UserPage">
+        <Link to="/UserPage">
+          <div className="btn btn-ghost rounded-md">
             <DirectionsRunIcon className="scale-125" />
-          </Link>
-        </div>
-        <div className="btn btn-ghost">
-          <Link to="/communityList">
+          </div>
+        </Link>
+        <Link to="/communityList">
+          <div className="btn btn-ghost rounded-md">
             <GroupsIcon className="scale-125" />
-          </Link>
-        </div>
-        <div className="btn btn-ghost">
-          <Link to="/About">
+          </div>
+        </Link>
+        <Link to="/About">
+          <div className="btn btn-ghost rounded-md">
             <InfoIcon className="scale-125" />
-          </Link>
-        </div>
+          </div>
+        </Link>
         <div className="absolute right-0 p-[5vw]">
           <SignOutButton></SignOutButton>
         </div>

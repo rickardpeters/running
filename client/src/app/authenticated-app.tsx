@@ -9,11 +9,11 @@ function AuthenticatedApp() {
   return (
     <Layout auth={true}>
       <Routes>
-        <Route path="/userPage" element={<UserPage />} />
-        <Route path="/communityList" element={<CommunityList />} />
-        <Route path="/about" element={<AboutPage />} />
+        <Route path="/UserPage" element={<UserPage />} />
+        <Route path="/CommunityList" element={<CommunityList />} />
+        <Route path="/About" element={<AboutPage />} />
         //Handle non-existing routes
-        <Route path="*" element={<Navigate to="/" replace />} />
+        <Route path="/*" element={<Navigate to="/UserPage" replace />} />
       </Routes>
     </Layout>
   );
