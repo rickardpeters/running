@@ -1,19 +1,6 @@
 import React, { FC, useState } from "react";
-import {
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  Button,
-  Snackbar,
-  Alert,
-  Collapse,
-} from "@mui/material";
-import {
-  onScreenAlertAtom,
-  showCreateCommunityAtom,
-  updateCommunityListAtom,
-} from "../../recoil/atoms";
+import { Dialog, DialogTitle, DialogContent, DialogActions, Button, Snackbar, Alert, Collapse } from "@mui/material";
+import { onScreenAlertAtom, showCreateCommunityAtom, updateCommunityListAtom } from "../../recoil/atoms";
 import { useRecoilState } from "recoil";
 import CreateCommunityForm from "./CreateCommunityForm";
 import { getUserToken } from "../../utils";
@@ -22,12 +9,8 @@ import axios from "axios";
 import OnScreenAlert from "../layout/OnScreenAlert";
 
 const CreateCommunityModal = () => {
-  const [showCreateCommunity, setShowCreateCommunity] = useRecoilState(
-    showCreateCommunityAtom
-  );
-  const [updateCommunityList, setUpdateCommunityList] = useRecoilState(
-    updateCommunityListAtom
-  );
+  const [showCreateCommunity, setShowCreateCommunity] = useRecoilState(showCreateCommunityAtom);
+  const [updateCommunityList, setUpdateCommunityList] = useRecoilState(updateCommunityListAtom);
   const [communityName, setCommunityName] = useState("");
   const [description, setDescription] = useState("");
 
@@ -54,10 +37,7 @@ const CreateCommunityModal = () => {
     };
 
     try {
-      const response = await axios.post(
-        "http://127.0.0.1:8000/communities/",
-        newCommunity
-      );
+      const response = await axios.post("http://127.0.0.1:8000/communities/", newCommunity);
       console.warn(response.data);
       setUpdateCommunityList(!updateCommunityList);
       setCommunityName("");
@@ -73,8 +53,7 @@ const CreateCommunityModal = () => {
       setAlert({
         showSnack: true,
         snackColor: "error",
-        snackMessage:
-          "There was an error creating the community, please try again!",
+        snackMessage: "There was an error creating the community, please try again!",
       });
     }
   };
@@ -88,19 +67,15 @@ const CreateCommunityModal = () => {
             name={communityName}
             description={description}
             setName={setCommunityName}
-            setDescription={setDescription}
-          ></CreateCommunityForm>
+            setDescription={setDescription}></CreateCommunityForm>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleCloseModal}>Cancel</Button>
-          <Button
-            onClick={handleSubmit}
-            variant="contained"
-            color="primary"
-            type="submit"
-          >
+          <button className="btn rounded-md" onClick={handleCloseModal}>
+            Cancel
+          </button>
+          <button className="btn btn-info rounded-md" onClick={handleSubmit} type="submit">
             Create Community
-          </Button>
+          </button>
         </DialogActions>
       </form>
     </Dialog>

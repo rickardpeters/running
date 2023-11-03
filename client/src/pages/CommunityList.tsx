@@ -4,9 +4,9 @@ import Communities from "../components/Community/Communities";
 
 const CommunityList = () => {
   return (
-    <Grid container spacing={2}>
+    <div className="bg-slate-200 h-full">
       <Communities />
-    </Grid>
+    </div>
   );
 };
 
