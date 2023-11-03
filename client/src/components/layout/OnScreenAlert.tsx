@@ -14,7 +14,11 @@ const OnScreenAlert = () => {
         open={snack.showSnack}
         autoHideDuration={6000}
         onClose={() =>
-          setSnack({ showSnack: false, snackColor: "info", snackMessage: "" })
+          setSnack({
+            showSnack: false,
+            snackColor: "info",
+            snackMessage: "",
+          })
         }
       >
         <Alert severity={snack.snackColor}>{snack.snackMessage}</Alert>

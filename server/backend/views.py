@@ -209,7 +209,7 @@ def challenges(request, user_id):
         challenges = Challenge.objects.filter(community_id__in=user_communities)
 
         if not challenges:
-            return HttpResponse("No challenges found.")
+            return HttpResponse("No challenges found.", status=404)
 
         ser_challenges = ChallengeSerializer(challenges, many=True)
 

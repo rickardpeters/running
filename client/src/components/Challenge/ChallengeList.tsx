@@ -1,31 +1,57 @@
 import { useRecoilState } from "recoil";
-import { challengesAtom, runTotalsAtom, showCreateChallengeAtom, updateChallengeListAtom } from "../../recoil/atoms";
-import axios from "axios";
+import {
+  challengesAtom,
+  onScreenAlertAtom,
+  runTotalsAtom,
+  showCreateChallengeAtom,
+  updateChallengeListAtom,
+} from "../../recoil/atoms";
+import axios, { AxiosError } from "axios";
 import { useContext, useEffect } from "react";
-import { Container, Card, CardContent, Typography, CardActionArea, Grid, LinearProgress } from "@mui/material";
+import {
+  Container,
+  Card,
+  CardContent,
+  Typography,
+  CardActionArea,
+  Grid,
+  LinearProgress,
+} from "@mui/material";
 import CreateChallengeModal from "./CreateChallengeModal";
 import { Context } from "../auth/AuthContextProvider";
 
 const ChallengeList = () => {
+  const [alert, setAlert] = useRecoilState(onScreenAlertAtom);
   const user = useContext(Context);
   const uid = user.user.uid;
   const token = user.user.token;
   const [challenges, setChallenges] = useRecoilState(challengesAtom);
   const [runTotals, setRunTotals] = useRecoilState(runTotalsAtom);
-  const [showCreateChallenge, setShowCreateChallenge] = useRecoilState(showCreateChallengeAtom);
-  const [updateChallengeList, setUpdateChallengeList] = useRecoilState(updateChallengeListAtom);
+  const [showCreateChallenge, setShowCreateChallenge] = useRecoilState(
+    showCreateChallengeAtom
+  );
+  const [updateChallengeList, setUpdateChallengeList] = useRecoilState(
+    updateChallengeListAtom
+  );
 
   async function fetchChallenges() {
     try {
-      const response = await axios.get(`http://127.0.0.1:8000/challenges/${uid}/`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await axios.get(
+        `http://127.0.0.1:8000/challenges/${uid}/`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
       setChallenges(response.data);
     } catch (error) {
-      console.error(error);
+      setAlert({
+        showSnack: true,
+        snackColor: "error",
+        snackMessage: "No challenges loaded",
+      });
     }
   }
 
@@ -47,61 +73,78 @@ const ChallengeList = () => {
         flexDirection: "column",
         justifyContent: "center",
         marginTop: "4rem",
-      }}>
+      }}
+    >
       <Card
         sx={{
           width: "100%",
           marginTop: "0.5vw",
           justifyContent: "center",
           placeItems: "center",
-        }}>
+        }}
+      >
         <Grid>
           <CardContent
             sx={{
               justifyContent: "center",
               alignItems: "center",
-            }}>
-            <div className="stat-value text-2xl my-2 text-center text-accent-content">Challenges</div>
-            <Typography>
-              {challenges
-                .slice()
-                .sort((a, b) => {
-                  const differenceA = a.goal - runTotals.distance / 1000;
-                  const differenceB = b.goal - runTotals.distance / 1000;
-                  return differenceB - differenceA;
-                })
-                .map((challenge) => (
-                  <Card
-                    sx={{
-                      padding: "10px",
-                      margin: "10px",
-                      justifyContent: "center",
-                      placeItems: "center",
-                      textAlign: "center",
-                    }}>
-                    <CardActionArea>
-                      <strong>{challenge.name}</strong>
+            }}
+          >
+            <div className="stat-value text-2xl my-2 text-center text-accent-content">
+              Challenges
+            </div>
+            {challenges.length != 0 ? (
+              <Typography>
+                {challenges
+                  .slice()
+                  .sort((a, b) => {
+                    const differenceA = a.goal - runTotals.distance / 1000;
+                    const differenceB = b.goal - runTotals.distance / 1000;
+                    return differenceB - differenceA;
+                  })
+                  .map((challenge) => (
+                    <Card
+                      sx={{
+                        padding: "10px",
+                        margin: "10px",
+                        justifyContent: "center",
+                        placeItems: "center",
+                        textAlign: "center",
+                      }}
+                    >
+                      <CardActionArea>
+                        <strong>{challenge.name}</strong>
 
-                      <br />
-                      {runTotals.distance / 1000 >= challenge.goal
-                        ? "Challenge complete!"
-                        : `${(runTotals.distance / 1000).toFixed(0)} of ${challenge.goal} km`}
-                      <br />
+                        <br />
+                        {runTotals.distance / 1000 >= challenge.goal
+                          ? "Challenge complete!"
+                          : `${(runTotals.distance / 1000).toFixed(0)} of ${
+                              challenge.goal
+                            } km`}
+                        <br />
 
-                      <LinearProgress
-                        variant="determinate"
-                        color="primary"
-                        value={(runTotals.distance / 1000 / challenge.goal) * 100}
-                      />
-                    </CardActionArea>
-                  </Card>
-                ))}
-            </Typography>
+                        <LinearProgress
+                          variant="determinate"
+                          color="primary"
+                          value={
+                            (runTotals.distance / 1000 / challenge.goal) * 100
+                          }
+                        />
+                      </CardActionArea>
+                    </Card>
+                  ))}
+              </Typography>
+            ) : (
+              <>You dont have any active challenges</>
+            )}
           </CardContent>
         </Grid>
         <CreateChallengeModal />
       </Card>
-      <button className="btn btn-secondary rounded-sm m-[0.5vw]" onClick={() => handleCreateChallenge()}>
+      <button
+        className="btn btn-secondary rounded-sm m-[0.5vw]"
+        onClick={() => handleCreateChallenge()}
+      >
         Create challenge
       </button>
     </Container>

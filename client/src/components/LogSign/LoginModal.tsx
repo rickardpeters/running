@@ -10,7 +10,11 @@ import { signInWithEmailAndPassword, signOut } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 
 import { useRecoilState } from "recoil";
-import { emailAtom, authTokenAtom } from "../../recoil/atoms";
+import {
+  emailAtom,
+  authTokenAtom,
+  onScreenAlertAtom,
+} from "../../recoil/atoms";
 import { auth } from "../../firebase";
 
 interface LoginModalProps {
@@ -18,6 +22,7 @@ interface LoginModalProps {
   setShow: React.Dispatch<React.SetStateAction<boolean>>;
 }
 const LoginModal = (props: LoginModalProps) => {
+  const [alert, setAlert] = useRecoilState(onScreenAlertAtom);
   const [open, setOpen] = useState(false);
   const [email, setEmail] = useRecoilState(emailAtom);
   const [password, setPassword] = useState("");
@@ -25,41 +30,19 @@ const LoginModal = (props: LoginModalProps) => {
 
   const navigate = useNavigate();
 
-  const signInToDjango = async (user: any) => {
-    const token = user.user.accessToken;
-    setAuthToken(token);
-
-    try {
-      const response = await fetch("http://127.0.0.1:8000/users/login/", {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      console.log(response);
-      if (!response.ok) {
-        console.log("wehaa");
-        // If the Django authentication fails, throw an error
-        throw new Error("Django authentication failed");
-      }
-    } catch (error) {
-      // Handle the error or log it as needed
-      console.error(error);
-      // You can choose to rethrow the error or handle it differently here
-    }
-  };
-
   const logIn = async (e: React.MouseEvent<HTMLElement>) => {
     e.preventDefault();
     try {
       const user = await signInWithEmailAndPassword(auth, email, password);
       console.log(user);
-
-      await signInToDjango(user);
-
       navigate("/UserPage");
     } catch (error) {
       console.log(error);
+      setAlert({
+        showSnack: true,
+        snackColor: "error",
+        snackMessage: "Wrong Email or password",
+      });
 
       // If there's an error during Django sign-in, you can choose to show an error message or take other actions
     }
