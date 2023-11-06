@@ -21,6 +21,9 @@ class UserExtended(models.Model):
 
     communities = models.ManyToManyField(Community, related_name="members")
 
+    def __str__(self):
+        return str(self.user)
+
     def is_authenticated(self):
         return self.user.is_authenticated
 

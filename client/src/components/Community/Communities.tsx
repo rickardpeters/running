@@ -40,9 +40,9 @@ const Communities = () => {
         </button>
       </div>
       <div className="justify-center m-3 grid gap-2 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-        {communities.map((community, index) => (
+        {communities.map((community) => (
           <>
-            <CommunityCard community={community} key={index} profileList={false}></CommunityCard>
+            <CommunityCard community={community} key={community.id} profileList={false}></CommunityCard>
           </>
         ))}
       </div>

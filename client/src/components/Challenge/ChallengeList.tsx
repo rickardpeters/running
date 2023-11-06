@@ -43,8 +43,6 @@ const ChallengeList = () => {
 
   const handleCreateChallenge = () => {
     setShowCreateChallenge(true);
-    console.log("create challenge");
-    console.log(showCreateChallenge);
   };
 
   //One for mount and unmount, one for creation.
@@ -74,7 +72,7 @@ const ChallengeList = () => {
                   return differenceB - differenceA;
                 })
                 .map((challenge) => (
-                  <div className="card shadow-md w-128 my-2 rounded-md bg-white">
+                  <div key={challenge.name} className="card shadow-md w-128 my-2 rounded-md bg-white">
                     <div className="card-body">
                       <div className="card-title">{challenge.name}</div>
                       <div className="text-slate-500">

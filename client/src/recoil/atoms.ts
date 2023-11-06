@@ -91,6 +91,11 @@ export const stravaLoggedinAtom = atom({
   default: false,
 });
 
+export const stravaTokenAtom = atom({
+  key: "stravaTokenAtom",
+  default: "",
+});
+
 export const challengesAtom = atom({
   key: "challengesAtom",
   default: [] as Challenge[],
