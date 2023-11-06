@@ -1,7 +1,19 @@
-import { Button, ButtonGroup, Card, CardContent, Container, Typography } from "@mui/material";
+import {
+  Button,
+  ButtonGroup,
+  Card,
+  CardContent,
+  Container,
+  Typography,
+} from "@mui/material";
 import axios from "axios";
 import { useRecoilState } from "recoil";
-import { stravaLoggedinAtom, athleteAtom, runTotalsAtom, onScreenAlertAtom } from "../recoil/atoms";
+import {
+  stravaLoggedinAtom,
+  athleteAtom,
+  runTotalsAtom,
+  onScreenAlertAtom,
+} from "../../recoil/atoms";
 import { useEffect } from "react";
 
 const StravaCard = () => {
@@ -37,7 +49,11 @@ const StravaCard = () => {
         grant_type: "authorization_code",
         redirect_uri: "http://localhost:3000/UserPage",
       };
-      const { data } = await axios.post("https://www.strava.com/oauth/token?", null, { params });
+      const { data } = await axios.post(
+        "https://www.strava.com/oauth/token?",
+        null,
+        { params }
+      );
       sessionStorage.setItem("access_token", data.access_token);
       sessionStorage.setItem("refresh_token", data.refresh_token);
       return data.access_token;
@@ -49,11 +65,14 @@ const StravaCard = () => {
 
   const fetchAthleteInfo = async () => {
     try {
-      const { data } = await axios.get("https://www.strava.com/api/v3/athlete", {
-        headers: {
-          Authorization: `Bearer ${sessionStorage.getItem("access_token")}`,
-        },
-      });
+      const { data } = await axios.get(
+        "https://www.strava.com/api/v3/athlete",
+        {
+          headers: {
+            Authorization: `Bearer ${sessionStorage.getItem("access_token")}`,
+          },
+        }
+      );
       setAthlete(data);
       await getAthleteStats(data);
       setAlert({
@@ -73,11 +92,14 @@ const StravaCard = () => {
 
   const getAthleteStats = async (athlete: any) => {
     try {
-      const { data } = await axios.get(`https://www.strava.com/api/v3/athletes/${athlete.id}/stats`, {
-        headers: {
-          Authorization: `Bearer ${sessionStorage.getItem("access_token")}`,
-        },
-      });
+      const { data } = await axios.get(
+        `https://www.strava.com/api/v3/athletes/${athlete.id}/stats`,
+        {
+          headers: {
+            Authorization: `Bearer ${sessionStorage.getItem("access_token")}`,
+          },
+        }
+      );
       setRunTotals(data.all_run_totals);
       setAlert({
         showSnack: true,
@@ -152,7 +174,10 @@ const StravaCard = () => {
         </div>
       </div>
       <div className="absolute -bottom-16">
-        <button className="btn btn-secondary  w-[100%] rounded-sm" onClick={signIn}>
+        <button
+          className="btn btn-secondary  w-[100%] rounded-sm"
+          onClick={signIn}
+        >
           Log in to Strava
         </button>
       </div>

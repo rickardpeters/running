@@ -23,3 +23,11 @@ export interface OnScreenAlertProps {
 snackColor:"error"| "success"|"info",
 snackMessage: string,
 }
+
+export interface TutorialCardProps {
+  card:{
+  title:string,
+  content:string,
+  link:string,
+  btnText:string,
+  }}

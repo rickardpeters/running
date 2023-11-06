@@ -1,12 +1,12 @@
 import React, { useState } from "react";
-import runningImage from "../img/headerimg.png";
+import runningImage from "../../img/headerimg.png";
 import { Button, Dialog } from "@mui/material";
-import LoginModal from "./LogSign/LoginModal";
-import SignUpModal from "./LogSign/SignupModal";
+import LoginModal from "../LogSign/LoginModal";
+import SignUpModal from "../LogSign/SignupModal";
 import LoginIcon from "@mui/icons-material/Login";
 import RocketLaunchIcon from "@mui/icons-material/RocketLaunch";
 import { useRecoilState } from "recoil";
-import { openSignUpAtom } from "../recoil/atoms";
+import { openSignUpAtom } from "../../recoil/atoms";
 
 const WelcomeMessage = () => {
   const [openLogIn, setOpenLogIn] = useState(false);
