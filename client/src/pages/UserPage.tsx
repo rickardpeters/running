@@ -1,4 +1,4 @@
-import StravaCard from "../components/StravaCard";
+import StravaCard from "../components/userpage/StravaCard";
 import ChallengeList from "../components/Challenge/ChallengeList";
 import JoinedCommunities from "../components/userpage/JoinedCommunities";
 

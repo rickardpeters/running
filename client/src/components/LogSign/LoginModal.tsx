@@ -10,7 +10,11 @@ import { signInWithEmailAndPassword, signOut } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 
 import { useRecoilState } from "recoil";
-import { emailAtom, authTokenAtom, onScreenAlertAtom } from "../../recoil/atoms";
+import {
+  emailAtom,
+  authTokenAtom,
+  onScreenAlertAtom,
+} from "../../recoil/atoms";
 import { auth } from "../../firebase";
 
 interface LoginModalProps {
@@ -28,19 +32,21 @@ const LoginModal = (props: LoginModalProps) => {
 
   const logIn = async (e: React.MouseEvent<HTMLElement>) => {
     e.preventDefault();
-    try {
-      const user = await signInWithEmailAndPassword(auth, email, password);
-      navigate("/UserPage");
-    } catch (error) {
-      console.log(error);
-      setAlert({
-        showSnack: true,
-        snackColor: "error",
-        snackMessage: "Wrong Email or password",
+
+    await signInWithEmailAndPassword(auth, email, password)
+      .then((user) => {
+        console.log(user);
+      })
+      .catch((error) => {
+        console.log(error.code);
+        setAlert({
+          showSnack: true,
+          snackColor: "error",
+          snackMessage: error.code,
+        });
       });
 
-      // If there's an error during Django sign-in, you can choose to show an error message or take other actions
-    }
+    // If there's an error during Django sign-in, you can choose to show an error message or take other actions
   };
 
   const handleClose = () => {
@@ -52,7 +58,9 @@ const LoginModal = (props: LoginModalProps) => {
     <>
       <DialogTitle>Sign In</DialogTitle>
       <DialogContent>
-        <DialogContentText sx={{ mb: 2 }}>Add your credentials to sign in to the application.</DialogContentText>
+        <DialogContentText sx={{ mb: 2 }}>
+          Add your credentials to sign in to the application.
+        </DialogContentText>
         <Grid container spacing={2}>
           <Grid item xs={6}>
             <TextField

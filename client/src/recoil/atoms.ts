@@ -130,3 +130,8 @@ export const joinedCommunitiesAtom = atom({
   key: "joinedCommunitiesAtom",
   default: [] as Community[],
 });
+
+export const openSignUpAtom = atom ({
+  key:"openSignUpAtom",
+  default: false
+})

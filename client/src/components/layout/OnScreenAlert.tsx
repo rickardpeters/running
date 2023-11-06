@@ -12,7 +12,7 @@ const OnScreenAlert = () => {
       <Snackbar
         anchorOrigin={{ vertical: "top", horizontal: "center" }}
         open={snack.showSnack}
-        autoHideDuration={6000}
+        autoHideDuration={3000}
         onClose={() =>
           setSnack({
             showSnack: false,

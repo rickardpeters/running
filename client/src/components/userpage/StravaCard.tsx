@@ -1,8 +1,9 @@
 import axios from "axios";
 import { useRecoilState } from "recoil";
-import { athleteAtom, runTotalsAtom, onScreenAlertAtom, stravaTokenAtom } from "../recoil/atoms";
-import { useContext, useEffect, useState } from "react";
-import { Context } from "./auth/AuthContextProvider";
+
+import { useContext, useEffect } from "react";
+import { Context } from "../auth/AuthContextProvider";
+import { athleteAtom, onScreenAlertAtom, runTotalsAtom, stravaTokenAtom } from "../../recoil/atoms";
 
 const StravaCard = () => {
   const [athlete, setAthlete] = useRecoilState(athleteAtom);
