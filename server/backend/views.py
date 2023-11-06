@@ -10,6 +10,7 @@ from firebaseAuth.authentication import FirebaseAuthentication
 from .serializers import UserSerializer, CommunitySerializer, ChallengeSerializer
 from .models import Community, Challenge, UserExtended
 import json
+import requests
 
 
 @csrf_exempt
@@ -22,7 +23,6 @@ def log_in(request):
         if user is not None:
             # The login function for the django user model
             login(request, user, "django.contrib.auth.backends.ModelBackend")
-            print(user.is_authenticated)
             ser_user = UserSerializer(fire_user)
             return Response(ser_user.data)
 
@@ -111,6 +111,35 @@ def communities(request):
     ser_communities = CommunitySerializer(communities, many=True)
 
     return JsonResponse(ser_communities.data, safe=False)
+
+
+@csrf_exempt
+@login_required
+def strava_token(request, user_id):
+    if request.method == "GET":
+        try:
+            user = UserExtended.objects.get(user_id=user_id)
+            ser_user = UserSerializer(user)
+            return JsonResponse(ser_user.data)
+
+        except UserExtended.DoesNotExist:
+            return HttpResponse("No user found.")
+    if request.method == "POST":
+        data = json.loads(request.body.decode("utf-8"))
+
+        strava_token = data["strava_token"]
+        print(strava_token)
+
+        try:
+            user = UserExtended.objects.get(user_id=user_id)
+            user.strava_key = strava_token
+            user.save()
+
+            ser_user = UserSerializer(user)
+            return JsonResponse(ser_user.data, safe=False)
+
+        except UserExtended.DoesNotExist:
+            return HttpResponse("No user found.")
 
 
 """
@@ -234,3 +263,63 @@ def challenges(request, user_id):
         ser_challenge = ChallengeSerializer(new_challenge)
 
         return JsonResponse(ser_challenge.data, safe=False)
+
+
+@csrf_exempt
+def get_strava_auth_url(request):
+    client_id = "105576"
+    redirect_uri = "http://localhost:3000/userPage"
+    scope = "read"
+    strava_auth_url = f"https://www.strava.com/oauth/authorize?client_id={client_id}&redirect_uri={redirect_uri}&response_type=code&scope={scope}"
+    return JsonResponse({"auth_url": strava_auth_url})
+
+
+@csrf_exempt
+@api_view(["POST"])
+def strava_data(request):
+    print(request.headers)
+    data = json.loads(request.body.decode("utf-8"))
+
+    client_id = "105576"
+    client_secret = "d91be7e7d6dc2775e6ee24f494d7079c172e2c8f"
+    code = data["code"]
+
+    athlete_info = {}
+    stats = {}
+
+    print(code)
+    # Exchange code for token
+    token_exchange_response = requests.post(
+        "https://www.strava.com/oauth/token",
+        data={
+            "client_id": client_id,
+            "client_secret": client_secret,
+            "code": code,
+            "grant_type": "authorization_code",
+        },
+    )
+    if token_exchange_response.status_code == 200:
+        access_token = token_exchange_response.json().get("access_token")
+
+        # Fetch athlete info
+        athlete_response = requests.get(
+            "https://www.strava.com/api/v3/athlete",
+            headers={"Authorization": f"Bearer {access_token}"},
+        )
+
+        if athlete_response.status_code == 200:
+            athlete_info = athlete_response.json()
+            athlete_id = athlete_info["id"]
+
+            # Fetch athlete stats
+            stats_response = requests.get(
+                f"https://www.strava.com/api/v3/athletes/{athlete_id}/stats",
+                headers={"Authorization": f"Bearer {access_token}"},
+            )
+
+            if stats_response.status_code == 200:
+                stats = stats_response.json()
+
+    return Response(
+        {"access_token": access_token, "athlete_info": athlete_info, "stats": stats}
+    )
