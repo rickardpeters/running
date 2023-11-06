@@ -8,7 +8,7 @@ const OnScreenAlert = () => {
   const [snack, setSnack] = useRecoilState(onScreenAlertAtom);
 
   return (
-    <div>
+    <div className="absolute top-[5vh]">
       <Snackbar
         anchorOrigin={{ vertical: "top", horizontal: "center" }}
         open={snack.showSnack}
