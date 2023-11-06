@@ -1,4 +1,4 @@
-import { RecoilState, atom } from "recoil";
+import { atom } from "recoil";
 import { Challenge, Community, OnScreenAlertProps } from "../types/types";
 
 export const emailAtom = atom({

@@ -10,11 +10,7 @@ import { signInWithEmailAndPassword, signOut } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 
 import { useRecoilState } from "recoil";
-import {
-  emailAtom,
-  authTokenAtom,
-  onScreenAlertAtom,
-} from "../../recoil/atoms";
+import { emailAtom, authTokenAtom, onScreenAlertAtom } from "../../recoil/atoms";
 import { auth } from "../../firebase";
 
 interface LoginModalProps {
@@ -34,7 +30,6 @@ const LoginModal = (props: LoginModalProps) => {
     e.preventDefault();
     try {
       const user = await signInWithEmailAndPassword(auth, email, password);
-      console.log(user);
       navigate("/UserPage");
     } catch (error) {
       console.log(error);

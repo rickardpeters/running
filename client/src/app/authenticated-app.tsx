@@ -15,7 +15,7 @@ function AuthenticatedApp() {
         <Route path="/communityList" element={<CommunityList />} />
         <Route path="/about" element={<AboutPage />} />
         //Handle non-existing routes
-        <Route path="*" element={<Navigate to="/" replace />} />
+        <Route path="/*" element={<Navigate to="/UserPage" replace />} />
       </Routes>
     </Layout>
   );
