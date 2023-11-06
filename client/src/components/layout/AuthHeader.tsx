@@ -10,8 +10,10 @@ const AuthHeader = () => {
   return (
     <>
       <div className="navbar bg-neutral text-neutral-content w-100 relative">
-        <div className="btn btn-ghost rounded-md">
-          <HomeIcon className="scale-150" />
+        <div className="btn btn-ghost px-[2vw]">
+          <Link to="/">
+            <HomeIcon className="scale-150" />
+          </Link>
         </div>
         <Link to="/UserPage">
           <div className="btn btn-ghost rounded-md">
