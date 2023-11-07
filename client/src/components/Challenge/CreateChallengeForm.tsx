@@ -5,9 +5,11 @@ import {
   SelectChangeEvent,
   TextField,
 } from "@mui/material";
-import React, { Dispatch, SetStateAction, useState } from "react";
-import { createChallenge, joinedCommunitiesAtom } from "../../recoil/atoms";
+import React, { useState } from "react";
+
 import { useRecoilState } from "recoil";
+import { createChallenge } from "../../recoil/challengeAtoms";
+import { joinedCommunitiesAtom } from "../../recoil/communityAtoms";
 
 const CreateChallengeForm = () => {
   const [challengeProps, setChallengeProps] = useRecoilState(createChallenge);
@@ -74,7 +76,7 @@ const CreateChallengeForm = () => {
           Select Community
         </MenuItem>
         {joinedCommunities.map((community) => (
-          <MenuItem key={community.id} value={community.id}>
+          <MenuItem key={community.id!} value={community.id!}>
             {community.community_name}
           </MenuItem>
         ))}

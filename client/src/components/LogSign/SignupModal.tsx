@@ -11,17 +11,15 @@ import { Dialog, Grid, TextField } from "@mui/material";
 import LoginModal from "./LoginModal";
 import PasswordField from "./PasswordField";
 import { useRecoilState, useRecoilValue } from "recoil";
-import {
-  authTokenAtom,
-  onScreenAlertAtom,
-  openSignUpAtom,
-  passwordStrengthTestPassed,
-  passwordTestPassed,
-} from "../../recoil/atoms";
-
 import { createUserWithEmailAndPassword, signOut } from "firebase/auth";
 import { auth } from "../../firebase";
 import "firebase/auth";
+import { onScreenAlertAtom } from "../../recoil/atoms";
+import {
+  passwordTestPassed,
+  passwordStrengthTestPassed,
+  openSignUpAtom,
+} from "../../recoil/authAtoms";
 
 interface SignUpModalProps {
   signedUp: boolean;

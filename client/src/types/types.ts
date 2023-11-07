@@ -1,8 +1,8 @@
 export interface Community {
   community_name: string;
-  id: number;
+  id: number|null;
   description: string;
-  members: [Member];
+  members: [Member]|[];
 }
 
 export interface Member {

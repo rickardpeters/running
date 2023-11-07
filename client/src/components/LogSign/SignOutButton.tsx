@@ -1,13 +1,19 @@
 import { Button } from "@mui/base";
-import React from "react";
+import React, { useContext } from "react";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { signOut } from "firebase/auth";
 import { auth } from "../../firebase";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { authTokenAtom, onScreenAlertAtom } from "../../recoil/atoms";
+import axios from "axios";
+import { Context } from "../auth/AuthContextProvider";
+import { authTokenAtom } from "../../recoil/authAtoms";
+import { onScreenAlertAtom } from "../../recoil/atoms";
 
 const SignOutButton = () => {
   const authToken = useRecoilValue(authTokenAtom);
+  const user = useContext(Context);
+  const uid = user.user.uid;
+  const token = user.user.token;
   const [alert, setAlert] = useRecoilState(onScreenAlertAtom);
 
   const handleSignOut = async () => {
@@ -19,12 +25,12 @@ const SignOutButton = () => {
   };
 
   const signOutFromDjango = async () => {
-    await fetch("http://127.0.0.1:8000/users/logout/", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${authToken}`,
-      },
-    })
+    await axios
+      .post("http://127.0.0.1:8000/users/logout/", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
       .then(() => {
         // First sign out from django, then from firebase
         setAlert({

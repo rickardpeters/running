@@ -5,16 +5,17 @@ import {
   DialogContent,
   DialogActions,
 } from "@mui/material";
-import {
-  createChallenge,
-  onScreenAlertAtom,
-  showCreateChallengeAtom,
-  updateChallengeListAtom,
-} from "../../recoil/atoms";
+
 import { useRecoilState } from "recoil";
 import CreateChallengeForm from "./CreateChallengeForm";
 import axios from "axios";
 import { Context } from "../auth/AuthContextProvider";
+import { onScreenAlertAtom } from "../../recoil/atoms";
+import {
+  showCreateChallengeAtom,
+  updateChallengeListAtom,
+  createChallenge,
+} from "../../recoil/challengeAtoms";
 
 const CreateChallengeModal = () => {
   const user = useContext(Context);

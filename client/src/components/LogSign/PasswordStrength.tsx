@@ -2,7 +2,7 @@ import { Grid, LinearProgress, Typography } from "@mui/material";
 import { passwordStrength } from "check-password-strength";
 import React, { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
-import { passwordStrengthTestPassed } from "../../recoil/atoms";
+import { passwordStrengthTestPassed } from "../../recoil/authAtoms";
 
 interface PasswordStrengthProps {
   password: string;

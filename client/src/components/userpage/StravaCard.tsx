@@ -3,7 +3,12 @@ import { useRecoilState } from "recoil";
 
 import { useContext, useEffect } from "react";
 import { Context } from "../auth/AuthContextProvider";
-import { athleteAtom, onScreenAlertAtom, runTotalsAtom, stravaTokenAtom } from "../../recoil/atoms";
+import { onScreenAlertAtom } from "../../recoil/atoms";
+import {
+  athleteAtom,
+  runTotalsAtom,
+  stravaTokenAtom,
+} from "../../recoil/stravaAtoms";
 
 const StravaCard = () => {
   const [athlete, setAthlete] = useRecoilState(athleteAtom);
@@ -23,7 +28,9 @@ const StravaCard = () => {
 
   const signInToStrava = async () => {
     try {
-      const response = await axios.get("http://localhost:8000/get_strava_auth_url/");
+      const response = await axios.get(
+        "http://localhost:8000/get_strava_auth_url/"
+      );
       const authUrl = response.data.auth_url;
       console.log(authUrl);
       window.location.href = authUrl;
@@ -122,7 +129,10 @@ const StravaCard = () => {
         </div>
       </div>
       <div className="absolute -bottom-16">
-        <button className="btn btn-secondary  w-[100%] rounded-sm" onClick={signInToStrava}>
+        <button
+          className="btn btn-secondary  w-[100%] rounded-sm"
+          onClick={signInToStrava}
+        >
           Log in to Strava
         </button>
       </div>

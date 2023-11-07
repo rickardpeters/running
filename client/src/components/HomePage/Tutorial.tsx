@@ -1,8 +1,6 @@
 import React from "react";
-import { Link } from "react-router-dom";
+
 import TutorialCard from "./TutorialCard";
-import { ContentCopy } from "@mui/icons-material";
-import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 
 const Tutorial = () => {
   const card1 = {

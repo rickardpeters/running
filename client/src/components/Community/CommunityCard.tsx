@@ -1,18 +1,18 @@
 import { Community } from "../../types/types";
 import { useContext } from "react";
 import { useRecoilState } from "recoil";
-import {
-  activeCommunityAtom,
-  onScreenAlertAtom,
-  showDeleteCommunityAtom,
-  showUpdateCommunityAtom,
-  updateChallengeListAtom,
-  updateCommunityListAtom,
-} from "../../recoil/atoms";
 import axios from "axios";
 import { Context } from "../auth/AuthContextProvider";
 import DeleteCommunityModal from "./DeleteCommunityModal";
 import UpdateCommunityForm from "./UpdateCommunityForm";
+import { onScreenAlertAtom } from "../../recoil/atoms";
+import {
+  activeCommunityAtom,
+  showDeleteCommunityAtom,
+  showUpdateCommunityAtom,
+  updateCommunityListAtom,
+} from "../../recoil/communityAtoms";
+import { updateChallengeListAtom } from "../../recoil/challengeAtoms";
 interface CommunityCardProps {
   community: Community;
   profileList: boolean;
@@ -23,14 +23,23 @@ const CommunityCard = ({ community }: CommunityCardProps) => {
   const uid = user.user.uid;
   const token = user.user.accessToken;
   const [alert, setAlert] = useRecoilState(onScreenAlertAtom);
-  const [showDeleteCommunity, setShowDeleteCommunity] = useRecoilState(showDeleteCommunityAtom);
+  const [showDeleteCommunity, setShowDeleteCommunity] = useRecoilState(
+    showDeleteCommunityAtom
+  );
 
-  const [activeCommunity, setActiveCommunity] = useRecoilState(activeCommunityAtom);
+  const [activeCommunity, setActiveCommunity] =
+    useRecoilState(activeCommunityAtom);
 
-  const [showUpdateCommunity, setShowUpdateCommunity] = useRecoilState(showUpdateCommunityAtom);
+  const [showUpdateCommunity, setShowUpdateCommunity] = useRecoilState(
+    showUpdateCommunityAtom
+  );
 
-  const [updateCommunityList, setUpdateCommunityList] = useRecoilState(updateCommunityListAtom);
-  const [updateChallengeList, setUpdateChallengeList] = useRecoilState(updateChallengeListAtom);
+  const [updateCommunityList, setUpdateCommunityList] = useRecoilState(
+    updateCommunityListAtom
+  );
+  const [updateChallengeList, setUpdateChallengeList] = useRecoilState(
+    updateChallengeListAtom
+  );
 
   const joined = () => {
     var joined = false;
@@ -141,24 +150,40 @@ const CommunityCard = ({ community }: CommunityCardProps) => {
           <h2 className="card-title text-2xl">{community.community_name}</h2>
           <br />
           <div className=" overflow-auto break-words">
-            {community.description === "" ? <i>No description</i> : community.description}
+            {community.description === "" ? (
+              <i>No description</i>
+            ) : (
+              community.description
+            )}
           </div>
         </div>
         <div className="card-actions justify-center p-3">
           {joined() ? (
             <>
-              <button className="btn btn-sm bg-info rounded-md" onClick={() => handleUpdateClick(community)}>
+              <button
+                className="btn btn-sm bg-info rounded-md"
+                onClick={() => handleUpdateClick(community)}
+              >
                 Edit
               </button>
-              <button className="btn btn-sm bg-error rounded-md" onClick={() => handleDeleteClick(community)}>
+              <button
+                className="btn btn-sm bg-error rounded-md"
+                onClick={() => handleDeleteClick(community)}
+              >
                 Delete
               </button>
-              <button className="btn btn-sm bg-success rounded-md" onClick={() => handleLeaveClick(community)}>
+              <button
+                className="btn btn-sm bg-success rounded-md"
+                onClick={() => handleLeaveClick(community)}
+              >
                 Leave
               </button>
             </>
           ) : (
-            <button className="btn bg-success rounded-md" onClick={() => handleJoinClick(community)}>
+            <button
+              className="btn bg-success rounded-md"
+              onClick={() => handleJoinClick(community)}
+            >
               Join
             </button>
           )}

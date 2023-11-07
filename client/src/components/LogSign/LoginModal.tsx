@@ -10,12 +10,10 @@ import { signInWithEmailAndPassword, signOut } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 
 import { useRecoilState } from "recoil";
-import {
-  emailAtom,
-  authTokenAtom,
-  onScreenAlertAtom,
-} from "../../recoil/atoms";
+
 import { auth } from "../../firebase";
+import { onScreenAlertAtom } from "../../recoil/atoms";
+import { emailAtom } from "../../recoil/authAtoms";
 
 interface LoginModalProps {
   show?: boolean;
@@ -26,7 +24,6 @@ const LoginModal = (props: LoginModalProps) => {
   const [open, setOpen] = useState(false);
   const [email, setEmail] = useRecoilState(emailAtom);
   const [password, setPassword] = useState("");
-  const [authToken, setAuthToken] = useRecoilState(authTokenAtom);
 
   const navigate = useNavigate();
 

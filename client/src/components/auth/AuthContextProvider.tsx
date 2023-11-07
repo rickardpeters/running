@@ -1,8 +1,6 @@
 import { createContext, useState, useEffect, ReactNode } from "react";
 import { onAuthStateChanged, User as FirebaseUser } from "firebase/auth";
 import { auth } from "../../firebase";
-import OnScreenAlert from "../layout/OnScreenAlert";
-import { useNavigate } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import { onScreenAlertAtom } from "../../recoil/atoms";
 

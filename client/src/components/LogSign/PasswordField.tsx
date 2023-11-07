@@ -3,7 +3,7 @@ import { FirstOption, passwordStrength, Option } from "check-password-strength";
 import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 import PasswordStrength from "./PasswordStrength";
 import { useRecoilState } from "recoil";
-import { passwordTestPassed } from "../../recoil/atoms";
+import { passwordTestPassed } from "../../recoil/authAtoms";
 
 interface PasswordFieldProps {
   password: string;
@@ -50,6 +50,18 @@ const PasswordField = (props: PasswordFieldProps) => {
     }
   }
 
+  const handlePassword = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const newPassword = event.target.value;
+    props.setPassword(newPassword);
+    const strength = passwordStrength(newPassword, customOptions).id;
+    setStrength(strength);
+  };
+
+  const handlePasswordTest = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const newPasswordTest = event.target.value;
+    setPasswordTest(newPasswordTest);
+  };
+
   useEffect(() => {
     testPassword(passwordTest);
   }, [passwordTest, props.password]);
@@ -64,12 +76,7 @@ const PasswordField = (props: PasswordFieldProps) => {
           type="password"
           fullWidth
           variant="outlined"
-          onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-            const newPassword = event.target.value;
-            props.setPassword(newPassword);
-            const strength = passwordStrength(newPassword, customOptions).id;
-            setStrength(strength);
-          }}
+          onChange={handlePassword}
         />
       </Grid>
       <Grid item xs={6}>
@@ -82,10 +89,7 @@ const PasswordField = (props: PasswordFieldProps) => {
             type="password"
             fullWidth
             variant="outlined"
-            onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-              const newPasswordTest = event.target.value;
-              setPasswordTest(newPasswordTest);
-            }}
+            onChange={handlePasswordTest}
           />
         ) : (
           <TextField
@@ -98,10 +102,7 @@ const PasswordField = (props: PasswordFieldProps) => {
             type="password"
             fullWidth
             variant="outlined"
-            onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-              const newPasswordTest = event.target.value;
-              setPasswordTest(newPasswordTest);
-            }}
+            onChange={handlePasswordTest}
           />
         )}
       </Grid>
@@ -111,7 +112,7 @@ const PasswordField = (props: PasswordFieldProps) => {
             <PasswordStrength
               password={props.password}
               passStrength={passStrength}
-            ></PasswordStrength>
+            />
           </Grid>
         )}
       </Grid>

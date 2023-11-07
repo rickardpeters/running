@@ -1,7 +1,8 @@
 import React from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { joinedCommunitiesAtom, runTotalsAtom } from "../../recoil/atoms";
 import { Challenge } from "../../types/types";
+import { joinedCommunitiesAtom } from "../../recoil/communityAtoms";
+import { runTotalsAtom } from "../../recoil/stravaAtoms";
 
 const ChallengeCard = ({ challenge }: { challenge: Challenge }) => {
   const joinedCommunities = useRecoilValue(joinedCommunitiesAtom);

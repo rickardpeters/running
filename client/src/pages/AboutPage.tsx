@@ -27,6 +27,3 @@ const AboutPage = () => {
 };
 
 export default AboutPage;
-function componentDidMount() {
-  throw new Error("Function not implemented.");
-}

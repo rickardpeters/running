@@ -1,5 +1,4 @@
 import React from "react";
-import { ReactComponent as Logo } from "../svgs/RunNerdsIntro.svg";
 import Tutorial from "../components/HomePage/Tutorial";
 
 const HomePage = () => {

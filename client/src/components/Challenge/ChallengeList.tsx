@@ -1,17 +1,17 @@
 import { useRecoilState, useRecoilValue } from "recoil";
-import {
-  challengesAtom,
-  onScreenAlertAtom,
-  runTotalsAtom,
-  showCreateChallengeAtom,
-  updateChallengeListAtom,
-  joinedCommunitiesAtom,
-} from "../../recoil/atoms";
 import axios from "axios";
 import { useContext, useEffect } from "react";
 import CreateChallengeModal from "./CreateChallengeModal";
 import { Context } from "../auth/AuthContextProvider";
 import ChallengeCard from "./ChallengeCard";
+import { onScreenAlertAtom } from "../../recoil/atoms";
+import {
+  challengesAtom,
+  showCreateChallengeAtom,
+  updateChallengeListAtom,
+} from "../../recoil/challengeAtoms";
+import { joinedCommunitiesAtom } from "../../recoil/communityAtoms";
+import { runTotalsAtom } from "../../recoil/stravaAtoms";
 
 const ChallengeList = () => {
   const [alert, setAlert] = useRecoilState(onScreenAlertAtom);

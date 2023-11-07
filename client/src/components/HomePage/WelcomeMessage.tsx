@@ -6,7 +6,7 @@ import SignUpModal from "../LogSign/SignupModal";
 import LoginIcon from "@mui/icons-material/Login";
 import RocketLaunchIcon from "@mui/icons-material/RocketLaunch";
 import { useRecoilState } from "recoil";
-import { openSignUpAtom } from "../../recoil/atoms";
+import { openSignUpAtom } from "../../recoil/authAtoms";
 
 const WelcomeMessage = () => {
   const [openLogIn, setOpenLogIn] = useState(false);
