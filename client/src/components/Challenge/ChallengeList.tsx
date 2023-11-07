@@ -30,24 +30,22 @@ const ChallengeList = () => {
   const joinedCommunities = useRecoilValue(joinedCommunitiesAtom);
 
   async function fetchChallenges() {
-    try {
-      const response = await axios.get(
-        `http://127.0.0.1:8000/challenges/${uid}/`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      setChallenges(response.data);
-    } catch (error) {
-      setAlert({
-        showSnack: true,
-        snackColor: "error",
-        snackMessage: "No challenges loaded",
+    await axios
+      .get(`http://127.0.0.1:8000/challenges/${uid}/`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((resp) => {
+        setChallenges(resp.data);
+      })
+      .catch((error) => {
+        setAlert({
+          showSnack: true,
+          snackColor: "error",
+          snackMessage: "No challenges loaded",
+        });
       });
-    }
   }
 
   const handleCreateChallenge = () => {

@@ -17,11 +17,11 @@ const SignOutButton = () => {
   const [alert, setAlert] = useRecoilState(onScreenAlertAtom);
 
   const handleSignOut = async () => {
-    try {
-      await signOutFromDjango();
-    } catch (error) {
-      console.log(error);
-    }
+    await signOutFromDjango()
+      .then()
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   const signOutFromDjango = async () => {

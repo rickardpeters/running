@@ -3,6 +3,7 @@ import { onAuthStateChanged, User as FirebaseUser } from "firebase/auth";
 import { auth } from "../../firebase";
 import { useRecoilState } from "recoil";
 import { onScreenAlertAtom } from "../../recoil/atoms";
+import axios from "axios";
 
 interface LayoutProps {
   children: ReactNode;
@@ -18,26 +19,26 @@ const AuthContext = ({ children }: LayoutProps) => {
   const signInToDjango = async (user: any) => {
     const token = user.accessToken;
 
-    try {
-      const response = await fetch("http://127.0.0.1:8000/users/login/", {
-        method: "POST",
+    await axios
+      .post("http://127.0.0.1:8000/users/login/", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
-      });
-      if (response.ok) {
+      })
+      .then((resp) => {
         setUser(user);
-      }
-      console.log(response);
-    } catch (error) {
-      console.error(error);
-      setUser(null);
-      setAlert({
-        showSnack: true,
-        snackColor: "error",
-        snackMessage: "Unable to log in",
+
+        console.log(resp);
+      })
+      .catch((error) => {
+        console.error(error);
+        setUser(null);
+        setAlert({
+          showSnack: true,
+          snackColor: "error",
+          snackMessage: "Unable to log in",
+        });
       });
-    }
   };
 
   useEffect(() => {
