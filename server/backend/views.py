@@ -222,8 +222,7 @@ def challenges(request, user_id):
         goal = data["goal"]
         community_id = data["community_id"]
 
-        if Challenge.objects.filter(name=name):
-            return HttpResponse("A Challenge with that name already exists.")
+        
 
         community = Community.objects.get(id=community_id)
 

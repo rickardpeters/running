@@ -130,3 +130,11 @@ export const openSignUpAtom = atom ({
   key:"openSignUpAtom",
   default: false
 })
+
+export const createChallenge = atom<Challenge>({
+  key: "createChallenge",
+  
+  default: {name:"", goal:0, community_id:null},
+});
+
+

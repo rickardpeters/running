@@ -14,8 +14,8 @@ export interface Member {
 
 export interface Challenge {
   name: string;
-  goal: number;
-  community_id: number;
+  goal: number|null;
+  community_id: number|null;
 }
 
 export interface OnScreenAlertProps {
