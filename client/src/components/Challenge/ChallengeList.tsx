@@ -52,8 +52,6 @@ const ChallengeList = () => {
 
   const handleCreateChallenge = () => {
     setShowCreateChallenge(true);
-    console.log("create challenge");
-    console.log(showCreateChallenge);
   };
 
   //One for mount and unmount, one for creation.

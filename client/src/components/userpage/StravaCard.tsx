@@ -1,122 +1,70 @@
-import {
-  Button,
-  ButtonGroup,
-  Card,
-  CardContent,
-  Container,
-  Typography,
-} from "@mui/material";
 import axios from "axios";
 import { useRecoilState } from "recoil";
-import {
-  stravaLoggedinAtom,
-  athleteAtom,
-  runTotalsAtom,
-  onScreenAlertAtom,
-} from "../../recoil/atoms";
-import { useEffect } from "react";
+
+import { useContext, useEffect } from "react";
+import { Context } from "../auth/AuthContextProvider";
+import { athleteAtom, onScreenAlertAtom, runTotalsAtom, stravaTokenAtom } from "../../recoil/atoms";
 
 const StravaCard = () => {
-  const [loggedInState, setLoggedInState] = useRecoilState(stravaLoggedinAtom);
   const [athlete, setAthlete] = useRecoilState(athleteAtom);
   const [runTotals, setRunTotals] = useRecoilState(runTotalsAtom);
   const [alert, setAlert] = useRecoilState(onScreenAlertAtom);
+  const [stravaToken, setStravaToken] = useRecoilState(stravaTokenAtom);
+
+  const user = useContext(Context);
+  const token = user.user.accessToken;
 
   useEffect(() => {
-    fetchData().catch((err) => console.error(err));
-  }, [loggedInState]);
-
-  useEffect(() => {
-    if (athlete) {
-      getAthleteStats(athlete).catch((err) => console.error(err));
+    const shouldFetch = Object.keys(runTotals).length === 0 || !runTotals.count;
+    if (shouldFetch) {
+      fetchData();
     }
-  }, [athlete]);
+  }, []);
+
+  const signInToStrava = async () => {
+    try {
+      const response = await axios.get("http://localhost:8000/get_strava_auth_url/");
+      const authUrl = response.data.auth_url;
+      console.log(authUrl);
+      window.location.href = authUrl;
+    } catch (error) {
+      console.error("Error fetching Strava auth URL", error);
+    }
+  };
 
   const fetchData = async () => {
     const code = new URLSearchParams(window.location.search).get("code");
-    const accessToken = await getAccessToken(code);
-    if (accessToken) {
-      await fetchAthleteInfo();
-    }
-  };
 
-  const getAccessToken = async (code: any) => {
-    try {
-      const params = {
-        client_id: "105576",
-        client_secret: "d91be7e7d6dc2775e6ee24f494d7079c172e2c8f",
-        code,
-        grant_type: "authorization_code",
-        redirect_uri: "http://localhost:3000/UserPage",
-      };
-      const { data } = await axios.post(
-        "https://www.strava.com/oauth/token?",
-        null,
-        { params }
-      );
-      sessionStorage.setItem("access_token", data.access_token);
-      sessionStorage.setItem("refresh_token", data.refresh_token);
-      return data.access_token;
-    } catch (error) {
-      console.error(error);
-      throw new Error("Error getting access token from Strava API");
-    }
-  };
+    if (code) {
+      try {
+        const { data } = await axios.post(
+          "http://localhost:8000/strava_data/",
+          { code },
+          {
+            headers: {
+              Authorization: `Token ${token}`,
+            },
+          }
+        );
 
-  const fetchAthleteInfo = async () => {
-    try {
-      const { data } = await axios.get(
-        "https://www.strava.com/api/v3/athlete",
-        {
-          headers: {
-            Authorization: `Bearer ${sessionStorage.getItem("access_token")}`,
-          },
-        }
-      );
-      setAthlete(data);
-      await getAthleteStats(data);
-      setAlert({
-        showSnack: true,
-        snackColor: "success",
-        snackMessage: "Connected to Strava!",
-      });
-    } catch (error) {
-      console.error(error);
-      setAlert({
-        showSnack: true,
-        snackColor: "error",
-        snackMessage: "Unable to connect to strava",
-      });
-    }
-  };
+        setStravaToken(data.access_token);
+        setAthlete(data.athlete_info);
+        setRunTotals(data.stats.all_run_totals);
 
-  const getAthleteStats = async (athlete: any) => {
-    try {
-      const { data } = await axios.get(
-        `https://www.strava.com/api/v3/athletes/${athlete.id}/stats`,
-        {
-          headers: {
-            Authorization: `Bearer ${sessionStorage.getItem("access_token")}`,
-          },
-        }
-      );
-      setRunTotals(data.all_run_totals);
-      setAlert({
-        showSnack: true,
-        snackColor: "success",
-        snackMessage: "Strava data succesfully fetched!",
-      });
-    } catch (error) {
-      console.error(error);
+        setAlert({
+          showSnack: true,
+          snackColor: "success",
+          snackMessage: "Strava data successfully fetched!",
+        });
+      } catch (error) {
+        console.error("Error fetching Strava data from backend", error);
+        setAlert({
+          showSnack: true,
+          snackColor: "error",
+          snackMessage: "Failed to fetch Strava data",
+        });
+      }
     }
-  };
-
-  const signIn = () => {
-    const authUrl =
-      "https://www.strava.com/oauth/authorize?client_id=" +
-      `${105576}&redirect_uri=http://localhost:3000/UserPage&response_type=code&scope=read`;
-    window.location.href = authUrl;
-    setLoggedInState(!loggedInState);
   };
 
   return (
@@ -174,10 +122,7 @@ const StravaCard = () => {
         </div>
       </div>
       <div className="absolute -bottom-16">
-        <button
-          className="btn btn-secondary  w-[100%] rounded-sm"
-          onClick={signIn}
-        >
+        <button className="btn btn-secondary  w-[100%] rounded-sm" onClick={signInToStrava}>
           Log in to Strava
         </button>
       </div>

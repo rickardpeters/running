@@ -28,7 +28,6 @@ const JoinedCommunities = () => {
           Authorization: `Token ${authToken}`,
         },
       });
-      console.warn(response.data);
       setJoinedCommunities(response.data);
     } catch (error) {
       console.error(error);
@@ -41,8 +40,8 @@ const JoinedCommunities = () => {
         <div className="card-title text-2xl justify-center m-4">Joined Communities</div>
 
         <div className="h-[100vh]  grid-flow-col overflow-y-auto overflow-x-visible justify-center">
-          {joinedCommunities.map((community, index) => (
-            <CommunityCard community={community} key={index} profileList={false}></CommunityCard>
+          {joinedCommunities.map((community) => (
+            <CommunityCard community={community} key={community.id} profileList={false}></CommunityCard>
           ))}
         </div>
       </div>
