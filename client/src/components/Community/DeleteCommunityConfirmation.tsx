@@ -1,16 +1,7 @@
-import {
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  Button,
-} from "@mui/material";
+import { Dialog, Button } from "@mui/material";
 import React from "react";
-import { useRecoilState, useRecoilValue } from "recoil";
-import {
-  showDeleteCommunityAtom,
-  showDeleteConfirmationAtom,
-} from "../../recoil/atoms";
+import { useRecoilState } from "recoil";
+import { showDeleteConfirmationAtom } from "../../recoil/communityAtoms";
 
 const DeleteCommunityConfirmation = () => {
   const [showDeleteConfirmationCommunity, setShowDeleteConfirmationCommunity] =
@@ -20,10 +11,6 @@ const DeleteCommunityConfirmation = () => {
       open={showDeleteConfirmationCommunity}
       onClose={() => setShowDeleteConfirmationCommunity(false)}
     >
-      <DialogTitle sx={{ textAlign: "center" }}>Delete successful!</DialogTitle>
-      <DialogContent sx={{ textAlign: "center" }}>
-        Community deleted.
-      </DialogContent>
       <Button
         sx={{ margin: 2 }}
         variant="contained"

@@ -1,34 +1,41 @@
-import { Button, TextField } from "@mui/material";
-import React, { Dispatch, SetStateAction, useState } from "react";
+import { TextField } from "@mui/material";
+import React from "react";
+import { useRecoilState } from "recoil";
+import { createCommunityAtom } from "../../recoil/communityAtoms";
 
-interface createCommunityFormProps {
-  name: string;
-  description: string;
-  setName: Dispatch<SetStateAction<string>>;
-  setDescription: Dispatch<SetStateAction<string>>;
-}
+const CreateCommunityForm = () => {
+  const [createCommunity, setCreateCommunity] =
+    useRecoilState(createCommunityAtom);
 
-const CreateCommunityForm = (props: createCommunityFormProps) => {
-  const handleCommunityNameChange = (event: { target: { value: React.SetStateAction<string> } }) => {
-    props.setName(event.target.value);
+  const { community_name, description } = createCommunity;
+
+  const handleCommunityNameChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setCreateCommunity({
+      ...createCommunity,
+      community_name: event.target.value,
+    });
   };
 
-  const handleDescriptionChange = (event: { target: { value: React.SetStateAction<string> } }) => {
-    props.setDescription(event.target.value);
+  const handleDescriptionChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setCreateCommunity({ ...createCommunity, description: event.target.value });
   };
 
   return (
     <>
       <TextField
         label="Community Name"
-        value={props.name}
+        value={community_name}
         onChange={handleCommunityNameChange}
         fullWidth
         margin="normal"
       />
       <TextField
         label="Description of Community"
-        value={props.description}
+        value={description}
         onChange={handleDescriptionChange}
         fullWidth
         margin="normal"

@@ -7,14 +7,14 @@ import {
   TextField,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import { useRecoilState, useRecoilValue } from "recoil";
-import {
-  showUpdateCommunityAtom,
-  showUpdateConfirmationAtom,
-  updateCommunityListAtom,
-} from "../../recoil/atoms";
+import { useRecoilState } from "recoil";
 import axios from "axios";
 import { Community } from "../../types/types";
+import { onScreenAlertAtom } from "../../recoil/atoms";
+import {
+  showUpdateCommunityAtom,
+  updateCommunityListAtom,
+} from "../../recoil/communityAtoms";
 
 interface UpdateCommuityModalProps {
   community: Community | null;
@@ -29,13 +29,13 @@ const UpdateCommunityModal: React.FC<UpdateCommuityModalProps> = ({
   const [updateCommunityList, setUpdateCommunityList] = useRecoilState(
     updateCommunityListAtom
   );
-  const [showUpdateConfirmationCommunity, setShowUpdateConfirmationCommunity] =
-    useRecoilState(showUpdateConfirmationAtom);
 
   const [updateName, setUpdateName] = useState(community?.community_name);
   const [updateDescription, setUpdateDescription] = useState(
     community?.description
   );
+
+  const [alert, setAlert] = useRecoilState(onScreenAlertAtom);
 
   useEffect(() => {
     if (community) {
@@ -47,18 +47,30 @@ const UpdateCommunityModal: React.FC<UpdateCommuityModalProps> = ({
   const handleUpdate = async () => {
     if (!community) return;
 
-    try {
-      const res = await axios.put(
-        `http://127.0.0.1:8000/communities/${community.id}/`,
-        { community_name: updateName, description: updateDescription }
+    await axios
+      .put(`http://127.0.0.1:8000/communities/${community.id}/`, {
+        community_name: updateName,
+        description: updateDescription,
+      })
+      .then(
+        (response) =>
+          setAlert({
+            showSnack: true,
+            snackColor: "info",
+            snackMessage: "Community Updated",
+          }),
+        (error) => {
+          console.log(error);
+          setAlert({
+            showSnack: true,
+            snackColor: "error",
+            snackMessage: "Unable to update community",
+          });
+        }
       );
-      console.warn(res.data);
-    } catch (error) {
-      console.error("Could not update: ", error);
-    }
+
     setShowUpdateCommunity(false);
     setUpdateCommunityList(!updateCommunityList);
-    //setShowUpdateConfirmationCommunity(true);
   };
 
   return (
