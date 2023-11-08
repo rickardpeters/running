@@ -14,7 +14,7 @@ from .views import (
 
 urlpatterns = [
     path("users/login/", log_in, name="login"),
-    path("users/logout/", log_out, name="login"),
+    path("users/logout/", log_out, name="logout"),
     path("users/communities/<str:user_id>/", get_joined_communities, name="get_joined"),
     path("strava_data/", strava_data, name="strava-data"),
     path("get_strava_auth_url/", get_strava_auth_url, name="strava-auth-url"),
