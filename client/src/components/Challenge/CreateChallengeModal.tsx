@@ -20,7 +20,7 @@ import {
 const CreateChallengeModal = () => {
   const user = useContext(Context);
   const uid = user.user.uid;
-  const token = user.user.token;
+  const token = user.user.accessToken;
   const [showCreateChallenge, setShowCreateChallenge] = useRecoilState(
     showCreateChallengeAtom
   );

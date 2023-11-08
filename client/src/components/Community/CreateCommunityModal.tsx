@@ -21,7 +21,7 @@ import {
 const CreateCommunityModal = () => {
   const user = useContext(Context);
 
-  const token = user.user.token;
+  const token = user.user.accessToken;
 
   const [showCreateCommunity, setShowCreateCommunity] = useRecoilState(
     showCreateCommunityAtom

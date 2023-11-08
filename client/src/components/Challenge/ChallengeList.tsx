@@ -17,7 +17,7 @@ const ChallengeList = () => {
   const [alert, setAlert] = useRecoilState(onScreenAlertAtom);
   const user = useContext(Context);
   const uid = user.user.uid;
-  const token = user.user.token;
+  const token = user.user.accessToken;
   const [challenges, setChallenges] = useRecoilState(challengesAtom);
   const [runTotals, setRunTotals] = useRecoilState(runTotalsAtom);
   const [showCreateChallenge, setShowCreateChallenge] = useRecoilState(

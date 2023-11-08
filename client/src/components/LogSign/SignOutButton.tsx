@@ -13,32 +13,28 @@ const SignOutButton = () => {
   const authToken = useRecoilValue(authTokenAtom);
   const user = useContext(Context);
   const uid = user.user.uid;
-  const token = user.user.token;
+  const token = user.user.accessToken;
   const [alert, setAlert] = useRecoilState(onScreenAlertAtom);
 
   const handleSignOut = async () => {
-    await signOutFromDjango()
-      .then()
-      .catch((error) => {
-        console.log(error);
-      });
-  };
-
-  const signOutFromDjango = async () => {
     await axios
-      .post("http://127.0.0.1:8000/users/logout/", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
+      .post(
+        "http://127.0.0.1:8000/users/logout/",
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
       .then(() => {
+        signOut(auth);
         // First sign out from django, then from firebase
         setAlert({
           showSnack: true,
           snackColor: "info",
           snackMessage: "Signed Out",
         });
-        signOut(auth);
       })
       .catch((e) => {
         console.log(e);

@@ -15,7 +15,7 @@ import {
 const Communities = () => {
   const user = useContext(Context);
   const uid = user.user.uid;
-  const token = user.user.token;
+  const token = user.user.accessToken;
   const [alert, setAlert] = useRecoilState(onScreenAlertAtom);
   const [communities, setCommunities] = useRecoilState(communitiesAtom);
   const [showCreateCommunity, setShowCreateCommunity] = useRecoilState(
@@ -25,9 +25,10 @@ const Communities = () => {
 
   async function fetchCommunities() {
     await axios
-      .get("http://127.0.0.1:8000/communities", {
+      .get("http://127.0.0.1:8000/communities/", {
         headers: {
-          Authorization: `Token ${token}`,
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
         },
       })
       .then((response) => {

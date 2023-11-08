@@ -39,11 +39,15 @@ const SignUpForm = () => {
     setAuthToken(token);
 
     await axios
-      .post("http://127.0.0.1:8000/users/login/", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
+      .post(
+        "http://127.0.0.1:8000/users/login/",
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
       .catch((e) => {
         //If the django auth fails, the user has to be logged out from firebase
         // The order has to be firebase ->django since we need the auth token
