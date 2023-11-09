@@ -4,15 +4,10 @@ import { Context } from "../auth/AuthContextProvider";
 import CommunityCard from "../Community/CommunityCard";
 
 import { useRecoilState, useRecoilValue } from "recoil";
-import {
-  joinedCommunitiesAtom,
-  updateCommunityListAtom,
-} from "../../recoil/communityAtoms";
+import { joinedCommunitiesAtom, updateCommunityListAtom } from "../../recoil/communityAtoms";
 
 const JoinedCommunities = () => {
-  const [joinedCommunities, setJoinedCommunities] = useRecoilState(
-    joinedCommunitiesAtom
-  );
+  const [joinedCommunities, setJoinedCommunities] = useRecoilState(joinedCommunitiesAtom);
   const updateCommunityList = useRecoilValue(updateCommunityListAtom);
   const user = useContext(Context);
   const uid = user.user.uid;
@@ -44,17 +39,11 @@ const JoinedCommunities = () => {
   return (
     <div className="card justify-center m-4 lg:w-[24vw]">
       <div className="card-content justify-center m-4">
-        <div className="card-title text-2xl justify-center m-4">
-          Joined Communities
-        </div>
+        <div className="card-title text-2xl justify-center m-4">Joined Communities</div>
 
-        <div className="h-[100vh]  grid-flow-col overflow-y-auto overflow-x-visible justify-center">
+        <div className="h-auto  grid-flow-col overflow-y-auto overflow-x-visible justify-center">
           {joinedCommunities.map((community) => (
-            <CommunityCard
-              community={community}
-              key={community.id}
-              profileList={false}
-            ></CommunityCard>
+            <CommunityCard community={community} key={community.id} profileList={false}></CommunityCard>
           ))}
         </div>
       </div>
