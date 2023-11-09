@@ -5,11 +5,7 @@ import CreateChallengeModal from "./CreateChallengeModal";
 import { Context } from "../auth/AuthContextProvider";
 import ChallengeCard from "./ChallengeCard";
 import { onScreenAlertAtom } from "../../recoil/atoms";
-import {
-  challengesAtom,
-  showCreateChallengeAtom,
-  updateChallengeListAtom,
-} from "../../recoil/challengeAtoms";
+import { challengesAtom, showCreateChallengeAtom, updateChallengeListAtom } from "../../recoil/challengeAtoms";
 import { joinedCommunitiesAtom } from "../../recoil/communityAtoms";
 import { runTotalsAtom } from "../../recoil/stravaAtoms";
 
@@ -20,12 +16,8 @@ const ChallengeList = () => {
   const token = user.user.accessToken;
   const [challenges, setChallenges] = useRecoilState(challengesAtom);
   const [runTotals, setRunTotals] = useRecoilState(runTotalsAtom);
-  const [showCreateChallenge, setShowCreateChallenge] = useRecoilState(
-    showCreateChallengeAtom
-  );
-  const [updateChallengeList, setUpdateChallengeList] = useRecoilState(
-    updateChallengeListAtom
-  );
+  const [showCreateChallenge, setShowCreateChallenge] = useRecoilState(showCreateChallengeAtom);
+  const [updateChallengeList, setUpdateChallengeList] = useRecoilState(updateChallengeListAtom);
 
   const joinedCommunities = useRecoilValue(joinedCommunitiesAtom);
 
@@ -65,23 +57,18 @@ const ChallengeList = () => {
     <div className="my-20">
       <div className="card place-items-center bg-slate-100 m-12 shadow-md rounded-md ">
         <div className="card-body">
-          <div className="stat-value text-2xl my-2 text-center text-accent-content">
-            Challenges
-          </div>
+          <div className="stat-value text-2xl my-2 text-center text-accent-content">Challenges</div>
           {joinedCommunities.length != 0 ? (
             <button
-              className="btn btn-secondary rounded-sm mb-4"
-              onClick={() => handleCreateChallenge()}
-            >
+              className="btn btn-secondary rounded-sm mb-4 mx-auto w-[80%] lg:w-full"
+              onClick={() => handleCreateChallenge()}>
               Create challenge
             </button>
           ) : (
-            <button className="btn btn-disabled rounded-sm mb-4">
-              Join a community to create a Challenge!
-            </button>
+            <button className="btn btn-disabled rounded-sm mb-4">Join a community to create a Challenge!</button>
           )}
 
-          <div className="overflow-y-auto h-[50vh]">
+          <div className="overflow-y-auto h-auto">
             {Array.isArray(challenges) &&
               challenges
                 .slice()
