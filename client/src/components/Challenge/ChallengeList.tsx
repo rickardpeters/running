@@ -6,7 +6,7 @@ import { Context } from "../auth/AuthContextProvider";
 import ChallengeCard from "./ChallengeCard";
 import { onScreenAlertAtom } from "../../recoil/atoms";
 import { challengesAtom, showCreateChallengeAtom, updateChallengeListAtom } from "../../recoil/challengeAtoms";
-import { joinedCommunitiesAtom } from "../../recoil/communityAtoms";
+import { joinedCommunitiesAtom, updateCommunityListAtom } from "../../recoil/communityAtoms";
 import { runTotalsAtom } from "../../recoil/stravaAtoms";
 
 const ChallengeList = () => {
@@ -18,6 +18,7 @@ const ChallengeList = () => {
   const [runTotals, setRunTotals] = useRecoilState(runTotalsAtom);
   const [showCreateChallenge, setShowCreateChallenge] = useRecoilState(showCreateChallengeAtom);
   const [updateChallengeList, setUpdateChallengeList] = useRecoilState(updateChallengeListAtom);
+  const [updateCommunityList, setUpdateCommunityList] = useRecoilState(updateCommunityListAtom);
 
   const joinedCommunities = useRecoilValue(joinedCommunitiesAtom);
 
@@ -30,8 +31,10 @@ const ChallengeList = () => {
       })
       .then((resp) => {
         setChallenges(resp.data);
+        console.log(resp.data);
       })
       .catch((error) => {
+        setChallenges([]);
         setAlert({
           showSnack: true,
           snackColor: "error",
@@ -51,7 +54,7 @@ const ChallengeList = () => {
 
   useEffect(() => {
     fetchChallenges();
-  }, [updateChallengeList]);
+  }, [updateChallengeList, updateCommunityList]);
 
   return (
     <div className="my-20">

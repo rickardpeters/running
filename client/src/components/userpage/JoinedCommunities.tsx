@@ -41,7 +41,7 @@ const JoinedCommunities = () => {
       <div className="card-content justify-center m-4">
         <div className="card-title text-2xl justify-center m-4">Joined Communities</div>
 
-        <div className="h-auto  grid-flow-col overflow-y-auto overflow-x-visible justify-center">
+        <div className="h-screen  grid-flow-col overflow-y-auto overflow-x-visible justify-center">
           {joinedCommunities.map((community) => (
             <CommunityCard community={community} key={community.id} profileList={false}></CommunityCard>
           ))}

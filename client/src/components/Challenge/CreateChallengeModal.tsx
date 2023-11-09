@@ -1,34 +1,21 @@
 import React, { useContext, useState } from "react";
-import {
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-} from "@mui/material";
+import { Dialog, DialogTitle, DialogContent, DialogActions } from "@mui/material";
 
 import { useRecoilState } from "recoil";
 import CreateChallengeForm from "./CreateChallengeForm";
 import axios from "axios";
 import { Context } from "../auth/AuthContextProvider";
 import { onScreenAlertAtom } from "../../recoil/atoms";
-import {
-  showCreateChallengeAtom,
-  updateChallengeListAtom,
-  createChallenge,
-} from "../../recoil/challengeAtoms";
+import { showCreateChallengeAtom, updateChallengeListAtom, createChallenge } from "../../recoil/challengeAtoms";
 
 const CreateChallengeModal = () => {
   const user = useContext(Context);
   const uid = user.user.uid;
   const token = user.user.accessToken;
-  const [showCreateChallenge, setShowCreateChallenge] = useRecoilState(
-    showCreateChallengeAtom
-  );
+  const [showCreateChallenge, setShowCreateChallenge] = useRecoilState(showCreateChallengeAtom);
   const [alert, setAlert] = useRecoilState(onScreenAlertAtom);
 
-  const [updateChallengeList, setUpdateChallengeList] = useRecoilState(
-    updateChallengeListAtom
-  );
+  const [updateChallengeList, setUpdateChallengeList] = useRecoilState(updateChallengeListAtom);
   const [challengeProps, setChallengeProps] = useRecoilState(createChallenge);
   const { name, goal, community_id } = challengeProps;
 
@@ -43,7 +30,6 @@ const CreateChallengeModal = () => {
       goal: goal,
       community_id: community_id,
     };
-
     const config = {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -90,9 +76,7 @@ const CreateChallengeModal = () => {
             Create Challenge
           </button>
         ) : (
-          <button className="btn btn-disabled rounded-md">
-            Create Challenge
-          </button>
+          <button className="btn btn-disabled rounded-md">Create Challenge</button>
         )}
       </DialogActions>
     </Dialog>
