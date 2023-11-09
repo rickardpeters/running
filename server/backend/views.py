@@ -12,6 +12,8 @@ from .serializers import UserSerializer, CommunitySerializer, ChallengeSerialize
 from .models import Community, Challenge, UserExtended
 import json
 import requests
+import os
+
 
 @csrf_exempt
 @api_view(["POST"])
@@ -22,12 +24,11 @@ def log_in(request):
 
         if user is not None:
             # The login function for the django user model
-            
+
             return Response("Login successfull!")
 
         else:
             raise InvalidAuthToken("Invalid auth token")
-
 
 
 @csrf_exempt
@@ -36,6 +37,7 @@ def log_out(request):
         request
     )  ## Behövs created? Ska motsvara ett token från firebase?
     return JsonResponse("logged out!", safe=False)
+
 
 @csrf_exempt
 @api_view(["GET"])  #### Göra om till inte api_view?
@@ -47,6 +49,7 @@ def getUsers(request):
         return Response(users_ser.data)
     except:
         raise InvalidAuthToken("Invalid auth token")
+
 
 @csrf_exempt
 @api_view(["POST"])  #### Göra om till inte api_view?
@@ -61,7 +64,7 @@ def join_community(request):
             identifier=user_id
         )  # Retrieve the UserExtended instance for the user
         community = Community.objects.get(
-        id=community_id
+            id=community_id
         )  # Retrieve the community by its ID
         user_extended.communities.add(community)
 
@@ -69,10 +72,11 @@ def join_community(request):
     except:
         raise InvalidAuthToken("Invalid auth token")
 
+
 @csrf_exempt
 @api_view(["GET"])  #### Göra om till inte api_view?
 def get_joined_communities(request, user_id):
-     try:
+    try:
         fire_user, created = FirebaseAuthentication().authenticate(request)
         user = UserExtended.objects.get(identifier=user_id)
         if not user:
@@ -85,9 +89,10 @@ def get_joined_communities(request, user_id):
             return Response([])
         comm_ser = CommunitySerializer(comm_joined, many=True)
         return Response(comm_ser.data)
-     
-     except:
+
+    except:
         raise InvalidAuthToken("Invalid auth token")
+
 
 @csrf_exempt
 @api_view(["POST"])  #### Göra om till inte api_view?
@@ -105,7 +110,6 @@ def leave_community(request):
         return JsonResponse("Success", safe=False)
     except:
         raise InvalidAuthToken("Invalid auth token")
-
 
 
 @csrf_exempt
@@ -144,12 +148,12 @@ def strava_token(request, user_id):
 This view handles CREATE and READ for all communities.
 """
 
+
 @csrf_exempt
 def communities(request):  #### Lägga in try/except
-    
     try:
         fire_user, created = FirebaseAuthentication().authenticate(request)
-       
+
         if request.method == "GET":
             try:
                 communities = Community.objects.all()
@@ -162,7 +166,7 @@ def communities(request):  #### Lägga in try/except
             return JsonResponse(ser_communities.data, safe=False)
 
         if request.method == "POST":
-            print("POST communities",fire_user)
+            print("POST communities", fire_user)
             data = json.loads(request.body.decode("utf-8"))
 
             community_name = data["community_name"]
@@ -185,6 +189,7 @@ def communities(request):  #### Lägga in try/except
 """
 This view handles READ, UPDATE and DELETE for community by id.
 """
+
 
 @csrf_exempt
 def community_by_id(request, community_id):
@@ -233,6 +238,7 @@ def community_by_id(request, community_id):
     except:
         raise InvalidAuthToken("Invalid auth token")
 
+
 @csrf_exempt
 def challenges(request, user_id):
     try:
@@ -259,12 +265,10 @@ def challenges(request, user_id):
             goal = data["goal"]
             community_id = data["community_id"]
 
-        
-
             community = Community.objects.get(id=community_id)
 
             new_challenge = Challenge.objects.create(
-               name=name, goal=goal, community_id=community
+                name=name, goal=goal, community_id=community
             )
 
             ser_challenge = ChallengeSerializer(new_challenge)
@@ -276,21 +280,19 @@ def challenges(request, user_id):
 
 @csrf_exempt
 def get_strava_auth_url(request):
-    client_id = "105576"
+    client_id = os.getenv("CLIENT_ID")
     redirect_uri = "http://localhost:3000/userPage"
     scope = "read"
     strava_auth_url = f"https://www.strava.com/oauth/authorize?client_id={client_id}&redirect_uri={redirect_uri}&response_type=code&scope={scope}"
     return JsonResponse({"auth_url": strava_auth_url})
 
 
-
 @api_view(["POST"])
 def strava_data(request):
-    
     data = json.loads(request.body.decode("utf-8"))
 
-    client_id = "105576"
-    client_secret = "d91be7e7d6dc2775e6ee24f494d7079c172e2c8f"
+    client_id = os.getenv("CLIENT_ID")
+    client_secret = os.getenv("CLIENT_SECRET")
     code = data["code"]
 
     athlete_info = {}
