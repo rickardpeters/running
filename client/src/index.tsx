@@ -5,9 +5,7 @@ import App from "./app/App";
 import { RecoilRoot } from "recoil";
 import AuthContext from "./components/auth/AuthContextProvider";
 
-const root = ReactDOM.createRoot(
-  document.getElementById("root") as HTMLElement
-);
+const root = ReactDOM.createRoot(document.getElementById("root") as HTMLElement);
 root.render(
   <React.StrictMode>
     <RecoilRoot>

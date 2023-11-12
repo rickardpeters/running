@@ -10,9 +10,11 @@ const AuthHeader = () => {
   return (
     <>
       <div className="navbar bg-neutral text-neutral-content w-100 relative">
-        <div className="btn btn-ghost rounded-md">
-          <HomeIcon className="scale-150" />
-        </div>
+        <Link to="/">
+          <div className="btn btn-ghost px-[2vw] rounded-md">
+            <HomeIcon className="scale-150" />
+          </div>
+        </Link>
         <Link to="/UserPage">
           <div className="btn btn-ghost rounded-md">
             <DirectionsRunIcon className="scale-125" />

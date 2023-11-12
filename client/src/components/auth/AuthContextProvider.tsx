@@ -1,8 +1,6 @@
 import { createContext, useState, useEffect, ReactNode } from "react";
-import { onAuthStateChanged, User as FirebaseUser } from "firebase/auth";
+import { onAuthStateChanged, User as FirebaseUser, signOut } from "firebase/auth";
 import { auth } from "../../firebase";
-import OnScreenAlert from "../layout/OnScreenAlert";
-import { useNavigate } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import { onScreenAlertAtom } from "../../recoil/atoms";
 
@@ -13,9 +11,9 @@ interface LayoutProps {
 export const Context = createContext<any>(null);
 
 const AuthContext = ({ children }: LayoutProps) => {
-  const [alert, setAlert] = useRecoilState(onScreenAlertAtom);
   const [user, setUser] = useState<FirebaseUser | null>(null);
   const [loading, setLoading] = useState(true);
+  const [alert, setAlert] = useRecoilState(onScreenAlertAtom);
 
   const signInToDjango = async (user: any) => {
     const token = user.accessToken;
@@ -27,23 +25,26 @@ const AuthContext = ({ children }: LayoutProps) => {
           Authorization: `Bearer ${token}`,
         },
       });
-      console.log(response);
-      setUser(user);
+      if (!response.ok) {
+        // If the Django authentication fails, throw an error
+        setUser(null);
+        signOut(auth);
+        setAlert({
+          showSnack: true,
+          snackColor: "error",
+          snackMessage: "Unable to log in to Server",
+        });
+      } else {
+        setUser(user);
+      }
     } catch (error) {
       console.error(error);
-      setUser(null);
-      setAlert({
-        showSnack: true,
-        snackColor: "error",
-        snackMessage: "Unable to log in",
-      });
     }
   };
 
   useEffect(() => {
     let unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setLoading(false);
-      console.log(currentUser);
       if (currentUser) {
         signInToDjango(currentUser);
       } else {
@@ -62,7 +63,13 @@ const AuthContext = ({ children }: LayoutProps) => {
 
   return (
     <Context.Provider value={values}>
-      {loading ? <>loading...</> : children}
+      {loading ? (
+        <div className="grid place-items-center h-screen">
+          <h1 className="text-3xl">Loading...</h1>
+        </div>
+      ) : (
+        children
+      )}
     </Context.Provider>
   );
 };

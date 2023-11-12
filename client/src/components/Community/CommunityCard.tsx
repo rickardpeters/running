@@ -1,18 +1,18 @@
 import { Community } from "../../types/types";
 import { useContext } from "react";
 import { useRecoilState } from "recoil";
-import {
-  activeCommunityAtom,
-  onScreenAlertAtom,
-  showDeleteCommunityAtom,
-  showUpdateCommunityAtom,
-  updateChallengeListAtom,
-  updateCommunityListAtom,
-} from "../../recoil/atoms";
 import axios from "axios";
 import { Context } from "../auth/AuthContextProvider";
 import DeleteCommunityModal from "./DeleteCommunityModal";
 import UpdateCommunityForm from "./UpdateCommunityForm";
+import { onScreenAlertAtom } from "../../recoil/atoms";
+import {
+  activeCommunityAtom,
+  showDeleteCommunityAtom,
+  showUpdateCommunityAtom,
+  updateCommunityListAtom,
+} from "../../recoil/communityAtoms";
+import { updateChallengeListAtom } from "../../recoil/challengeAtoms";
 interface CommunityCardProps {
   community: Community;
   profileList: boolean;
@@ -67,16 +67,9 @@ const CommunityCard = ({ community }: CommunityCardProps) => {
         (response) => {
           setUpdateCommunityList(!updateCommunityList);
           setUpdateChallengeList(!updateChallengeList);
-          setAlert({
-            showSnack: true,
-            snackColor: "success",
-            snackMessage: "You have joined the community!",
-          });
-
-          //Navigate to the community page to give the list a cance to update
         },
         (error) => {
-          console.log(error);
+          console.error(error);
           setAlert({
             showSnack: true,
             snackColor: "error",
@@ -103,18 +96,12 @@ const CommunityCard = ({ community }: CommunityCardProps) => {
         }
       )
       .then(
-        (response) => {
+        () => {
           setUpdateCommunityList(!updateCommunityList);
           setUpdateChallengeList(!updateChallengeList);
-          setAlert({
-            showSnack: true,
-            snackColor: "info",
-            snackMessage: "You have left the community",
-          });
-          //Navigate to the community page to give the list a cance to update
         },
         (error) => {
-          console.log(error);
+          console.error(error);
           setAlert({
             showSnack: true,
             snackColor: "error",
@@ -126,7 +113,6 @@ const CommunityCard = ({ community }: CommunityCardProps) => {
   const handleUpdateClick = (community: Community) => {
     setActiveCommunity(community);
     setShowUpdateCommunity(true);
-    console.log("hej");
   };
 
   const handleDeleteClick = (community: Community) => {

@@ -12,7 +12,7 @@ function App() {
   return (
     <BrowserRouter>
       <OnScreenAlert />
-      <Suspense fallback={<div></div>}>
+      <Suspense fallback={<></>}>
         {user.user ? <AuthenticatedApp /> : <UnauthenticatedApp />}
       </Suspense>
     </BrowserRouter>

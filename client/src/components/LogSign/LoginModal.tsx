@@ -1,17 +1,15 @@
 import * as React from "react";
 import { useState } from "react";
-import Button from "@mui/material/Button";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import { Grid, TextField } from "@mui/material";
-import { signInWithEmailAndPassword, signOut } from "firebase/auth";
-import { useNavigate } from "react-router-dom";
-
+import { signInWithEmailAndPassword } from "firebase/auth";
 import { useRecoilState } from "recoil";
-import { emailAtom, authTokenAtom, onScreenAlertAtom } from "../../recoil/atoms";
 import { auth } from "../../firebase";
+import { onScreenAlertAtom } from "../../recoil/atoms";
+import { emailAtom } from "../../recoil/authAtoms";
 
 interface LoginModalProps {
   show?: boolean;
@@ -22,25 +20,22 @@ const LoginModal = (props: LoginModalProps) => {
   const [open, setOpen] = useState(false);
   const [email, setEmail] = useRecoilState(emailAtom);
   const [password, setPassword] = useState("");
-  const [authToken, setAuthToken] = useRecoilState(authTokenAtom);
-
-  const navigate = useNavigate();
 
   const logIn = async (e: React.MouseEvent<HTMLElement>) => {
     e.preventDefault();
-    try {
-      const user = await signInWithEmailAndPassword(auth, email, password);
-      navigate("/UserPage");
-    } catch (error) {
-      console.log(error);
-      setAlert({
-        showSnack: true,
-        snackColor: "error",
-        snackMessage: "Wrong Email or password",
+
+    await signInWithEmailAndPassword(auth, email, password)
+      .then(() => {})
+      .catch((error) => {
+        console.error(error.code);
+        setAlert({
+          showSnack: true,
+          snackColor: "error",
+          snackMessage: error.code,
+        });
       });
 
-      // If there's an error during Django sign-in, you can choose to show an error message or take other actions
-    }
+    // If there's an error during Django sign-in, you can choose to show an error message or take other actions
   };
 
   const handleClose = () => {

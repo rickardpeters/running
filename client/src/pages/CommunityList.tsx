@@ -1,4 +1,3 @@
-import { Grid } from "@mui/material";
 import React from "react";
 import Communities from "../components/Community/Communities";
 

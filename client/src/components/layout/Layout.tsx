@@ -1,6 +1,5 @@
 import React, { ReactNode } from "react";
 import Header from "./Header";
-import OnScreenAlert from "./OnScreenAlert";
 
 // Interface for children bc TS
 interface LayoutProps {

@@ -1,14 +1,16 @@
 import React, { useState } from "react";
-import runningImage from "../img/headerimg.png";
-import { Button, Dialog } from "@mui/material";
-import LoginModal from "./LogSign/LoginModal";
-import SignUpModal from "./LogSign/SignupModal";
+import runningImage from "../../img/headerimg.png";
+import { Dialog } from "@mui/material";
+import LoginModal from "../LogSign/LoginModal";
+import SignUpModal from "../LogSign/SignupModal";
 import LoginIcon from "@mui/icons-material/Login";
 import RocketLaunchIcon from "@mui/icons-material/RocketLaunch";
+import { useRecoilState } from "recoil";
+import { openSignUpAtom } from "../../recoil/authAtoms";
 
 const WelcomeMessage = () => {
   const [openLogIn, setOpenLogIn] = useState(false);
-  const [openSignUp, setOpenSignUp] = useState(false);
+  const [openSignUp, setOpenSignUp] = useRecoilState(openSignUpAtom);
   const [signedUp, setSignedUp] = useState(false);
 
   const handleLogIn = () => {
@@ -17,10 +19,6 @@ const WelcomeMessage = () => {
 
   const handleSignUp = () => {
     setOpenSignUp(true);
-  };
-
-  const handleCloseSignUp = () => {
-    setOpenSignUp(false);
   };
 
   const handleCloseLogIn = () => {
@@ -49,17 +47,7 @@ const WelcomeMessage = () => {
           <LoginModal setShow={setOpenLogIn}></LoginModal>
         </Dialog>
 
-        <Dialog open={openSignUp} onClose={handleCloseSignUp}>
-          {signedUp ? (
-            <LoginModal setShow={setOpenLogIn}></LoginModal>
-          ) : (
-            <SignUpModal
-              show={openSignUp}
-              setShow={setOpenSignUp}
-              signedUp={signedUp}
-              setSignedUp={setSignedUp}></SignUpModal>
-          )}
-        </Dialog>
+        <SignUpModal signedUp={signedUp} setSignedUp={setSignedUp} />
       </div>
     </div>
   );

@@ -1,47 +1,56 @@
-import { InputLabel, MenuItem, Select, TextField } from "@mui/material";
-import React, { Dispatch, SetStateAction } from "react";
-import { joinedCommunitiesAtom } from "../../recoil/atoms";
+import { MenuItem, Select, SelectChangeEvent, TextField } from "@mui/material";
+import React, { useState } from "react";
 import { useRecoilState } from "recoil";
+import { createChallenge } from "../../recoil/challengeAtoms";
+import { joinedCommunitiesAtom } from "../../recoil/communityAtoms";
 
-interface createChallengeFormProps {
-  name: string;
-  goal: string;
-  communityId: string;
-  setName: Dispatch<SetStateAction<string>>;
-  setGoal: Dispatch<SetStateAction<string>>;
-  setCommunityId: Dispatch<SetStateAction<string>>;
-}
-
-const CreateChallengeForm = (props: createChallengeFormProps) => {
-  //props.setCommunityId(""); // Det här är bara för att få till något typ av "placeholder-beteende" i select nedan..
+const CreateChallengeForm = () => {
+  const [challengeProps, setChallengeProps] = useRecoilState(createChallenge);
+  const { name } = challengeProps;
+  const [selectComm, setSelectComm] = useState("");
+  const [selectGoal, setSelectGoal] = useState("");
 
   const [joinedCommunities, setJoinedCommunities] = useRecoilState(joinedCommunitiesAtom);
 
-  const handleChallengeNameChange = (event: { target: { value: React.SetStateAction<string> } }) => {
-    props.setName(event.target.value);
+  const handleChallengeNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    e.preventDefault();
+    setChallengeProps({ ...challengeProps, name: e.target.value });
   };
 
-  const handleGoalChange = (event: { target: { value: React.SetStateAction<string> } }) => {
-    props.setGoal(event.target.value);
+  const handleGoalChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    e.preventDefault();
+    const goal = parseInt(e.target.value, 10);
+
+    setChallengeProps({ ...challengeProps, goal: goal });
+    setSelectGoal(e.target.value);
   };
 
-  const handleCommunityIdChange = (event: { target: { value: React.SetStateAction<string> } }) => {
-    props.setCommunityId(event.target.value);
+  const handleCommunityIdChange = (e: SelectChangeEvent) => {
+    e.preventDefault();
+    const comm = parseInt(e.target.value, 10);
+
+    setChallengeProps({ ...challengeProps, community_id: comm });
+    setSelectComm(e.target.value);
   };
 
   return (
     <>
+      <TextField label="Challenge Name" value={name} onChange={handleChallengeNameChange} fullWidth margin="normal" />
       <TextField
-        label="Challenge Name"
-        value={props.name}
-        onChange={handleChallengeNameChange}
+        label="Goal (km)"
+        placeholder="Goal (km)"
+        value={selectGoal}
+        type="number"
+        onChange={handleGoalChange}
         fullWidth
         margin="normal"
       />
-      <TextField label="Goal (km)" value={props.goal} onChange={handleGoalChange} fullWidth margin="normal" />
+
       <Select
         labelId="select-community"
-        value={props.communityId}
+        placeholder="Community"
+        type="number"
+        value={selectComm}
         onChange={handleCommunityIdChange}
         displayEmpty
         fullWidth>
@@ -49,7 +58,7 @@ const CreateChallengeForm = (props: createChallengeFormProps) => {
           Select Community
         </MenuItem>
         {joinedCommunities.map((community) => (
-          <MenuItem key={community.id} value={community.id}>
+          <MenuItem key={community.id!} value={community.id!}>
             {community.community_name}
           </MenuItem>
         ))}

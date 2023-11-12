@@ -1,45 +1,52 @@
-import { Dialog, DialogTitle, DialogContent, DialogActions, Button } from "@mui/material";
-import React from "react";
-import { useRecoilState, useRecoilValue } from "recoil";
-import {
-  onScreenAlertAtom,
-  showDeleteCommunityAtom,
-  showDeleteConfirmationAtom,
-  updateCommunityListAtom,
-} from "../../recoil/atoms";
+import { Dialog, DialogTitle, DialogContent, DialogActions } from "@mui/material";
+import React, { useContext } from "react";
+import { useRecoilState } from "recoil";
 import axios from "axios";
-import DeleteCommunityConfirmation from "./DeleteCommunityConfirmation";
 import { Community } from "../../types/types";
+import { onScreenAlertAtom } from "../../recoil/atoms";
+import { showDeleteCommunityAtom, updateCommunityListAtom } from "../../recoil/communityAtoms";
+import { Context } from "../auth/AuthContextProvider";
 
 interface DeleteCommunityModalProps {
   community: Community | null;
 }
 
 const DeleteCommunityModal: React.FC<DeleteCommunityModalProps> = ({ community }) => {
+  const user = useContext(Context);
+  const token = user.user.accessToken;
+
   const [showDeleteCommunity, setShowDeleteCommunity] = useRecoilState(showDeleteCommunityAtom);
   const [updateCommunityList, setUpdateCommunityList] = useRecoilState(updateCommunityListAtom);
-  const [showDeleteConfirmationCommunity, setShowDeleteConfirmationCommunity] =
-    useRecoilState(showDeleteConfirmationAtom);
 
   const [alert, setAlert] = useRecoilState(onScreenAlertAtom);
 
   const handleDelete = async () => {
     if (!community) return;
 
-    try {
-      const res = await axios.delete(`http://127.0.0.1:8000/communities/${community.id}/`, {});
-      setAlert({
-        showSnack: true,
-        snackColor: "info",
-        snackMessage: "Community Deleted",
-      });
-    } catch (error) {
-      setAlert({
-        showSnack: true,
-        snackColor: "error",
-        snackMessage: "Unable to delete community",
-      });
-    }
+    await axios
+      .delete(`http://127.0.0.1:8000/communities/${community.id}/`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      })
+      .then(
+        () =>
+          setAlert({
+            showSnack: true,
+            snackColor: "info",
+            snackMessage: "Community Deleted",
+          }),
+        (error) => {
+          console.error(error);
+          setAlert({
+            showSnack: true,
+            snackColor: "error",
+            snackMessage: "Unable to delete community",
+          });
+        }
+      );
+
     setShowDeleteCommunity(false);
     setUpdateCommunityList(!updateCommunityList);
   };
