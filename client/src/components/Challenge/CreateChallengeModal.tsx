@@ -1,6 +1,5 @@
 import React, { useContext, useState } from "react";
 import { Dialog, DialogTitle, DialogContent, DialogActions } from "@mui/material";
-
 import { useRecoilState } from "recoil";
 import CreateChallengeForm from "./CreateChallengeForm";
 import axios from "axios";
@@ -40,19 +39,13 @@ const CreateChallengeModal = () => {
     await axios
       .post(`http://127.0.0.1:8000/challenges/${uid}/`, newChallenge, config)
       .then((response) => {
-        console.log("challenge created:", response);
-        setAlert({
-          showSnack: true,
-          snackColor: "success",
-          snackMessage: "Challenge created!",
-        });
         handleCloseModal();
         setUpdateChallengeList(!updateChallengeList);
         setChallengeProps({ name: "", goal: null, community_id: null });
       })
 
       .catch((error) => {
-        console.log(error);
+        console.error(error);
         setAlert({
           showSnack: true,
           snackColor: "error",

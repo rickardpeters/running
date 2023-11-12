@@ -1,16 +1,12 @@
 import * as React from "react";
 import { useState } from "react";
-import Button from "@mui/material/Button";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import { Grid, TextField } from "@mui/material";
-import { signInWithEmailAndPassword, signOut } from "firebase/auth";
-import { useNavigate } from "react-router-dom";
-
+import { signInWithEmailAndPassword } from "firebase/auth";
 import { useRecoilState } from "recoil";
-
 import { auth } from "../../firebase";
 import { onScreenAlertAtom } from "../../recoil/atoms";
 import { emailAtom } from "../../recoil/authAtoms";
@@ -25,17 +21,13 @@ const LoginModal = (props: LoginModalProps) => {
   const [email, setEmail] = useRecoilState(emailAtom);
   const [password, setPassword] = useState("");
 
-  const navigate = useNavigate();
-
   const logIn = async (e: React.MouseEvent<HTMLElement>) => {
     e.preventDefault();
 
     await signInWithEmailAndPassword(auth, email, password)
-      .then((user) => {
-        console.log(user);
-      })
+      .then(() => {})
       .catch((error) => {
-        console.log(error.code);
+        console.error(error.code);
         setAlert({
           showSnack: true,
           snackColor: "error",
@@ -55,9 +47,7 @@ const LoginModal = (props: LoginModalProps) => {
     <>
       <DialogTitle>Sign In</DialogTitle>
       <DialogContent>
-        <DialogContentText sx={{ mb: 2 }}>
-          Add your credentials to sign in to the application.
-        </DialogContentText>
+        <DialogContentText sx={{ mb: 2 }}>Add your credentials to sign in to the application.</DialogContentText>
         <Grid container spacing={2}>
           <Grid item xs={6}>
             <TextField

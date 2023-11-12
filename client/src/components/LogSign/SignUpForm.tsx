@@ -12,13 +12,13 @@ const SignUpForm = () => {
 
   const handleEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
-    console.log(email);
+
     setEmail(e.target.value);
   };
 
   const handlePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
-    console.log(password);
+
     setPassword(e.target.value);
   };
 
@@ -26,11 +26,10 @@ const SignUpForm = () => {
     e.preventDefault();
     createUserWithEmailAndPassword(auth, email, password)
       .then((user) => {
-        console.log(user);
         signInToDjango(user);
       })
       .catch((error) => {
-        console.log(error);
+        console.error(error);
       });
   };
 
@@ -51,7 +50,7 @@ const SignUpForm = () => {
       .catch((e) => {
         //If the django auth fails, the user has to be logged out from firebase
         // The order has to be firebase ->django since we need the auth token
-        console.log(e);
+        console.error(e);
         signOut(auth);
       });
   };
@@ -64,15 +63,13 @@ const SignUpForm = () => {
           id="email"
           placeholder="E-mail"
           value={email}
-          onChange={handleEmail}
-        ></input>
+          onChange={handleEmail}></input>
         <input
           placeholder="Password"
           className="input input-bordered"
           type="password"
           value={password}
-          onChange={handlePassword}
-        ></input>
+          onChange={handlePassword}></input>
         <button className="btn btn-accent mt-5" onClick={signUp}>
           SignUp
         </button>

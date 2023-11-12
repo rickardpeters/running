@@ -4,13 +4,11 @@ import { useContext, useEffect } from "react";
 import CreateChallengeModal from "./CreateChallengeModal";
 import { Context } from "../auth/AuthContextProvider";
 import ChallengeCard from "./ChallengeCard";
-import { onScreenAlertAtom } from "../../recoil/atoms";
 import { challengesAtom, showCreateChallengeAtom, updateChallengeListAtom } from "../../recoil/challengeAtoms";
 import { joinedCommunitiesAtom, updateCommunityListAtom } from "../../recoil/communityAtoms";
 import { runTotalsAtom } from "../../recoil/stravaAtoms";
 
 const ChallengeList = () => {
-  const [alert, setAlert] = useRecoilState(onScreenAlertAtom);
   const user = useContext(Context);
   const uid = user.user.uid;
   const token = user.user.accessToken;
@@ -31,15 +29,9 @@ const ChallengeList = () => {
       })
       .then((resp) => {
         setChallenges(resp.data);
-        console.log(resp.data);
       })
       .catch((error) => {
         setChallenges([]);
-        setAlert({
-          showSnack: true,
-          snackColor: "error",
-          snackMessage: "No challenges loaded",
-        });
       });
   }
 

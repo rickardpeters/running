@@ -12,11 +12,7 @@ const ChallengeCard = ({ challenge }: { challenge: Challenge }) => {
       <div className="card-body">
         <div className="card-title">{challenge.name}</div>
         <div className="text-slate-500">
-          {
-            joinedCommunities.find(
-              (community) => community.id === challenge.community_id
-            )?.community_name
-          }
+          {joinedCommunities.find((community) => community.id === challenge.community_id)?.community_name}
         </div>
         <br />
         {runTotals.distance / 1000 >= challenge.goal!

@@ -1,8 +1,8 @@
 export interface Community {
   community_name: string;
-  id: number|null;
+  id: number | null;
   description: string;
-  members: [Member]|[];
+  members: [Member] | [];
 }
 
 export interface Member {
@@ -14,20 +14,21 @@ export interface Member {
 
 export interface Challenge {
   name: string;
-  goal: number|null;
-  community_id: number|null;
+  goal: number | null;
+  community_id: number | null;
 }
 
 export interface OnScreenAlertProps {
-  showSnack:boolean,
-snackColor:"error"| "success"|"info",
-snackMessage: string,
+  showSnack: boolean;
+  snackColor: "error" | "success" | "info";
+  snackMessage: string;
 }
 
 export interface TutorialCardProps {
-  card:{
-  title:string,
-  content:string,
-  link:string,
-  btnText:string,
-  }}
+  card: {
+    title: string;
+    content: string;
+    link: string;
+    btnText: string;
+  };
+}

@@ -1,19 +1,12 @@
 import axios from "axios";
 import { useRecoilState } from "recoil";
-
 import { useContext, useEffect } from "react";
 import { Context } from "../auth/AuthContextProvider";
-import { onScreenAlertAtom } from "../../recoil/atoms";
-import {
-  athleteAtom,
-  runTotalsAtom,
-  stravaTokenAtom,
-} from "../../recoil/stravaAtoms";
+import { athleteAtom, runTotalsAtom, stravaTokenAtom } from "../../recoil/stravaAtoms";
 
 const StravaCard = () => {
   const [athlete, setAthlete] = useRecoilState(athleteAtom);
   const [runTotals, setRunTotals] = useRecoilState(runTotalsAtom);
-  const [alert, setAlert] = useRecoilState(onScreenAlertAtom);
   const [stravaToken, setStravaToken] = useRecoilState(stravaTokenAtom);
 
   const user = useContext(Context);
@@ -28,11 +21,12 @@ const StravaCard = () => {
 
   const signInToStrava = async () => {
     try {
-      const response = await axios.get(
-        "http://localhost:8000/get_strava_auth_url/"
-      );
+      const response = await axios.get("http://localhost:8000/get_strava_auth_url/", {
+        headers: {
+          Authorization: `Token ${token}`,
+        },
+      });
       const authUrl = response.data.auth_url;
-      console.log(authUrl);
       window.location.href = authUrl;
     } catch (error) {
       console.error("Error fetching Strava auth URL", error);
@@ -57,19 +51,8 @@ const StravaCard = () => {
         setStravaToken(data.access_token);
         setAthlete(data.athlete_info);
         setRunTotals(data.stats.all_run_totals);
-
-        setAlert({
-          showSnack: true,
-          snackColor: "success",
-          snackMessage: "Strava data successfully fetched!",
-        });
       } catch (error) {
         console.error("Error fetching Strava data from backend", error);
-        setAlert({
-          showSnack: true,
-          snackColor: "error",
-          snackMessage: "Failed to fetch Strava data",
-        });
       }
     }
   };
@@ -129,10 +112,7 @@ const StravaCard = () => {
         </div>
       </div>
       <div className="absolute -bottom-16">
-        <button
-          className="btn btn-secondary  w-[100%] rounded-sm"
-          onClick={signInToStrava}
-        >
+        <button className="btn btn-secondary  w-[100%] rounded-sm" onClick={signInToStrava}>
           Log in to Strava
         </button>
       </div>

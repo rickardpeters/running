@@ -1,5 +1,4 @@
 import { Grid, LinearProgress, Typography } from "@mui/material";
-import { passwordStrength } from "check-password-strength";
 import React, { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
 import { passwordStrengthTestPassed } from "../../recoil/authAtoms";
@@ -10,24 +9,15 @@ interface PasswordStrengthProps {
 }
 
 const PasswordStrength = (props: PasswordStrengthProps) => {
-  const [color, setColor] = useState<
-    | "primary"
-    | "secondary"
-    | "error"
-    | "info"
-    | "success"
-    | "warning"
-    | "inherit"
-  >("primary");
-  const [message, setMessage] = useState("");
-  const [strengthTest, setStrengthTest] = useRecoilState(
-    passwordStrengthTestPassed
+  const [color, setColor] = useState<"primary" | "secondary" | "error" | "info" | "success" | "warning" | "inherit">(
+    "primary"
   );
+  const [message, setMessage] = useState("");
+  const [strengthTest, setStrengthTest] = useRecoilState(passwordStrengthTestPassed);
 
   const normalize = (value: number) => ((value - 0) * 100) / 3;
 
   useEffect(() => {
-    console.log("strength effect", props.passStrength);
     if (props.passStrength == 0) {
       setColor("error");
       setMessage("The password is too Weak");

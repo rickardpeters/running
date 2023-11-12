@@ -1,11 +1,6 @@
 import { createContext, useState, useEffect, ReactNode } from "react";
-import {
-  onAuthStateChanged,
-  User as FirebaseUser,
-  signOut,
-} from "firebase/auth";
+import { onAuthStateChanged, User as FirebaseUser, signOut } from "firebase/auth";
 import { auth } from "../../firebase";
-import OnScreenAlert from "../layout/OnScreenAlert";
 import { useRecoilState } from "recoil";
 import { onScreenAlertAtom } from "../../recoil/atoms";
 
@@ -69,10 +64,9 @@ const AuthContext = ({ children }: LayoutProps) => {
   return (
     <Context.Provider value={values}>
       {loading ? (
-        <>
-          <OnScreenAlert />
-          loading...
-        </>
+        <div className="grid place-items-center h-screen">
+          <h1 className="text-3xl">Loading...</h1>
+        </div>
       ) : (
         children
       )}

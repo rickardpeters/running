@@ -1,25 +1,17 @@
 import * as React from "react";
 import { useState, SetStateAction, Dispatch } from "react";
-
-import Button from "@mui/material/Button";
-
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import { Dialog, Grid, TextField } from "@mui/material";
-import LoginModal from "./LoginModal";
 import PasswordField from "./PasswordField";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { createUserWithEmailAndPassword, signOut } from "firebase/auth";
+import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../firebase";
 import "firebase/auth";
 import { onScreenAlertAtom } from "../../recoil/atoms";
-import {
-  passwordTestPassed,
-  passwordStrengthTestPassed,
-  openSignUpAtom,
-} from "../../recoil/authAtoms";
+import { passwordTestPassed, passwordStrengthTestPassed, openSignUpAtom } from "../../recoil/authAtoms";
 
 interface SignUpModalProps {
   signedUp: boolean;
@@ -38,11 +30,9 @@ const SignUpModal = (props: SignUpModalProps) => {
   const signUp = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     createUserWithEmailAndPassword(auth, email, password)
-      .then((user) => {
-        console.log(user);
-      })
+      .then((user) => {})
       .catch((error) => {
-        console.log(error.code);
+        console.error(error.code);
 
         setAlert({
           showSnack: true,
@@ -53,7 +43,6 @@ const SignUpModal = (props: SignUpModalProps) => {
   };
 
   const handleClose = () => {
-    console.log("closing", show);
     setShow(false);
   };
 
@@ -62,9 +51,7 @@ const SignUpModal = (props: SignUpModalProps) => {
       <Dialog open={show}>
         <DialogTitle>Sign Up</DialogTitle>
         <DialogContent>
-          <DialogContentText sx={{ mb: 2 }}>
-            Please enter your information below to Join the club!
-          </DialogContentText>
+          <DialogContentText sx={{ mb: 2 }}>Please enter your information below to Join the club!</DialogContentText>
 
           <Grid container spacing={1}>
             <Grid item xs={12}>
@@ -81,10 +68,7 @@ const SignUpModal = (props: SignUpModalProps) => {
             </Grid>
           </Grid>
           <Grid container spacing={2}>
-            <PasswordField
-              password={password}
-              setPassword={setPassword}
-            ></PasswordField>
+            <PasswordField password={password} setPassword={setPassword}></PasswordField>
           </Grid>
         </DialogContent>
         <DialogActions>

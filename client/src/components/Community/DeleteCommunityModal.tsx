@@ -1,15 +1,10 @@
-import { Dialog, DialogTitle, DialogContent, DialogActions, Button } from "@mui/material";
+import { Dialog, DialogTitle, DialogContent, DialogActions } from "@mui/material";
 import React, { useContext } from "react";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilState } from "recoil";
 import axios from "axios";
-import DeleteCommunityConfirmation from "./DeleteCommunityConfirmation";
 import { Community } from "../../types/types";
 import { onScreenAlertAtom } from "../../recoil/atoms";
-import {
-  showDeleteCommunityAtom,
-  updateCommunityListAtom,
-  showDeleteConfirmationAtom,
-} from "../../recoil/communityAtoms";
+import { showDeleteCommunityAtom, updateCommunityListAtom } from "../../recoil/communityAtoms";
 import { Context } from "../auth/AuthContextProvider";
 
 interface DeleteCommunityModalProps {
@@ -18,13 +13,10 @@ interface DeleteCommunityModalProps {
 
 const DeleteCommunityModal: React.FC<DeleteCommunityModalProps> = ({ community }) => {
   const user = useContext(Context);
-  const uid = user.user.id;
   const token = user.user.accessToken;
 
   const [showDeleteCommunity, setShowDeleteCommunity] = useRecoilState(showDeleteCommunityAtom);
   const [updateCommunityList, setUpdateCommunityList] = useRecoilState(updateCommunityListAtom);
-  const [showDeleteConfirmationCommunity, setShowDeleteConfirmationCommunity] =
-    useRecoilState(showDeleteConfirmationAtom);
 
   const [alert, setAlert] = useRecoilState(onScreenAlertAtom);
 
@@ -39,14 +31,14 @@ const DeleteCommunityModal: React.FC<DeleteCommunityModalProps> = ({ community }
         },
       })
       .then(
-        (response) =>
+        () =>
           setAlert({
             showSnack: true,
             snackColor: "info",
             snackMessage: "Community Deleted",
           }),
         (error) => {
-          console.log(error);
+          console.error(error);
           setAlert({
             showSnack: true,
             snackColor: "error",

@@ -1,7 +1,6 @@
 import React from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
 import LandingPage from "../pages/LandingPage";
-import OnScreenAlert from "../components/layout/OnScreenAlert";
 
 function UnAuthenticatedApp() {
   return (

@@ -43,7 +43,6 @@ const PasswordField = (props: PasswordFieldProps) => {
 
   function testPassword(test: string) {
     if (test === props.password && test.length != 0) {
-      console.log("inne i if");
       setTestPassed(true);
     } else {
       setTestPassed(false);
@@ -109,10 +108,7 @@ const PasswordField = (props: PasswordFieldProps) => {
       <Grid container spacing={2}>
         {passStrength != null && props.password.length != 0 && (
           <Grid item xs={6}>
-            <PasswordStrength
-              password={props.password}
-              passStrength={passStrength}
-            />
+            <PasswordStrength password={props.password} passStrength={passStrength} />
           </Grid>
         )}
       </Grid>

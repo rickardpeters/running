@@ -13,7 +13,6 @@ interface UpdateCommuityModalProps {
 
 const UpdateCommunityModal: React.FC<UpdateCommuityModalProps> = ({ community }) => {
   const user = useContext(Context);
-  const uid = user.user.id;
   const token = user.user.accessToken;
   const [showUpdateCommunity, setShowUpdateCommunity] = useRecoilState(showUpdateCommunityAtom);
   const [updateCommunityList, setUpdateCommunityList] = useRecoilState(updateCommunityListAtom);
@@ -48,14 +47,14 @@ const UpdateCommunityModal: React.FC<UpdateCommuityModalProps> = ({ community })
         }
       )
       .then(
-        (response) =>
+        () =>
           setAlert({
             showSnack: true,
             snackColor: "info",
             snackMessage: "Community Updated",
           }),
         (error) => {
-          console.log(error);
+          console.error(error);
           setAlert({
             showSnack: true,
             snackColor: "error",
