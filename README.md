@@ -4,6 +4,7 @@
 https://clipchamp.com/watch/YTrgKh9wr92
 
 **Martins Screencast:** https://youtu.be/ETQgq9322y0
+**Rickards Screencast:** https://clipchamp.com/watch/97gkUkJtZOL
 
 ## Functional Specification
 
