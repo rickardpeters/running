@@ -28,3 +28,14 @@ Our vision is to create an app for runners where Strava users can create "run co
 -   **Server side:** Django, Python
     
 -   **Database:** SQLite
+
+## Run the Project
+0. Get secret keys from Firebase project and Strava API project.
+1. Clone the Project.
+2. Create two ```.env```files, one in server and one in client.
+3. Add your seceret keys from step 0 into the relevant env-file.
+2. Create a virtual environment and install dependencies in ```requirements.txt```.
+3. Install Node packages from ```/client``` with npm install.
+4. Set up server by running ```python manage.py makemigrations``` and ```python manage.py migrate```from ```/server```.
+5. Start server with ```python manage.py runserver``` from ```/server```.
+6. In a different terminal start client with ```npm start```from ```/client```.
