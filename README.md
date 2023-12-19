@@ -1,5 +1,7 @@
 # Running
 
+![Screenshot](running3.png) ![Screenshot](running2.png)
+
 ## Functional Specification
 
 ### Project vision
