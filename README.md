@@ -1,4 +1,4 @@
-# TDDD27 - Advanced Web Programming
+# Running
 
 ## Functional Specification
 
